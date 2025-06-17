@@ -34,7 +34,10 @@ my_access_tools = ToolGroup(
                 "This tool is useful for understanding what access options are available to the user. "
                 "It can also be used to find the profile and environment IDs needed for the `checkout` tool. "
                 "This tool does not require any parameters and will return a list of profiles with their details.",
-            tool_name="update_my_access_tool",
+        ),
+        ToolConfig(
+            function_name="checkout_by_name",
+            ai_description="The description for AI"
         )
     ]
 )
