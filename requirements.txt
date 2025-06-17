@@ -1,0 +1,6 @@
+britive==4.3.0
+fastmcp==2.10.6
+pydantic==2.11.7
+python-dotenv==1.1.0
+pybritive==2.2.0
+pyenchant==3.2.2
