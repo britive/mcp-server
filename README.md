@@ -65,16 +65,42 @@ TOOLS = {
 
 **Step 4: Run the Tool Generator Script**
 
+You can generate or update your MCP tool files using the `converter.py` script.
+
 * Update the MCP tools (Provide the already existing directory path of generated MCP Tools):
 
 ```bash
-python3 converter.py --output britive_tools_mcp
+python3 converter.py --output "britive_tools_mcp"
 ```
 
 * To generate all tools from scratch (Provide new directory path to avoid overwritting existing tools):
 
 ```bash
-python3 converter.py --output britive_tools_mcp.py --all
+python3 converter.py --output "britive_tools_mcp" --all
+```
+
+### ⚠️ Important Notes:
+
+The `--output` path should be **relative to your working directory** (where you run the Python script).
+
+📌 **Example:**
+
+If your working directory is:
+
+```
+C:\Users\username\britive\mcp
+```
+
+And you want the tools to be saved in:
+
+```
+C:\Users\username\britive\mcp\outputs\britive_mcp_tools
+```
+
+Then run:
+
+```bash
+python3 converter.py --output "outputs\britive_mcp_tools" --all
 ```
 
 ---
