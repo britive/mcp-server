@@ -11,7 +11,7 @@ my_access_tools = ToolGroup(
                 "Set 'programmatic=False' unless programmatic access is explicitly mentioned. "
                 "Include 'justification' only if needed for approval (e.g., access typically restricted or user says 'need approval'). "
                 "Use 'include_credentials=True' only if the user expects immediate use. "
-                "Handle approval flows quietly—inform the user once if there's a delay, but avoid repeated updates unless asked. "
+                "Handle approval flows quietly, inform the user once if there's a delay, but avoid repeated updates unless asked. "
                 "Accept optional 'ticket_id', 'ticket_type', or 'otp' if context provides them. "
                 "Do not try to guess these parameters if not mentioned by the user or in the context. "
                 "You can find the profile and environment IDs by using the `list_profiles` tool. "
@@ -24,7 +24,7 @@ my_access_tools = ToolGroup(
             function_name="checkin",
             ai_description="Use this tool when the user has completed their task or explicitly indicates they no longer need access (e.g., 'done with access', 'you can check it in', 'I'm finished', or 'revoke access'). "
                 "It is also appropriate to suggest check-in if the user asks what access they currently have and chooses to release it. "
-                "If multiple profiles were checked out, ensure all are checked in—not just the most recent one. "
+                "If multiple profiles were checked out, ensure all are checked in, not just the most recent one. "
                 "Prefer silent handling unless the user expects confirmation. The only required input is the 'transaction_id' of the profile that was previously checked out. "
                 "If not already tracked or known from context, ask the user briefly. Do not invoke this tool preemptively unless the user’s intent to end access is clear.",
         ),
