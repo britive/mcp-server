@@ -50,12 +50,15 @@ britive = britive_client()
 
 def get_runner_file_content(output_dir: str, controller_attrs: list[str]) -> str:
     import_lines = [f"from {output_dir.replace('/', '.')}.{controller_attr.replace('.', '_')} import *" for controller_attr in controller_attrs]
+    joined_imports = "\n".join(import_lines)
 
     return f"""from {output_dir.replace('/', '.')} import mcp
-{"\n".join(import_lines)}
-\n\nif __name__ == '__main__':
+{joined_imports}
+
+if __name__ == '__main__':
     mcp.run()
 """
+
 
 
 def is_supported_parameter_type(param_type: Any) -> bool:
@@ -207,7 +210,8 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
                 f.write("\n\n".join(new_tool_funcs))
                 f.write("\n")
             new_tools_count += len(new_tool_funcs)
-            print(f"[✅] Generated '{controller_file_path}' with {len(new_tool_funcs)} tool(s)\n   • {'\n   • '.join(new_tool_names)}")
+            tool_list = '\n   • '.join(new_tool_names)
+            print(f"[✅] Generated '{controller_file_path}' with {len(new_tool_funcs)} tool(s)\n   • {tool_list}")
         else:
             if funcs_to_remove:
                 content_to_write = remove_functions_from_content(
@@ -221,7 +225,8 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
                     f.write("\n\n".join(new_tool_funcs))
                     f.write("\n")
                 new_tools_count += len(new_tool_funcs)
-                print(f"[✅] Updated '{controller_file_path}' with {len(new_tool_funcs)} tool(s): \n   •  {'\n   •  '.join(new_tool_names)}")
+                tool_list = '\n   • '.join(new_tool_names)
+                print(f"[✅] Updated '{controller_file_path}' with {len(new_tool_funcs)} tool(s): \n   • {tool_list}")
         new_tool_funcs.clear()
         new_tool_names.clear()
 
@@ -241,4 +246,4 @@ if __name__ == "__main__":
     parser.add_argument('--all', action='store_true', help='Generate all tools from Britive SDK')
 
     args = parser.parse_args()
-    generate_tools_package(args.all, args.output)
+    generate_tools_package(args.all, args.output.replace("\\", "/"))
