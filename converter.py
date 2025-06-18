@@ -3,9 +3,11 @@ import sys
 import re
 import inspect
 from britive.britive import Britive
+from britive.exceptions import UnauthorizedRequest
 from converter_config import SYSTEM_PROMPT, TOOLS
 from dotenv import load_dotenv
 from typing import Callable, List, Any, Optional
+from configparser import ConfigParser
 
 load_dotenv()
 
@@ -47,6 +49,26 @@ britive = britive_client()
 {chr(10).join(sorted(instances))}
 
 """
+
+def get_britive_client(tenant: str = "") -> Britive | None:
+    print(f"TENANT: {os.getenv('BRITIVE_TENANT')}")
+    tenant = tenant if tenant else os.getenv("BRITIVE_TENANT", "courage.dev2.aws")
+    tenant_config = ConfigParser()
+    tenant_config.read(os.path.expanduser("~/.britive/pybritive.config"))
+    try:
+        tenant_dns = tenant_config[f"tenant-{tenant}"]["name"]
+    except KeyError:
+        raise KeyError("Invalid or missing Britive tenant. Please verify and enter the correct tenant name.")
+    token_config = ConfigParser()
+    token_config.read(os.path.expanduser("~/.britive/pybritive.credentials"))
+    try:
+        token = token_config[tenant]["accessToken"]
+    except KeyError:
+        raise KeyError("Authentication required: No access token detected. Run 'pybritive login' to authenticate before using the converter.")
+    try:
+        return Britive(tenant=tenant_dns, token=token)
+    except UnauthorizedRequest as uae:
+        print(str(uae).rsplit("-", maxsplit=1)[-1].strip()) 
 
 def get_runner_file_content(output_dir: str, controller_attrs: list[str]) -> str:
     import_lines = [f"from {output_dir.replace('/', '.')}.{controller_attr.replace('.', '_')} import *" for controller_attr in controller_attrs]
@@ -143,7 +165,7 @@ def remove_functions_from_content(content: str, func_names: set) -> str:
 
 def generate_tools_package(generate_all: bool = False, output_dir: str = None) -> None:
     """Generate MCP tool functions from Britive SDK methods."""
-    britive = Britive()
+    britive = get_britive_client()
     existing_tool_names = set()
     new_tool_funcs = []
     new_tool_names = []
