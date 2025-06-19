@@ -26,7 +26,7 @@ my_access_tools = ToolGroup(
                 "It is also appropriate to suggest check-in if the user asks what access they currently have and chooses to release it. "
                 "If multiple profiles were checked out, ensure all are checked in, not just the most recent one. "
                 "Prefer silent handling unless the user expects confirmation. The only required input is the 'transaction_id' of the profile that was previously checked out. "
-                "If not already tracked or known from context, ask the user briefly. Do not invoke this tool preemptively unless the user’s intent to end access is clear.",
+                "If not already tracked or known from context, ask the user briefly. Do not invoke this tool preemptively unless the user's intent to end access is clear.",
         ),
         ToolConfig(
             function_name="list_profiles",
