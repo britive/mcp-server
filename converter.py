@@ -2,6 +2,7 @@ import os
 import sys
 import re
 import inspect
+from britive import __version__ as britive_version
 from britive.britive import Britive
 from britive.exceptions import UnauthorizedRequest
 from converter_config import SYSTEM_PROMPT, TOOLS
@@ -51,7 +52,6 @@ britive = britive_client()
 """
 
 def get_britive_client(tenant: str = "") -> Britive | None:
-    print(f"TENANT: {os.getenv('BRITIVE_TENANT')}")
     tenant = tenant if tenant else os.getenv("BRITIVE_TENANT", "courage.dev2.aws")
     tenant_config = ConfigParser()
     tenant_config.read(os.path.expanduser("~/.britive/pybritive.config"))
@@ -68,7 +68,7 @@ def get_britive_client(tenant: str = "") -> Britive | None:
     try:
         return Britive(tenant=tenant_dns, token=token)
     except UnauthorizedRequest as uae:
-        print(str(uae).rsplit("-", maxsplit=1)[-1].strip()) 
+        raise UnauthorizedRequest("Authentication required: No access token detected. Run 'pybritive login' to authenticate before using the converter.")
 
 def get_runner_file_content(output_dir: str, controller_attrs: list[str]) -> str:
     import_lines = [f"from {output_dir.replace('/', '.')}.{controller_attr.replace('.', '_')} import *" for controller_attr in controller_attrs]
@@ -149,7 +149,8 @@ def generate_tool_function(func_name: str, method: Callable, attr: str, descript
     controller_instance = attr.replace('.', '_')
     body = f"    return {controller_instance}.{method.__name__}({args_str})"
     docstring = process_method_docstring(method)
-    return "\n".join([decorator, f"def {func_name}({param_str}):", docstring, body])
+    tool_version = f"    # This tool is generated using Britive SDK v{britive_version}"
+    return "\n".join([decorator, f"def {func_name}({param_str}):", tool_version, docstring, body])
 
 def remove_functions_from_content(content: str, func_names: set) -> str:
     """Remove all tool functions (decorator + def block) with names in func_names from the content."""
