@@ -236,6 +236,7 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
             tool_list = '\n   • '.join(new_tool_names)
             print(f"[✅] Generated '{controller_file_path}' with {len(new_tool_funcs)} tool(s)\n   • {tool_list}")
         else:
+            content_to_write = open(controller_file_path).read() if os.path.exists(controller_file_path) else ""
             if funcs_to_remove:
                 content_to_write = remove_functions_from_content(
                     content_to_write, funcs_to_remove
@@ -243,9 +244,9 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
             
             if new_tool_funcs:
                 add_file_header = not os.path.exists(controller_file_path)
-                with open(controller_file_path, "a") as f:
+                with open(controller_file_path, "w") as f:
                     f.write(f"{import_statement}\n\n" if add_file_header else "")
-                    f.write("\n\n".join(new_tool_funcs))
+                    f.write(f"{content_to_write}\n\n{'\n\n'.join(new_tool_funcs)}")
                     f.write("\n")
                 new_tools_count += len(new_tool_funcs)
                 tool_list = '\n   • '.join(new_tool_names)
