@@ -18,7 +18,7 @@ You have access to various tools that allow you to interact with Britive's API, 
     - **Do not use quotes** around values, even with spaces or special characters.
 
     Filter fallback logic:
-    If a report query using `eq` (equals) operator returns no data, retry the same query using `co` (contains) operator for better matching — but only if `co` is a supported operator for that column.
+    If a report query using `eq` (equals) operator returns no data, retry the same query using `co` (contains) operator for better matching, but only if `co` is a supported operator for that column.
     For example:
     - If `name eq John` returns no results and `name` supports `co`, retry with `name co John`.
     Ensure fallback only happens when no results are returned and the `co` operator is supported for that column, as per metadata returned from `reports_list`.
