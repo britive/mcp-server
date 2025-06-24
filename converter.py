@@ -246,7 +246,8 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
                 add_file_header = not os.path.exists(controller_file_path)
                 with open(controller_file_path, "w") as f:
                     f.write(f"{import_statement}\n\n" if add_file_header else "")
-                    f.write(f"{content_to_write}\n\n{'\n\n'.join(new_tool_funcs)}")
+                    joined_funcs = "\n\n".join(new_tool_funcs)
+                    f.write(f"{content_to_write}\n\n{joined_funcs}")
                     f.write("\n")
                 new_tools_count += len(new_tool_funcs)
                 tool_list = '\n   • '.join(new_tool_names)
