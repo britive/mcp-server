@@ -1,5 +1,4 @@
 import os
-import sys
 import re
 import inspect
 from britive import __version__ as britive_version
@@ -67,7 +66,7 @@ def get_britive_client(tenant: str = "") -> Britive | None:
         raise KeyError("Authentication required: No access token detected. Run 'pybritive login' to authenticate before using the converter.")
     try:
         return Britive(tenant=tenant_dns, token=token)
-    except UnauthorizedRequest as uae:
+    except UnauthorizedRequest:
         raise UnauthorizedRequest("Authentication required: No access token detected. Run 'pybritive login' to authenticate before using the converter.")
 
 def get_runner_file_content(output_dir: str, controller_attrs: list[str]) -> str:
