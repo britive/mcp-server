@@ -1,29 +1,8 @@
 import os
-from configparser import ConfigParser
 from fastmcp import FastMCP
-from britive.britive import Britive
-from dotenv import load_dotenv
-from britive.exceptions import UnauthorizedRequest
-import datetime
-from typing import Optional
+from britive_mcp_tools.auth.client_wrapper import BritiveClientWrapper
 
-load_dotenv()
-
-
-def britive_client(tenant: str = "") -> Britive | None:
-    tenant = tenant if tenant else os.getenv("BRITIVE_TENANT", "courage.dev2.aws")
-    tenant_config = ConfigParser()
-    tenant_config.read(os.path.expanduser("~/.britive/pybritive.config"))
-    tenant_dns = tenant_config[f"tenant-{tenant}"]["name"]
-    token_config = ConfigParser()
-    token_config.read(os.path.expanduser("~/.britive/pybritive.credentials"))
-    token = token_config[tenant]["accessToken"]
-    try:
-        return Britive(tenant=tenant_dns, token=token)
-    except UnauthorizedRequest as uae:
-        print(str(uae).rsplit("-", maxsplit=1)[-1].strip()) 
-
-mcp = FastMCP(name="Britive Tool Server", instruction="""
+mcp = FastMCP(name="Britive Tool Server", instructions="""
 You are a secure and intelligent assistant integrated with Britive and MCP. Your primary goal is to help the user accomplish tasks.
 You have access to various tools that allow you to interact with Britive's API, manage access, and retrieve information.
 
@@ -48,9 +27,5 @@ You have access to various tools that allow you to interact with Britive's API, 
     - If `name eq John` returns no results and `name` supports `co`, retry with `name co John`.
     Ensure fallback only happens when no results are returned and the `co` operator is supported for that column, as per metadata returned from `reports_list`.
 """)
-britive = britive_client()
-
-audit_logs_logs = britive.audit_logs.logs
-my_access = britive.my_access
-reports = britive.reports
-
+tenant = os.getenv("BRITIVE_TENANT", "courage.dev2.aws")
+client_wrapper = BritiveClientWrapper(tenant)

@@ -1,5 +1,6 @@
 import datetime
-from britive_mcp_tools import mcp, reports
+from britive_mcp_tools.core.mcp_init import mcp, client_wrapper
+from britive.exceptions import UnauthorizedRequest
 
 @mcp.tool(name="reports_list", description="""List all available reports and their metadata.
 Use this tool to:
@@ -14,7 +15,16 @@ def reports_list():
     """Return list of all built-in reports.
 
 :return: List of reports."""
-    return reports.list()
+
+    try:
+        client = client_wrapper.get_client()
+        return client.reports.list()
+    except UnauthorizedRequest:
+        raise UnauthorizedRequest(
+            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
+            "After the user finishes logging in, ask them to confirm so you can retry this tool."
+        )
+    
 
 @mcp.tool(name="report_run_profile_historical_access", description="""This tool provides historical information on profiles access checked out by users
 
@@ -42,7 +52,16 @@ def report_run_profile_historical_access(report_id: str, csv: bool = False, filt
 :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
     correct filter expression string.
 :return: CSV string or list."""
-    return reports.run(report_id, csv, filter_expression)
+
+    try:
+        client = client_wrapper.get_client()
+        return client.reports.run(report_id, csv, filter_expression)
+    except UnauthorizedRequest:
+        raise UnauthorizedRequest(
+            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
+            "After the user finishes logging in, ask them to confirm so you can retry this tool."
+        )
+    
 
 @mcp.tool(name="report_run_permissions_in_profile", description="""This tool allows to get details on what permissions are assigned to which profiles, details on the permissions, profiles associations and policies
 This tool provides information on permissions in a specific profile.
@@ -71,7 +90,16 @@ def report_run_permissions_in_profile(report_id: str, csv: bool = False, filter_
 :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
     correct filter expression string.
 :return: CSV string or list."""
-    return reports.run(report_id, csv, filter_expression)
+
+    try:
+        client = client_wrapper.get_client()
+        return client.reports.run(report_id, csv, filter_expression)
+    except UnauthorizedRequest:
+        raise UnauthorizedRequest(
+            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
+            "After the user finishes logging in, ask them to confirm so you can retry this tool."
+        )
+    
 
 @mcp.tool(name="report_run_tag_membership", description="""This tool allows to get details on members associated with each tag. 
 This tool provides information on tag membership, including which profiles are associated with which tags. 
@@ -100,7 +128,16 @@ def report_run_tag_membership(report_id: str, csv: bool = False, filter_expressi
 :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
     correct filter expression string.
 :return: CSV string or list."""
-    return reports.run(report_id, csv, filter_expression)
+
+    try:
+        client = client_wrapper.get_client()
+        return client.reports.run(report_id, csv, filter_expression)
+    except UnauthorizedRequest:
+        raise UnauthorizedRequest(
+            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
+            "After the user finishes logging in, ask them to confirm so you can retry this tool."
+        )
+    
 
 @mcp.tool(name="report_run_service_identities_details", description="""This tool allows to get details on service identities. 
 This tool provides information on service identities and their creation and expiration dates.
@@ -129,4 +166,13 @@ def report_run_service_identities_details(report_id: str, csv: bool = False, fil
 :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
     correct filter expression string.
 :return: CSV string or list."""
-    return reports.run(report_id, csv, filter_expression)
+
+    try:
+        client = client_wrapper.get_client()
+        return client.reports.run(report_id, csv, filter_expression)
+    except UnauthorizedRequest:
+        raise UnauthorizedRequest(
+            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
+            "After the user finishes logging in, ask them to confirm so you can retry this tool."
+        )
+    
