@@ -105,6 +105,145 @@ Examples:
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
 """,
+            regenerate=False,
+        ),
+
+        ToolConfig(
+            function_name="run",
+            tool_name="report_run_user_secret_access",
+            ai_description="""This tool allows information on secret assigned to users. 
+This tool retrieves details of secrets assigned to users based on their identity context
+
+Steps:
+1. Use `reports_list` to find the report named 'User Secret Access'.
+2. Extract its `reportId` and valid columns/operators.
+3. Call this tool with that `report_id` and optional filters.
+
+Filterable columns include: `username`, `identityType`, `secretPath`, `secretDescription`, etc.
+
+Examples:
+- `firstname sw john`
+- `secretPath co /path/to/secret`
+
+Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
+Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
+""",
+            regenerate=True,
+        ),
+        ToolConfig(
+            function_name="run",
+            tool_name="report_run_secret_last_access",
+            ai_description="""This tool provides information on secrets and when they were accessed. 
+This tool retrieves information about secrets accessed by specific identities, including access timestamps. It supports queries such as identifying which secrets were accessed in the past 30 days and by whom.
+
+Steps:
+1. Use `reports_list` to find the report named 'Secret Last Access'.
+2. Extract its `reportId` and valid columns/operators.
+3. Call this tool with that `report_id` and optional filters.
+
+Filterable columns include: `secretPath`, `secretDescription`, `name`, `identityType`, `secret_last_used_time`, etc.
+
+Examples:
+- `secret_last_used_time co 2023-01-01`
+- `secretPath co searchExperssion`
+
+Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
+Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
+""",
+            regenerate=True,
+        ),
+
+        ToolConfig(
+            function_name="run",
+            tool_name="report_run_profiles_assigned_to_service_identities",
+            ai_description="""This tool provides information to get details on who has what access to profiles, applications and environments
+This tool retrieves detailed access mappings between service identities and their assigned profiles, applications, and environments within Britive. It helps determine who has access to what, allowing you to analyze identity-level access across profiles, applications, and environments, along with related metadata such as status, mapped accounts, and tags.
+
+Steps:
+1. Use `reports_list` to find the report named 'Profile Assigned to Service Identities'.
+2. Extract its `reportId` and valid columns/operators.
+3. Call this tool with that `report_id` and optional filters.
+
+Filterable columns include: `name`, `email`, `type`, `application`, `applicationStatus`, `profile`, `description`, `environment`, `environmentStatus`, `mappedAccount`, `tag`
+
+Examples:
+
+User may ask questions such as:
+
+-What applications does Identity "xyz" have access to via provider?
+-What environments does Identity "xyz" have access to?
+-What profiles does Identity "xyz" have access to?
+
+Expected Response Format:
+Answer in a structured format (e.g., tables or bullet points).
+Include metadata like Application status, Environment status, Mapped Account, etc., when relevant.
+Apply column-based filters precisely based on the question.
+
+Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
+Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
+""",
+            regenerate=True,
+        ),
+
+        ToolConfig(
+                function_name="run",
+                tool_name="report_run_profile_accessed_tags",
+                ai_description=""" This tool provides tags information associated with details on who has what access to applications, environments and profiles.
+    This tool retrieves detailed access mappings between profiles and their associated tags, applications, and environments within Britive. It helps determine which profiles are associated with which tags, allowing you to analyze profile-level access across applications and environments, along with related metadata such as status, mapped accounts, and tags.
+        
+
+        Steps:
+        1. Use `reports_list` to find the report named 'Profiles Assigned to Tags'.
+        2. Extract its `reportId` and valid columns/operators.
+        3. Call this tool with that `report_id` and optional filters.
+
+        Filterable columns include: `name`, `application`, `applicationStatus`, `profile`, `description`, `environment`, `environmentStatus`
+
+        Examples:
+
+        User may ask questions such as:
+
+        -What applications does tag "xyz" have access to via provider name
+        -What environments does tag "xyz" have access to via provider name
+        -What profiles does a tag "xyz" have access to
+
+    Expected Response Format:
+    Answer in a structured format (e.g., tables or bullet points).
+    Include metadata like Application status, Environment status, Profile, etc., when relevant associated with tags.
+    Apply column-based filters precisely based on the question.
+
+    Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
+    Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
+    """,
+            regenerate=True,
+        ),
+        ToolConfig(
+                function_name="run",
+                tool_name="report_run_AI_identities_secret_lst_access",
+                ai_description=""" This tool provides information on details of AI identities with secrets last access
+    This tool retrieves detailed access mappings between AI identities and their associated secrets, including last access timestamps. It helps determine which AI identities have accessed which secrets, allowing you to analyze AI identity-level access across secrets, along with related metadata such as usernames,secret path and secret description.
+        Steps:
+        1. Use `reports_list` to find the report named 'AI Identity Secret Last Access'.
+        2. Extract its `reportId` and valid columns/operators.
+        3. Call this tool with that `report_id` and optional filters.
+
+        Filterable columns include: `username`, `firstName`, `lastName`, `identityType`, `secretPath`, `secretDescription`, `lastAccessedTime`
+
+        Examples:
+
+        User may ask questions such as:
+        -Give me a list of AI identities that haven't been usedin the past 30 days?
+        -Give me a list of AI identities whose access tokens expire in the next y days
+
+
+    Expected Response Format:
+    Answer in a structured format (e.g., tables or bullet points).
+    Include metadata like Application status, Environment status, Profile, etc., when relevant associated with AI identities.
+    Apply column-based filters precisely based on the question.
+
+    Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
+    Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
+    """,
             regenerate=True,
         )
     ]
