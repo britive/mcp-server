@@ -1,6 +1,6 @@
 from converter_config.base import ToolConfig, ToolGroup
 
-identity_management = ToolGroup(
+identity_service_management = ToolGroup(
     name="identity_management.service_identities",
     tools=[
         ToolConfig(

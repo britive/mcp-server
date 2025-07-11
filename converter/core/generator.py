@@ -75,7 +75,12 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
             if not generate_all and tool_func_name in existing_tool_names:
                 funcs_to_remove.add(tool_func_name)
 
-        import_statement = f"import datetime\nfrom {init_file.replace(".py", "").replace('/', '.')} import mcp, client_wrapper\nfrom britive.exceptions import UnauthorizedRequest"
+        module_path = init_file.replace('.py', '').replace('/', '.').replace('\\', '.')
+        import_statement = (
+            f"import datetime\n"
+            f"from {module_path} import mcp, client_wrapper\n"
+            f"from britive.exceptions import UnauthorizedRequest"
+        )
         if generate_all:
             # Write the new tool functions to the controller file
             with open(controller_file_path, "w") as f:

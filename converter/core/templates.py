@@ -1,5 +1,7 @@
-INIT_FILE = "core/mcp_init.py"
-RUNNER_FILE = "core/mcp_runner.py"
+import os
+
+INIT_FILE = os.path.join("core", "mcp_init.py")
+RUNNER_FILE = os.path.join("core", "mcp_runner.py")
 
 def get_mcp_init_content(controller_attrs: list[str], system_prompt: str, output_dir: str) -> str:
     instances = {
@@ -15,10 +17,10 @@ client_wrapper = BritiveClientWrapper(tenant)
 """
 
 def get_mcp_runner_content(output_dir: str, tools_dir: str, controller_attrs: list[str]) -> str:
-    import_lines = [f"from {tools_dir.replace('/', '.')}.{controller_attr.replace('.', '_')} import *" for controller_attr in controller_attrs]
+    import_lines = [f"from {tools_dir.replace(os.sep, '.')}.{controller_attr.replace('.', '_')} import *" for controller_attr in controller_attrs]
     joined_imports = "\n".join(import_lines)
 
-    return f"""from {output_dir.replace('/', '.')} import mcp
+    return f"""from {output_dir.replace(os.sep, '.')} import mcp
 {joined_imports}
 
 if __name__ == '__main__':

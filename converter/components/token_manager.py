@@ -26,7 +26,7 @@ class TokenManager:
 
     def is_logged_out(self):
         self.config.read(self.token_file)
-        return self.tenant in self.config
+        return self.tenant not in self.config
     
     def refresh_token(self):
         pybritive_cli = os.path.join(os.path.dirname(sys.executable), "pybritive")
