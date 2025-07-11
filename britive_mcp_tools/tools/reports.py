@@ -11,7 +11,7 @@ Use this tool to:
 You must call this tool before using any `report_run_*` tool to ensure you have the correct `reportId`, column names, and operator support.
 No parameters required.""")
 def reports_list():
-    # This tool is generated using Britive SDK v4.2.0
+    # This tool is generated using Britive SDK v4.3.0
     """Return list of all built-in reports.
 
 :return: List of reports."""
@@ -43,7 +43,7 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
 """)
 def report_run_profile_historical_access(report_id: str, csv: bool = False, filter_expression: str = None):
-    # This tool is generated using Britive SDK v4.2.0
+    # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
 :param report_id: The ID of the report.
@@ -81,7 +81,7 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
 """)
 def report_run_permissions_in_profile(report_id: str, csv: bool = False, filter_expression: str = None):
-    # This tool is generated using Britive SDK v4.2.0
+    # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
 :param report_id: The ID of the report.
@@ -119,7 +119,7 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
 """)
 def report_run_tag_membership(report_id: str, csv: bool = False, filter_expression: str = None):
-    # This tool is generated using Britive SDK v4.2.0
+    # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
 :param report_id: The ID of the report.
@@ -157,7 +157,7 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
 """)
 def report_run_service_identities_details(report_id: str, csv: bool = False, filter_expression: str = None):
-    # This tool is generated using Britive SDK v4.2.0
+    # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
 :param report_id: The ID of the report.
@@ -195,7 +195,7 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
 """)
 def report_run_user_secret_access(report_id: str, csv: bool = False, filter_expression: str = None):
-    # This tool is generated using Britive SDK v4.2.0
+    # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
 :param report_id: The ID of the report.
@@ -233,7 +233,7 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
 """)
 def report_run_secret_last_access(report_id: str, csv: bool = False, filter_expression: str = None):
-    # This tool is generated using Britive SDK v4.2.0
+    # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
 :param report_id: The ID of the report.
@@ -280,7 +280,7 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
 """)
 def report_run_profiles_assigned_to_service_identities(report_id: str, csv: bool = False, filter_expression: str = None):
-    # This tool is generated using Britive SDK v4.2.0
+    # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
 :param report_id: The ID of the report.
@@ -328,7 +328,7 @@ def report_run_profiles_assigned_to_service_identities(report_id: str, csv: bool
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """)
 def report_run_profile_accessed_tags(report_id: str, csv: bool = False, filter_expression: str = None):
-    # This tool is generated using Britive SDK v4.2.0
+    # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
 :param report_id: The ID of the report.
@@ -373,7 +373,7 @@ def report_run_profile_accessed_tags(report_id: str, csv: bool = False, filter_e
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """)
 def report_run_AI_identities_secret_lst_access(report_id: str, csv: bool = False, filter_expression: str = None):
-    # This tool is generated using Britive SDK v4.2.0
+    # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
 :param report_id: The ID of the report.

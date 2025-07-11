@@ -4,7 +4,7 @@ from britive.exceptions import UnauthorizedRequest
 
 @mcp.tool(name="identity_management_service_identities_list", description="""This tool lists all service identities available in the Britive platform. It provides list of details such as identity ID, name, type, and status. Use this tool to get userId based on filter options and use this id in further operations like enabling or disabling a service identity. You can filter the list by name, type, status, and tags to narrow down the results.""")
 def identity_management_service_identities_list(filter_expression: str = None, include_tags: bool = False):
-    # This tool is generated using Britive SDK v4.2.0
+    # This tool is generated using Britive SDK v4.3.0
     """Provide an optionally filtered list of all service identities.
 
 :param filter_expression: filter list of users based on name, status, or role. The supported operators
@@ -24,7 +24,7 @@ def identity_management_service_identities_list(filter_expression: str = None, i
 
 @mcp.tool(name="identity_management_service_identities_get", description="""This tool retrieves detailed information about a specific service identity by its ID. It provides comprehensive details including the identity's name, type, status, created date, modified date, last login, token expires on, token expiration in days, type of serviceIdentity type and any associated tags. Use this tool to gather specific information about a service identity before taking actions like enabling or disabling it """)
 def identity_management_service_identities_get(service_identity_id: str):
-    # This tool is generated using Britive SDK v4.2.0
+    # This tool is generated using Britive SDK v4.3.0
     """Provide details of the given service_identity.
 
 :param service_identity_id: The ID  of the service identity.
@@ -42,7 +42,7 @@ def identity_management_service_identities_get(service_identity_id: str):
 
 @mcp.tool(name="identity_management_service_identities_search", description="""This tool searches for service identities based on a query string. It allows you to find identities by name, type, or other attributes. The search results include basic details such as identity ID, name, type, and status. Use this tool to quickly locate service identities that match specific criteria without needing to list all identities.""")
 def identity_management_service_identities_search(search_string: str):
-    # This tool is generated using Britive SDK v4.2.0
+    # This tool is generated using Britive SDK v4.3.0
     """Search all user fields for the given `search_string` and returns
 a list of matched service identities.
 
@@ -61,7 +61,7 @@ a list of matched service identities.
 
 @mcp.tool(name="identity_management_service_identities_enable", description="""Checks the status of the specified service identity. If the status is inactive, prompts the user for confirmation to enable it. If confirmed, it performs the enable action. If the identity is already active, it informs the user and suggests disabling it instead.""")
 def identity_management_service_identities_enable(service_identity_id: str = None, service_identity_ids: list = None):
-    # This tool is generated using Britive SDK v4.2.0
+    # This tool is generated using Britive SDK v4.3.0
     """Enable the given service identities.
 
 You can pass in both `service_identity_id` for a single user and `service_identity_ids` to enable multiple
@@ -84,7 +84,7 @@ will be merged together into one list.
 
 @mcp.tool(name="identity_management_service_identities_disable", description="""Checks the status of the specified service identity. If the status is active, prompts the user for confirmation to disable it. If confirmed, it performs the disable action. If the identity is already inactive, it informs the user and suggests enabling it instead.""")
 def identity_management_service_identities_disable(service_identity_id: str = None, service_identity_ids: list = None):
-    # This tool is generated using Britive SDK v4.2.0
+    # This tool is generated using Britive SDK v4.3.0
     """Disable the given service identities.
 
 You can pass in both `service_identity_id` for a single service identity and `service_identity_ids` to disable
