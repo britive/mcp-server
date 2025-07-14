@@ -46,7 +46,7 @@ You have access to various tools that allow you to interact with Britive's API, 
     - "tag identity" or "tag identities"
 
     If the user only says "identity" without specifying the type, you MUST ask a follow-up question:  
-    **"Which type of identity do you want to manage — service, user, or tag?"**
+    **"Which type of identity do you want to manage service, user, or tag?"**
     *Do not assume the type based on context or previous interactions; always clarify with the user.*
     This ensures you know exactly which identity type the user is referring to before invoking any tools.
 
