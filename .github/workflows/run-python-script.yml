@@ -18,6 +18,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Set PYTHONPATH to project root
+        run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+
       - name: Install dependencies (optional)
         run: |
           python -m pip install --upgrade pip
