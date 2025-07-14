@@ -1,145 +1,115 @@
-**User Guide: Britive MCP Tool Generator**
+# Britive MCP Tools - Quickstart Guide
 
----
+This guide explains how to set up and use the generated MCP tools in this repository.
 
-**Purpose:**
-This guide helps users understand how to use the Britive MCP Tool Generator to automatically generate or update tool functions based on the SDK and a modular config file structure.
+## 1. Clone the Repository
 
----
+Clone this repository to your local machine:
 
-**Step-by-Step Guide:**
-
-**Step 1: Setup Environment**
-
-* Clone the project repository.
-* Install dependencies:
-
-  ```bash
-  pip install -r requirements.txt
-  ```
-* Add necessary environment variables in a `.env` file (BRITIVE_API_TOKEN, BRITIVE_TENANT).
-
-**Step 2: Define Tool Configuration (Per Controller)**
-
-* Create a separate config file for each controller using `ToolGroup` and `ToolConfig` in the `converter_config` directory :
-
-```python
-# audit_logs_logs.py
-
-from converter_config.base import ToolConfig, ToolGroup
-
-audit_logs_logs = ToolGroup(
-    name="audit_logs.logs",
-    tools=[
-        ToolConfig(
-            function_name="fields",
-            ai_description="Return list of fields that can be used in a filter for an audit query."
-        ),
-        ToolConfig(
-            function_name="operators",
-            ai_description="Return the list of operators that can be used in a filter for an audit query."
-        ),
-        ToolConfig(
-            function_name="query",
-            ai_description="Retrieve audit log events."
-        )
-    ]
-)
+```sh
+git clone git@github.com:britive/mcp-server.git
+cd mcp-server
 ```
 
-**Step 3: Register Config in Central File**
+## 2. Create Virtual Environement and Install Requirements
 
-* Add the controller config to `converter_config/__init__.py`:
+Create virtual environment
+```sh
+python -m venv <virtual_env_name>
+```
+Activate virtual environment
 
-```python
-from converter_config.system_prompt import SYSTEM_PROMPT
-from converter_config.my_access_config import my_access_tools
-from converter_config.audit_logs_logs_config import audit_logs_logs
+Windows
+```sh
+<virtual_env_name>\Scripts\activate
+```
+Linux
 
-TOOLS = {
-    my_access_tools.name: my_access_tools.tools,
-    audit_logs_logs.name: audit_logs_logs.tools,
-#   your_controller.name: your_controller.tools
+```sh
+source <virtual_env_name>/Scripts/activate
+```
+
+Install the required Python packages in your created environment:
+
+```sh
+pip install -r requirements.txt
+```
+
+## 3. Configure MCP JSON file
+
+Sample json file
+
+```json
+{
+  "servers": {
+    "britive": {
+1      "command": "<path_to_the_repo>\\<virtual_env_name>\\Scripts\\python.exe",
+      "args": [
+2        "<path_to_the_repo>\\mcp-server\\britive_mcp_tools\\core\\mcp_runner.py"
+      ],
+      "env": {
+3        "PYTHONPATH": "<path_to_the_repo>\\mcp-server",
+4        "BRITIVE_TENANT": "your_tenant"
+      }
+    }
+  }
 }
-```
-
-**Step 4: Run the Tool Generator Script**
-
-You can generate or update your MCP tool files using the `converter.py` script.
-
-* Update the MCP tools (Provide the already existing directory path of generated MCP Tools):
-
-```bash
-python3 converter.py --output "britive_tools_mcp"
-```
-
-* To generate all tools from scratch (Provide new directory path to avoid overwritting existing tools):
-
-```bash
-python3 converter.py --output "britive_tools_mcp" --all
-```
-
-### ⚠️ Important Notes:
-
-The `--output` path should be **relative to your working directory** (where you run the Python script).
-
-📌 **Example:**
-
-If your working directory is:
 
 ```
-C:\Users\username\britive\mcp
+---
+| Line No | Key/Field        | Description                                                                |
+| ------- | ---------------- | -------------------------------------------------------------------------- |
+| 1       | `command`        | Full path to the Python executable inside the virtual environment.         |
+| 2       | `args`           | Full path to the `britive_mcp_tools\core\mcp_runner.py` module.            |
+| 3       | `PYTHONPATH`     | Set the Python path to `mcp-server` directory (repo).                      |
+| 4       | `BRITIVE_TENANT` (Optional) | Your tenant on Britive. Default is `courage.dev2.aws`                                                    |
+---
+
+## 4. Login with PyBritive Credentials
+
+Authenticate with your Britive account using the [pybritive](https://pypi.org/project/pybritive/) CLI:
+
+```sh
+pybritive login
+```
+If you are having multiple tenant configured then use following command to login:
+
+```sh
+pybritive login --tenant=<tenant_name>
 ```
 
-And you want the tools to be saved in:
+Follow the instructions to authenticate.
 
-```
-C:\Users\username\britive\mcp\outputs\britive_mcp_tools
+## 5. Start the MCP Server
+
+You can now start the MCP server using your configured environment.  
+If using VS Code, you can launch the server via the MCP extension or by running:
+
+```sh
+python britive_mcp_tools/core/mcp_runner.py
 ```
 
-Then run:
-
-```bash
-python3 converter.py --output "outputs\britive_mcp_tools" --all
-```
+Or use the `.vscode/mcp.json` configuration with your preferred MCP client.
 
 ---
 
-**How It Works:**
+## 6. Enable Copilot Agent Mode
 
-* Loads the modular config and identifies each controller.
-* Uses Python reflection to get all available SDK methods.
-* Filters and selects methods based on the config.
-* Generates or updates tool functions.
+Enable Copilot in Agent mode in your client (such as Claude Desktop or another MCP-compatible client).
 
----
+## 7. Start Using MCP Tools
 
-**Common Scenarios:**
+Begin with your prompt to test the MCP tools, for example:
 
-* **Add a new method**
+> Show me my profile access.
 
-  * Add the method to the class-specific config file.
-  * Rerun the script with `--output` flag and give the directory path for tools which you want to update.
-
-* **Update an existing method**
-
-  * Add `regenerate=True` in the `ToolConfig`.
-  * Rerun the script.
-
-* **Regenerate all tools from scratch**
-
-  * Run the script with `--all` flag.
+or
+> Show all active sessions.
 
 ---
 
-**Troubleshooting:**
+For more details on available tools, see the source files in [`britive_mcp_tools/tools/`](britive_mcp_tools/tools/).
 
-* **Tool not generated?** Ensure the method exists in the SDK and matches the config.
-* **Syntax issues?** Check function parameter names and types.
+For more details on converter to generate tools [`Click here`](converter_readme.md)
 
 ---
-
-**Best Practices:**
-
-* Write clear `ai_description` and examples for better LLM results.
-* Avoid manual edits to the generated file.
