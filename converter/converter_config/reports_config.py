@@ -1,4 +1,4 @@
-from converter_config.base import ToolConfig, ToolGroup
+from converter.converter_config.base import ToolConfig, ToolGroup
 
 reports = ToolGroup(
     name="reports",
@@ -186,9 +186,9 @@ Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `
         ),
 
         ToolConfig(
-                function_name="run",
-                tool_name="report_run_profile_accessed_tags",
-                ai_description=""" This tool provides tags information associated with details on who has what access to applications, environments and profiles.
+            function_name="run",
+            tool_name="report_run_profile_accessed_tags",
+            ai_description=""" This tool provides tags information associated with details on who has what access to applications, environments and profiles.
     This tool retrieves detailed access mappings between profiles and their associated tags, applications, and environments within Britive. It helps determine which profiles are associated with which tags, allowing you to analyze profile-level access across applications and environments, along with related metadata such as status, mapped accounts, and tags.
         
 
@@ -218,9 +218,9 @@ Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `
             regenerate=True,
         ),
         ToolConfig(
-                function_name="run",
-                tool_name="report_run_AI_identities_secret_lst_access",
-                ai_description=""" This tool provides information on details of AI identities with secrets last access
+            function_name="run",
+            tool_name="report_run_AI_identities_secret_last_access",
+            ai_description=""" This tool provides information on details of AI identities with secrets last access
     This tool retrieves detailed access mappings between AI identities and their associated secrets, including last access timestamps. It helps determine which AI identities have accessed which secrets, allowing you to analyze AI identity-level access across secrets, along with related metadata such as usernames,secret path and secret description.
         Steps:
         1. Use `reports_list` to find the report named 'AI Identity Secret Last Access'.

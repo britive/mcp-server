@@ -1,4 +1,4 @@
-from converter_config.base import ToolConfig, ToolGroup
+from converter.converter_config.base import ToolConfig, ToolGroup
 
 audit_logs_logs = ToolGroup(
     name="audit_logs.logs",

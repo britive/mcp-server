@@ -1,4 +1,4 @@
-from converter_config.base import ToolConfig, ToolGroup
+from converter.converter_config.base import ToolConfig, ToolGroup
 
 security_active_session = ToolGroup(
     name="security.active_sessions",

@@ -1,8 +1,8 @@
-from converter_config.system_prompt import SYSTEM_PROMPT
+from converter.converter_config.system_prompt import SYSTEM_PROMPT
 
-from converter_config. my_access_config import my_access_tools
-from converter_config.audit_logs_logs_config import audit_logs_logs
-from converter_config.reports_config import reports
+from converter.converter_config. my_access_config import my_access_tools
+from converter.converter_config.audit_logs_logs_config import audit_logs_logs
+from converter.converter_config.reports_config import reports
 from converter.converter_config.identity_service_config import identity_service_management
 from converter.converter_config.identity_user_config import identity_user_management
 from converter.converter_config.identity_tag_config import identity_tag_management

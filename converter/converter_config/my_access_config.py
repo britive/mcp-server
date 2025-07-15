@@ -1,4 +1,4 @@
-from converter_config.base import ToolConfig, ToolGroup
+from converter.converter_config.base import ToolConfig, ToolGroup
 
 my_access_tools = ToolGroup(
     name="my_access",
