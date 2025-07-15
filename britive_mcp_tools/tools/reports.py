@@ -348,7 +348,7 @@ def report_run_profile_accessed_tags(report_id: str, csv: bool = False, filter_e
         )
     
 
-@mcp.tool(name="report_run_AI_identities_secret_lst_access", description=""" This tool provides information on details of AI identities with secrets last access
+@mcp.tool(name="report_run_AI_identities_secret_last_access", description=""" This tool provides information on details of AI identities with secrets last access
     This tool retrieves detailed access mappings between AI identities and their associated secrets, including last access timestamps. It helps determine which AI identities have accessed which secrets, allowing you to analyze AI identity-level access across secrets, along with related metadata such as usernames,secret path and secret description.
         Steps:
         1. Use `reports_list` to find the report named 'AI Identity Secret Last Access'.
@@ -372,7 +372,8 @@ def report_run_profile_accessed_tags(report_id: str, csv: bool = False, filter_e
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """)
-def report_run_AI_identities_secret_lst_access(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_AI_identities_secret_last_access(report_id: str, csv: bool = False, filter_expression: str = None):
+    # This tool is generated using Britive SDK v4.3.0
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 

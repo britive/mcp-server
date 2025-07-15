@@ -245,6 +245,203 @@ Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
             regenerate=True,
+        ),
+        ToolConfig(
+            function_name="run",
+            tool_name="report_run_resource_historical_access",
+            ai_description=""" This tool provides information on resource checked out by users in last 90 days.
+    This tool retrieves historical information on resources accessed by users in the last 90 days. It provides details such as resource name, resource type, resource origin, last accessed date, etc.
+
+        Steps:
+        1. Use `reports_list` to find the report named 'Resource Historical Access'.
+        2. Extract its `reportId` and valid columns/operators.
+        3. Call this tool with that `report_id` and optional filters.
+
+        Filterable columns include: `name`, `origin`, `resourceType`, `profileName`, `permissionName`, `version`, `identityType`, `lastAccessedDate`.
+
+        Examples:
+
+        User may ask questions such as:
+        -Give me a list of resources that are not being used in the past 30 days?
+        -Which resource has been accessed by which user in the last 2 days?
+
+
+    Expected Response Format:
+    Answer in a structured format (e.g., tables or bullet points).
+    Apply column-based filters precisely based on the question.
+
+    Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
+    Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
+    """,
+            regenerate=True,
+        ),
+        ToolConfig(
+            function_name="run",
+            tool_name="report_run_resource_last_access",
+            ai_description=""" This tool provides information on when a resource was used.
+    This tool retrieves information about resources accessed by specific identities, including access date and days.
+        Steps:
+        1. Use `reports_list` to find the report named 'Resource Last Access'.
+        2. Extract its `reportId` and valid columns/operators.
+        3. Call this tool with that `report_id` and optional filters.
+
+        Filterable columns include: `name`, `origin`, `resourceType`, `profileName`, `permissionName`, `version`, `identityName`,`identityType`, `lastAccessed`, `lastAccessedDate`.
+
+        Examples:
+
+        User may ask questions such as:
+        -Give me a list of resources that are not being used in the past 30 days?
+        -Which resource has been accessed by which user in the last 2 days?
+
+
+    Expected Response Format:
+    Answer in a structured format (e.g., tables or bullet points).
+    Apply column-based filters precisely based on the question.
+
+    Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
+    Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
+    """,
+            regenerate=True,
+        ),
+        ToolConfig(
+            function_name="run",
+            tool_name="report_run_resources_assigned_to_ai_identities",
+            ai_description=""" This tool provides information on resources assigned to ai identities.
+    This tool retrieves detailed access mappings between AI identities and their assigned resources, including resource names, types, and origin. It helps determine which AI identities have access to which resources, allowing you to analyze AI identity-level access across resources.
+        Steps:
+        1. Use `reports_list` to find the report named 'Resources Assigned to AI Identities'.
+        2. Extract its `reportId` and valid columns/operators.
+        3. Call this tool with that `report_id` and optional filters.
+
+        Filterable columns include: `resourceName`, `origin`, `resourceType`, `profileName`, `identityName`,`identityType`.
+
+        Examples:
+
+        User may ask questions such as:
+        -What resources does AI identity "xyz" have access to?
+        -Can you list all resources assigned to AI identity "xyz"?
+
+
+    Expected Response Format:
+    Answer in a structured format (e.g., tables or bullet points).
+    Apply column-based filters precisely based on the question.
+
+    Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
+    Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
+    """,
+            regenerate=True,
+        ),
+        ToolConfig(
+            function_name="run",
+            tool_name="report_run_resources_assigned_to_all_identities",
+            ai_description=""" This tool provides information on resources assigned to all identities.
+    This tool retrieves detailed access mappings between all identities and their assigned resources, including resource names, types, and origin. It helps determine which identities have access to which resources, allowing you to analyze identity-level access across resources.
+        Steps:
+        1. Use `reports_list` to find the report named 'Resources Assigned to All Identities'.
+        2. Extract its `reportId` and valid columns/operators.
+        3. Call this tool with that `report_id` and optional filters.
+
+        Filterable columns include: `resourceName`, `origin`, `resourceType`, `profileName`, `identityName`,`identityType`.
+
+        Examples:
+
+        User may ask questions such as:
+        -What resources does identity "xyz" have access to?
+        -Can you list all resources assigned to identity "xyz"?
+
+
+    Expected Response Format:
+    Answer in a structured format (e.g., tables or bullet points).
+    Apply column-based filters precisely based on the question.
+
+    Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
+    Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
+    """,
+            regenerate=True,
+        ),
+        ToolConfig(
+            function_name="run",
+            tool_name="report_run_resources_assigned_to_service_identities",
+            ai_description=""" This tool provides information on resources assigned to service identities.
+    This tool retrieves detailed access mappings between service identities and their assigned resources, including resource names, types, and origin. It helps determine which service identities have access to which resources, allowing you to analyze service identity-level access across resources.
+        Steps:
+        1. Use `reports_list` to find the report named 'Resources Assigned to Service Identities'.
+        2. Extract its `reportId` and valid columns/operators.
+        3. Call this tool with that `report_id` and optional filters.
+
+        Filterable columns include: `resourceName`, `origin`, `resourceType`, `profileName`, `identityName`,`identityType`.
+
+        Examples:
+
+        User may ask questions such as:
+        -What resources does service identity "xyz" have access to?
+        -Can you list all resources assigned to service identity "xyz"?
+
+
+    Expected Response Format:
+    Answer in a structured format (e.g., tables or bullet points).
+    Apply column-based filters precisely based on the question.
+
+    Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
+    Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
+    """,
+            regenerate=True,
+        ),
+        ToolConfig(
+            function_name="run",
+            tool_name="report_run_resources_assigned_to_tags",
+            ai_description=""" This tool provides information on resources assigned to tags.
+    This tool retrieves detailed access mappings between tags and their assigned resources, including resource names, types, and origin. It helps determine which tag have access to which resources, allowing you to analyze tag-level access across resources.
+        Steps:
+        1. Use `reports_list` to find the report named 'Resources Assigned to Tags'.
+        2. Extract its `reportId` and valid columns/operators.
+        3. Call this tool with that `report_id` and optional filters.
+
+        Filterable columns include: `resourceName`, `origin`, `resourceType`, `profileName`, `identityName`,`identityType`.
+
+        Examples:
+
+        User may ask questions such as:
+        -What resources does tag "xyz" have access to?
+        -Can you list all resources assigned to tag "xyz"?
+
+
+    Expected Response Format:
+    Answer in a structured format (e.g., tables or bullet points).
+    Apply column-based filters precisely based on the question.
+
+    Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
+    Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
+    """,
+            regenerate=True,
+        ),
+        ToolConfig(
+            function_name="run",
+            tool_name="report_run_resources_assigned_to_users",
+            ai_description=""" This tool provides information on resources assigned to users.
+    This tool retrieves detailed access mappings between users and their assigned resources, including resource names, types, and origin. It helps determine which user have access to which resources, allowing you to analyze user-level access across resources.
+        Steps:
+        1. Use `reports_list` to find the report named 'Resources Assigned to Users'.
+        2. Extract its `reportId` and valid columns/operators.
+        3. Call this tool with that `report_id` and optional filters.
+
+        Filterable columns include: `resourceName`, `origin`, `resourceType`, `profileName`, `identityName`,`identityType`.
+
+        Examples:
+
+        User may ask questions such as:
+        -What resources does user "xyz" have access to?
+        -Can you list all resources assigned to user "xyz"?
+
+
+    Expected Response Format:
+    Answer in a structured format (e.g., tables or bullet points).
+    Apply column-based filters precisely based on the question.
+
+    Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
+    Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
+    """,
+            regenerate=True,
         )
     ]
 )
