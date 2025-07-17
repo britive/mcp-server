@@ -9,17 +9,17 @@ def find_unicode_characters(text: str) -> List[Tuple[int, str, int]]:
     Returns:
         A list of tuples: (index, character, unicode_code_point)
     """
-    return [(i, char, ord(char)) for i, char in enumerate(text) if ord(char) > 127]
+    return [(i, char, text[i-10 : i+10]) for i, char in enumerate(text) if ord(char) > 127]
 
 
 def format_unicode_error(source: str, unicode_info: List[Tuple[int, str, int]]) -> str:
     """
     Format a readable error message for found unicode characters.
     """
-    lines = [f"Unicode characters found in {source}:"]
+    error = [f"Unicode characters found in {source}"]
     for index, char, code_point in unicode_info:
-        lines.append(f"\tPosition {index}: '{char}' (Unicode code point: U+{code_point:04X})")
-    return "\n".join(lines)
+        error.append(f"  • Position {index}: '{char}'\n    → Found in: [{code_point}]")
+    return "\n".join(error)
 
 
 def check_unicode_in_system_prompt():
