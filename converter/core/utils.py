@@ -79,6 +79,9 @@ def extract_params(method: Callable) -> tuple[List[inspect.Parameter], List[str]
     sig = inspect.signature(method)
     valid_params, call_args = [], []
     for param in sig.parameters.values():
+        # This is just a temporary fix for list type bug in Britive SDK
+        if inspect.isfunction(param.annotation):
+            param = param.replace(annotation=list)
         if is_supported_parameter_type(param.annotation if param.annotation != inspect.Parameter.empty else None):
             valid_params.append(param)
             call_args.append(param.name)
