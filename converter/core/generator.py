@@ -1,4 +1,4 @@
-import os
+import os, logging
 from converter import client_wrapper
 from converter.converter_config import TOOLS, SYSTEM_PROMPT
 from converter.core.utils import (
@@ -7,10 +7,16 @@ from converter.core.utils import (
     extract_params, remove_functions_from_content
 )
 from converter.core.templates import INIT_FILE, RUNNER_FILE, get_mcp_init_content, get_mcp_runner_content
+from converter.core.logger import setup_logging, LOG_FILE
+
 
 TOOLS_DIRECTORY = "tools"
+setup_logging()
+logger = logging.getLogger(__name__)
 
 def generate_tools_package(generate_all: bool = False, output_dir: str = None) -> None:
+    logger.info("========================(STARTING TOOL GENERATION)========================\n")
+
     """Generate MCP tool functions from Britive SDK methods."""
     britive = client_wrapper.get_client()
     existing_tool_names = set()
@@ -45,7 +51,7 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
     for controller_attr, tools in TOOLS.items():
         controller_instance = get_controller_instance(britive, controller_attr)
         if not controller_instance:
-            print(f"⚠️   Controller '{controller_attr}' not found in Britive SDK.")
+            logger.warning(f"⚠️   Controller '{controller_attr}' not found in Britive SDK.")
             continue
 
         controller_file_path = os.path.join(tools_dir, f"{controller_attr.replace('.', '_')}.py")
@@ -63,7 +69,7 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
             method = getattr(controller_instance, sdk_func_name, None)
             if not method or sdk_func_name.startswith('_'):
                 if not method:
-                    print(f"⚠️   Method '{sdk_func_name}' not found in controller '{controller_attr}'.")
+                    logger.warning(f"⚠️   Method '{sdk_func_name}' not found in controller '{controller_attr}'.")
                 continue
             
             filtered_params, call_args = extract_params(method)
@@ -89,7 +95,7 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
                 f.write("\n")
             new_tools_count += len(new_tool_funcs)
             tool_list = '\n   • '.join(new_tool_names)
-            print(f"[✅] Generated '{controller_file_path}' with {len(new_tool_funcs)} tool(s)\n   • {tool_list}")
+            logger.info(f"[✅] Generated '{controller_file_path}' with {len(new_tool_funcs)} tool(s): \n   • {tool_list}")
         else:
             content_to_write = open(controller_file_path).read() if os.path.exists(controller_file_path) else ""
             if funcs_to_remove:
@@ -106,11 +112,15 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
                     f.write("\n")
                 new_tools_count += len(new_tool_funcs)
                 tool_list = '\n   • '.join(new_tool_names)
-                print(f"[✅] Updated '{controller_file_path}' with {len(new_tool_funcs)} tool(s): \n   • {tool_list}")
+                logger.info(f"[✅] Updated '{controller_file_path}' with {len(new_tool_funcs)} tool(s): \n   • {tool_list}")
         new_tool_funcs.clear()
         new_tool_names.clear()
 
     if new_tools_count:
-        print(f"\n[✅] Total new tools generated: {new_tools_count}")
+        logger.info(f"\n[✅] Total new tools generated: {new_tools_count}")
     else:
-        print("[ℹ️] No new tools generated. Ensure to add new tools in the config.")
+        logger.info("[ℹ️] No new tools generated. Ensure to add new tools in the config.")
+
+    logger.info("========================(TOOL GENERATION COMPLETED)========================")
+    
+    print(f"\n\n[✅] Detailed logs have been written to '{LOG_FILE}'")

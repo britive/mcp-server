@@ -1,14 +1,18 @@
-import os, shutil, re, inspect
+import os, shutil, re, inspect, logging
 from typing import Callable, List, Any, Optional
 from britive import __version__ as britive_version
 from britive.britive import Britive
+from converter.core.logger import setup_logging
+
+setup_logging()
+logger = logging.getLogger(__name__)
 
 def validate_output_dir(generate_all: bool, output_dir: str) -> None:
     if not output_dir:
         raise ValueError("Output directory must be specified when generating tools.")
     if generate_all:
         if os.path.exists(output_dir):
-            print(f"⚠️   Output directory '{output_dir}' already exists. Do you want to overwrite it? (y/n)")
+            logger.warning(f"⚠️   Output directory '{output_dir}' already exists. Do you want to overwrite it? (y/n)")
             response = input().strip().lower()
             if response != 'y':
                 raise FileExistsError(f"Output directory '{output_dir}' already exists. Please choose a different directory or remove it.")
