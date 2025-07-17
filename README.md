@@ -68,14 +68,14 @@ Sample json file
 {
   "servers": {
     "britive": {
-1      "command": "<path_to_the_repo>\\<virtual_env_name>\\Scripts\\python.exe",
+      "command": "<path_to_the_repo>\\<virtual_env_name>\\Scripts\\python.exe",
       "args": [
-2        "<path_to_the_repo>\\mcp-server\\britive_mcp_tools\\core\\mcp_runner.py"
+        "<path_to_the_repo>\\mcp-server\\britive_mcp_tools\\core\\mcp_runner.py"
       ],
       "env": {
-3        "PYTHONPATH": "<path_to_the_repo>\\mcp-server",
-4        "BRITIVE_TENANT": "your_tenant",   (Optional)
-5        "BRITIVE_STATIC_TOKEN": "your_static_token",   (Optional)
+        "PYTHONPATH": "<path_to_the_repo>\\mcp-server",
+        "BRITIVE_TENANT": "your_tenant",
+        "BRITIVE_STATIC_TOKEN": "your_static_token",   
       }
     }
   }
