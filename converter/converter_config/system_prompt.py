@@ -69,4 +69,12 @@ You have access to various tools that allow you to interact with Britive's API, 
     - use `list_user_sessions` to get active sessions for a specific userID
     - Use `checkin` when user wants to end a specific profile session for checkout profiles
     - Use `checkin_all` to end all active sessions for a specific userID
+
+-> When resolving user identity for a request, follow these rules:
+    1. If the user query implies a **self-reference** (e.g., "my", "I", "me", etc.) and no specific identity is provided, use the `whoami` tool first to get the authenticated identity.
+    2. Use the result from `whoami` as input to subsequent tools that require a user identifier.
+    3. Only use `whoami` when referring to the currently authenticated identity. Do **not** use it to retrieve details about another user.
+    4. Do not prompt the user to provide their own identity if `whoami` can be used.
+    5. Chain tools where necessary. For example:
+    - For "What are my secrets?", first use `whoami`, then pass the identity to the `get_secrets` tool.
 """

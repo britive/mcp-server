@@ -81,3 +81,40 @@ def my_access_list_profiles():
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
     
+
+@mcp.tool(name="my_access_whoami", description="""
+Use this tool to retrieve details of the currently authenticated identity (user or service). 
+It returns information like username, type (user/service), and any other associated metadata.
+
+When to Use:
+- When the user asks questions like:
+  - "Who am I?"
+  - "What user is currently logged in?"
+  - "Tell me about my account"
+  - "What is my identity?"
+
+- When the user refers to themselves using:
+  - Words like "I", "me", "my", "mine"
+  - Phrases that imply a self-reference (e.g., "my secrets", "my roles", "my entitlements")
+
+- When another tool requires an identity as input, but the user did not specify one.
+  - In such cases, use `whoami` first to fetch the identity, and then pass it to the next tool.
+
+Constraints:
+- Only use this tool when the user is referring to themselves.
+- Do **not** use this tool when the user is asking about someone else.""")
+def my_access_whoami():
+    # This tool is generated using Britive SDK v4.3.0
+    """Return details about the currently authenticated identity (user or service).
+
+:return: Details of the currently authenticated identity."""
+
+    try:
+        client = client_wrapper.get_client()
+        return client.my_access.whoami()
+    except UnauthorizedRequest:
+        raise UnauthorizedRequest(
+            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
+            "After the user finishes logging in, ask them to confirm so you can retry this tool."
+        )
+    

@@ -34,6 +34,30 @@ my_access_tools = ToolGroup(
                 "This tool is useful for understanding what access options are available to the user. "
                 "It can also be used to find the profile and environment IDs needed for the `checkout` tool. "
                 "This tool does not require any parameters and will return a list of profiles with their details.",
-        )
+        ),
+        ToolConfig(
+            function_name="whoami",
+            ai_description="""
+Use this tool to retrieve details of the currently authenticated identity (user or service). 
+It returns information like username, type (user/service), and any other associated metadata.
+
+When to Use:
+- When the user asks questions like:
+  - "Who am I?"
+  - "What user is currently logged in?"
+  - "Tell me about my account"
+  - "What is my identity?"
+
+- When the user refers to themselves using:
+  - Words like "I", "me", "my", "mine"
+  - Phrases that imply a self-reference (e.g., "my secrets", "my roles", "my entitlements")
+
+- When another tool requires an identity as input, but the user did not specify one.
+  - In such cases, use `whoami` first to fetch the identity, and then pass it to the next tool.
+
+Constraints:
+- Only use this tool when the user is referring to themselves.
+- Do **not** use this tool when the user is asking about someone else.""",
+        ),
     ]
 )
