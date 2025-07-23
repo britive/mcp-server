@@ -145,7 +145,7 @@ Filterable columns include: `secretPath`, `secretDescription`, `name`, `identity
 
 Examples:
 - `secret_last_used_time co 2023-01-01`
-- `secretPath co searchExperssion`
+- `secretPath co searchExpression`
 
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
