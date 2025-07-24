@@ -12,7 +12,7 @@ def setup_logging():
         root.handlers.clear()
 
     # File handler (detailed)
-    fh = logging.FileHandler(LOG_FILE, mode='a')
+    fh = logging.FileHandler(LOG_FILE, mode='a', encoding='utf-8')
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(logging.Formatter(
         "%(asctime)s %(name)s %(levelname)s: %(message)s",
