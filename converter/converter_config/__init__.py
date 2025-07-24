@@ -7,6 +7,7 @@ from converter.converter_config.identity_service_config import identity_service_
 from converter.converter_config.identity_user_config import identity_user_management
 from converter.converter_config.identity_tag_config import identity_tag_management
 from converter.converter_config.security_config import security_active_session
+from converter.converter_config.application_management_applications_config import application_management_applications
 
 TOOLS = {
     my_access_tools.name: my_access_tools.tools,
@@ -15,5 +16,6 @@ TOOLS = {
     identity_service_management.name: identity_service_management.tools,
     identity_user_management.name: identity_user_management.tools,
     identity_tag_management.name: identity_tag_management.tools,
-    security_active_session.name: security_active_session.tools
+    security_active_session.name: security_active_session.tools,
+    application_management_applications.name: application_management_applications.tools,
 }
