@@ -12,7 +12,7 @@ def get_ignored_words() -> List[str]:
     """
     return [
         "britive's", "britive", "eq", "sw", "neq", "nco", "aws", "checkin", "whoami", "mcp", "otp",
-        "xyz", "userids", "papids", "firstname", "usedin", "ai", "checkedout"
+        "xyz", "userids", "papids", "firstname", "usedin", "ai", "checkedout", "eg", "highrisk"
     ]
 
 
