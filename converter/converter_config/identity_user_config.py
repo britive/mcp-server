@@ -12,7 +12,7 @@ identity_user_management = ToolGroup(
                 "Use this tool to get userId based on filter options and use this id in further operations like enabling or disabling a service identity. "
                 "You can filter the list by username, type, status, and tags to narrow down the results."
             ),         
-            regenerate=True
+            regenerate=False
             ),
         ToolConfig(
             function_name="get",
@@ -22,7 +22,7 @@ identity_user_management = ToolGroup(
                 "It provides comprehensive details including the identity's userId, username, email, firstName, lastName, type, status, created, modified, identityProvider and userTags. "
                 "Use this tool to gather specific information about a user identity before taking actions like enabling or disabling it "
             ),         
-            regenerate=True
+            regenerate=False
             ),
         ToolConfig(
             function_name="search",
@@ -33,7 +33,7 @@ identity_user_management = ToolGroup(
                 "The search results include basic details such as userId, name, type, and status. "
                 "Use this tool to quickly locate user identities that match specific criteria without needing to list all identities."
             ),         
-            regenerate=True
+            regenerate=False
             ),
         ToolConfig(
             function_name="enable",
@@ -42,7 +42,7 @@ identity_user_management = ToolGroup(
                 "Checks the status of the specified user identity. If the status is inactive, prompts the user for confirmation to enable it. "
                 "If confirmed, it performs the enable action. If the identity is already active, it informs the user and suggests disabling it instead."
             ),         
-            regenerate=True
+            regenerate=False
             ),
         ToolConfig(
             function_name="disable",
@@ -51,7 +51,7 @@ identity_user_management = ToolGroup(
                 "Checks the status of the specified user identity. If the status is active, prompts the user for confirmation to disable it. "
                 "If confirmed, it performs the disable action. If the identity is already inactive, it informs the user and suggests enabling it instead."
             ),
-         regenerate=True
+         regenerate=False
         )
     ]
 )

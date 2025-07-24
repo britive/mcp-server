@@ -14,7 +14,7 @@ Use this tool to:
 You must call this tool before using any `report_run_*` tool to ensure you have the correct `reportId`, column names, and operator support.
 No parameters required.""",
             tool_name="reports_list",
-            regenerate=True,
+            regenerate=False,
             ),
 
         ToolConfig(
@@ -36,7 +36,7 @@ Examples:
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
 """,
-            regenerate=True,
+            regenerate=False,
         ),
 
         ToolConfig(
@@ -59,7 +59,7 @@ Examples:
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
 """,
-            regenerate=True,
+            regenerate=False,
         ),
 
         ToolConfig(
@@ -82,7 +82,7 @@ Examples:
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
 """,
-            regenerate=True,
+            regenerate=False,
         ),
 
         ToolConfig(
@@ -128,7 +128,7 @@ Examples:
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
 """,
-            regenerate=True,
+            regenerate=False,
         ),
         ToolConfig(
             function_name="run",
@@ -150,7 +150,7 @@ Examples:
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
 """,
-            regenerate=True,
+            regenerate=False,
         ),
 
         ToolConfig(
@@ -182,7 +182,7 @@ Apply column-based filters precisely based on the question.
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
 """,
-            regenerate=True,
+            regenerate=False,
         ),
 
         ToolConfig(
@@ -215,7 +215,7 @@ Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
-            regenerate=True,
+            regenerate=False,
         ),
         ToolConfig(
             function_name="run",
@@ -273,7 +273,7 @@ Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
-            regenerate=True,
+            regenerate=False,
         ),
         ToolConfig(
             function_name="run",
@@ -301,7 +301,7 @@ Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
-            regenerate=True,
+            regenerate=False,
         ),
         ToolConfig(
             function_name="run",
@@ -329,7 +329,7 @@ Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
-            regenerate=True,
+            regenerate=False,
         ),
         ToolConfig(
             function_name="run",
@@ -357,7 +357,7 @@ Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
-            regenerate=True,
+            regenerate=False,
         ),
         ToolConfig(
             function_name="run",
@@ -385,7 +385,7 @@ Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
-            regenerate=True,
+            regenerate=False,
         ),
         ToolConfig(
             function_name="run",
@@ -413,7 +413,7 @@ Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
-            regenerate=True,
+            regenerate=False,
         ),
         ToolConfig(
             function_name="run",
@@ -441,7 +441,7 @@ Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
-            regenerate=True,
+            regenerate=False,
         )
     ]
 )
