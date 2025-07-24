@@ -70,8 +70,12 @@ Steps:
 1. Use `reports_list` to find the report named 'Permissions in Profile'.
 2. Extract its `reportId` and valid columns/operators.
 3. Call this tool with that `report_id` and optional filters.
-
+4. Once this tool returns a list of permissions, for each permission fetched:
+   - Automatically call the `report_run_permission_details` tool for each permission to get **granular details**.
+   - Do not call the `report_run_permission_details` tool before this tool returns the list of permissions.
+          
 Filterable columns include: `profile`, `application`, `environment`, etc.
+Use `co` for filter as user might not know the exact name, so use `co` operator to match partial names. Avoid using `eq` operator as it requires exact match.
 
 Examples:
 - `profile eq john`
@@ -79,6 +83,10 @@ Examples:
 
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
+
+### Important:
+- This tool should be chained with `report_run_permission_details` for each permission it returns.
+- The output of this tool is incomplete until detailed permission info is fetched using the second tool.
 """)
 def report_run_permissions_in_profile(report_id: str, csv: bool = False, filter_expression: str = None):
     # This tool is generated using Britive SDK v4.3.0
@@ -227,7 +235,7 @@ Filterable columns include: `secretPath`, `secretDescription`, `name`, `identity
 
 Examples:
 - `secret_last_used_time co 2023-01-01`
-- `secretPath co searchExperssion`
+- `secretPath co searchExpression`
 
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
@@ -373,6 +381,52 @@ def report_run_profile_accessed_tags(report_id: str, csv: bool = False, filter_e
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """)
 def report_run_AI_identities_secret_last_access(report_id: str, csv: bool = False, filter_expression: str = None):
+    # This tool is generated using Britive SDK v4.3.0
+    """Run a report.
+
+:param report_id: The ID of the report.
+:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+    as a list where each time in the list is a dict representing the row of data.
+:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+    correct filter expression string.
+:return: CSV string or list."""
+
+    try:
+        client = client_wrapper.get_client()
+        return client.reports.run(report_id, csv, filter_expression)
+    except UnauthorizedRequest:
+        raise UnauthorizedRequest(
+            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
+            "After the user finishes logging in, ask them to confirm so you can retry this tool."
+        )
+    
+
+@mcp.tool(name="report_run_permission_details", description=""" This tool provides granular details on application permissions for specified application
+                use this tool after application access tool to get more details on permissions and focus on permissionDefinition
+        
+        1. Use `reports_list` to find the report named 'Permission Details'.
+        2. Extract its `reportId` and valid columns/operators.
+        3. Call this tool with that `report_id` and optional filters. after the application access tool to have detailed permission information.
+
+        Filterable columns include: `application`, `environment`,`permissionDefinition`,`scope`, `scopeType`, `name`,`applicationStatus`,`environmentStatus`,`type`, `highrisk`
+
+
+        Examples:
+
+        User may ask questions such as:
+        -Show me what permissions are assigned to a role/policy in a `xyz` application
+        -Show me which roles/policies in a `xyz` application have not been used in the past 30 days.
+
+
+    Expected Response Format:
+    Answer in a structured format (e.g., tables or bullet points).
+    Include metadata like Application, Environment, account, permissions, permission description, status, etc., when relevant associated with application access. 
+    Apply column-based filters precisely based on the question.
+
+    Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
+    Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
+    """)
+def report_run_permission_details(report_id: str, csv: bool = False, filter_expression: str = None):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
