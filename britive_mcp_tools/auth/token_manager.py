@@ -2,6 +2,7 @@ import os
 import time
 from configparser import ConfigParser
 
+
 class TokenManager:
     def __init__(self, tenant="courage.dev2.aws"):
         self.tenant = tenant

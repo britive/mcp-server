@@ -1,4 +1,6 @@
+import sys
 import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from fastmcp import FastMCP
 from britive_mcp_tools.auth.client_wrapper import BritiveClientWrapper
 
