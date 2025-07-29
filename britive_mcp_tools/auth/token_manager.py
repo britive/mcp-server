@@ -28,6 +28,8 @@ class TokenManager:
             token_expiry = int(self.config[self.tenant].get("safeExpirationTime", "0"))
             if not token or time.time() > token_expiry:
                 raise KeyError(token_error)
+            self.config = ConfigParser()
             return token
         except KeyError:
+            self.config = ConfigParser()
             raise KeyError(token_error)
