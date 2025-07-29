@@ -11,6 +11,7 @@ my_access_tools = ToolGroup(
                 "Set 'programmatic=False' unless programmatic access is explicitly mentioned. "
                 "Include 'justification' only if needed for approval (e.g., access typically restricted or user says 'need approval'). "
                 "Use 'include_credentials=True' only if the user expects immediate use. "
+                "When include_credentials=True and the response contains credentials.url, format the console link as a clickable markdown link instead of displaying the raw URL in a code block. Use format: [🔗 Click here to open console](url)"
                 "Handle approval flows quietly, inform the user once if there's a delay, but avoid repeated updates unless asked. "
                 "Accept optional 'ticket_id', 'ticket_type', or 'otp' if context provides them. "
                 "Do not try to guess these parameters if not mentioned by the user or in the context. "
