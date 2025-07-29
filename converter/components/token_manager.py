@@ -1,7 +1,5 @@
 import os
 import time
-import sys
-import subprocess
 from configparser import ConfigParser
 
 class TokenManager:
@@ -9,38 +7,29 @@ class TokenManager:
         self.tenant = tenant
         self.token_file = os.path.expanduser("~/.britive/pybritive.credentials")
         self.config = ConfigParser()
-        self.token_expiry_buffer = 60
-        self.read_token()
 
-    def read_token(self):
-        if os.getenv("BRITIVE_STATIC_TOKEN"):
-            self.token = os.getenv("BRITIVE_STATIC_TOKEN")
+    def get_token(self):
+        static_token = os.getenv("BRITIVE_STATIC_TOKEN")
+        if static_token:
+            return static_token
         else:
             self.config.read(self.token_file)
             try:
-                self.token = self.config[self.tenant]["accessToken"]
-                self.expiry = int(self.config[self.tenant].get("safeExpirationTime", "0"))
+                return self.get_valid_token()
             except KeyError:
-                self.token = None
-                self.expiry = 0
+                self.config = ConfigParser()
+                raise KeyError(f"User not authenticated. Please ask user to run `pybritive login` to authenticate.")
+            
 
-    def is_expired(self):
-        return not self.token or (time.time() + self.token_expiry_buffer) > self.expiry
-
-    def is_logged_out(self):
-        self.config.read(self.token_file)
-        return self.tenant not in self.config
-    
-    def refresh_token(self):
-        pybritive_cli = os.path.join(os.path.dirname(sys.executable), "pybritive")
-        subprocess.run([pybritive_cli, "login"], check=True)
-        self.read_token()
-
-    def get_token(self):
-        britive_static_token = os.getenv("BRITIVE_STATIC_TOKEN")
-        if britive_static_token:
-            self.token = britive_static_token
-            return self.token
-        if self.is_expired() or self.is_logged_out():
-            self.refresh_token()
-        return self.token
+    def get_valid_token(self):
+        token_error = "User not authenticated. Please ask user to run `pybritive login` to authenticate."
+        try:
+            token = self.config[self.tenant].get("accessToken")
+            token_expiry = int(self.config[self.tenant].get("safeExpirationTime", "0"))
+            if not token or time.time() > token_expiry:
+                raise KeyError(token_error)
+            self.config = ConfigParser()
+            return token
+        except KeyError:
+            self.config = ConfigParser()
+            raise KeyError(token_error)
