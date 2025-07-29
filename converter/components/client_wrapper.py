@@ -18,4 +18,7 @@ class BritiveClientWrapper:
 
     def get_client(self):
         token = self.token_manager.get_token()
-        return Britive(tenant=self.tenant_dns, token=token)
+        b = Britive(tenant=self.tenant_dns, token=token)
+        user_agent = b.session.headers.get("User-Agent")
+        b.session.headers.update({"User-Agent": f"Britive MCP Server {user_agent}"})
+        return b

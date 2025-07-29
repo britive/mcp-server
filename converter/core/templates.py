@@ -12,7 +12,9 @@ from fastmcp import FastMCP
 from {output_dir}.auth.client_wrapper import BritiveClientWrapper
 
 mcp = FastMCP(name="Britive Tool Server", instructions=\"\"\"{system_prompt}\"\"\")
-tenant = os.getenv("BRITIVE_TENANT", "courage.dev2.aws")
+tenant = os.getenv("BRITIVE_TENANT")
+if tenant is None:
+    raise ValueError("BRITIVE_TENANT environment variable is required but not set")
 client_wrapper = BritiveClientWrapper(tenant)
 """
 
