@@ -37,7 +37,14 @@ def security_active_sessions_list_user_sessions(user_id: str):
         )
     
 
-@mcp.tool(name="security_active_sessions_checkin", description="""This Tool will take userId and list of papID i.e. profile application ID and checkin the profile application ID for the user. It will return a message indicating whether the check-in was successful or if there were any issues.""")
+@mcp.tool(name="security_active_sessions_checkin", description="""
+This Tool will take userId and list of papID i.e. profile application ID and checkin the profile application ID for the user. It will return a message indicating whether the check-in was successful or if there were any issues.
+
+This tool should not be used when a user is asking to checkin all their profiles. that should be the my_access_checkout tool.
+
+This tool should be used when the user is asking to checkin another users profiles.
+
+""")
 def security_active_sessions_checkin(user_id: str, profile_ids: list):
     # This tool is generated using Britive SDK v4.3.0
     """Checkin one or more active profile sessions for a given user.
