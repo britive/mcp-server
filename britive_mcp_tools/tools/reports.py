@@ -1,20 +1,26 @@
 import datetime
-from britive_mcp_tools.core.mcp_init import mcp, client_wrapper
+
 from britive.exceptions import UnauthorizedRequest
 
-@mcp.tool(name="reports_list", description="""List all available reports and their metadata.
+from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
+
+
+@mcp.tool(
+    name="reports_list",
+    description="""List all available reports and their metadata.
 Use this tool to:
 - Retrieve report names and their `reportId`s.
 - Extract available filterable columns for each report.
 - Understand which operators (e.g., `eq`, `co`, `gt`) are supported per column.
 
 You must call this tool before using any `report_run_*` tool to ensure you have the correct `reportId`, column names, and operator support.
-No parameters required.""")
+No parameters required.""",
+)
 def reports_list():
     # This tool is generated using Britive SDK v4.3.0
     """Return list of all built-in reports.
 
-:return: List of reports."""
+    :return: List of reports."""
 
     try:
         client = client_wrapper.get_client()
@@ -24,9 +30,11 @@ def reports_list():
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_profile_historical_access", description="""This tool provides historical information on profiles access checked out by users
+
+@mcp.tool(
+    name="report_run_profile_historical_access",
+    description="""This tool provides historical information on profiles access checked out by users
 
 Steps:
 1. Use `reports_list` to find the report named 'Profile Historical access'.
@@ -41,17 +49,20 @@ Examples:
 
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
-""")
-def report_run_profile_historical_access(report_id: str, csv: bool = False, filter_expression: str = None):
+""",
+)
+def report_run_profile_historical_access(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -61,9 +72,11 @@ def report_run_profile_historical_access(report_id: str, csv: bool = False, filt
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_permissions_in_profile", description="""This tool allows to get details on what permissions are assigned to which profiles, details on the permissions, profiles associations and policies
+
+@mcp.tool(
+    name="report_run_permissions_in_profile",
+    description="""This tool allows to get details on what permissions are assigned to which profiles, details on the permissions, profiles associations and policies
 This tool provides information on permissions in a specific profile.
 
 Steps:
@@ -87,17 +100,20 @@ Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `
 ### Important:
 - This tool should be chained with `report_run_permission_details` for each permission it returns.
 - The output of this tool is incomplete until detailed permission info is fetched using the second tool.
-""")
-def report_run_permissions_in_profile(report_id: str, csv: bool = False, filter_expression: str = None):
+""",
+)
+def report_run_permissions_in_profile(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -107,9 +123,11 @@ def report_run_permissions_in_profile(report_id: str, csv: bool = False, filter_
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_tag_membership", description="""This tool allows to get details on members associated with each tag. 
+
+@mcp.tool(
+    name="report_run_tag_membership",
+    description="""This tool allows to get details on members associated with each tag. 
 This tool provides information on tag membership, including which profiles are associated with which tags. 
 
 Steps:
@@ -125,17 +143,20 @@ Examples:
 
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
-""")
-def report_run_tag_membership(report_id: str, csv: bool = False, filter_expression: str = None):
+""",
+)
+def report_run_tag_membership(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -145,9 +166,11 @@ def report_run_tag_membership(report_id: str, csv: bool = False, filter_expressi
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_service_identities_details", description="""This tool allows to get details on service identities. 
+
+@mcp.tool(
+    name="report_run_service_identities_details",
+    description="""This tool allows to get details on service identities. 
 This tool provides information on service identities and their creation and expiration dates.
 
 Steps:
@@ -163,17 +186,20 @@ Examples:
 
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
-""")
-def report_run_service_identities_details(report_id: str, csv: bool = False, filter_expression: str = None):
+""",
+)
+def report_run_service_identities_details(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -183,9 +209,11 @@ def report_run_service_identities_details(report_id: str, csv: bool = False, fil
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_user_secret_access", description="""This tool allows information on secret assigned to users. 
+
+@mcp.tool(
+    name="report_run_user_secret_access",
+    description="""This tool allows information on secret assigned to users. 
 This tool retrieves details of secrets assigned to users based on their identity context
 
 Steps:
@@ -201,17 +229,20 @@ Examples:
 
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
-""")
-def report_run_user_secret_access(report_id: str, csv: bool = False, filter_expression: str = None):
+""",
+)
+def report_run_user_secret_access(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -221,9 +252,11 @@ def report_run_user_secret_access(report_id: str, csv: bool = False, filter_expr
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_secret_last_access", description="""This tool provides information on secrets and when they were accessed. 
+
+@mcp.tool(
+    name="report_run_secret_last_access",
+    description="""This tool provides information on secrets and when they were accessed. 
 This tool retrieves information about secrets accessed by specific identities, including access timestamps. It supports queries such as identifying which secrets were accessed in the past 30 days and by whom.
 
 Steps:
@@ -239,17 +272,20 @@ Examples:
 
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
-""")
-def report_run_secret_last_access(report_id: str, csv: bool = False, filter_expression: str = None):
+""",
+)
+def report_run_secret_last_access(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -259,9 +295,11 @@ def report_run_secret_last_access(report_id: str, csv: bool = False, filter_expr
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_profiles_assigned_to_service_identities", description="""This tool provides information to get details on who has what access to profiles, applications and environments
+
+@mcp.tool(
+    name="report_run_profiles_assigned_to_service_identities",
+    description="""This tool provides information to get details on who has what access to profiles, applications and environments
 This tool retrieves detailed access mappings between service identities and their assigned profiles, applications, and environments within Britive. It helps determine who has access to what, allowing you to analyze identity-level access across profiles, applications, and environments, along with related metadata such as status, mapped accounts, and tags.
 
 Steps:
@@ -286,17 +324,20 @@ Apply column-based filters precisely based on the question.
 
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
-""")
-def report_run_profiles_assigned_to_service_identities(report_id: str, csv: bool = False, filter_expression: str = None):
+""",
+)
+def report_run_profiles_assigned_to_service_identities(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -306,9 +347,11 @@ def report_run_profiles_assigned_to_service_identities(report_id: str, csv: bool
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_profile_accessed_tags", description=""" This tool provides tags information associated with details on who has what access to applications, environments and profiles.
+
+@mcp.tool(
+    name="report_run_profile_accessed_tags",
+    description=""" This tool provides tags information associated with details on who has what access to applications, environments and profiles.
     This tool retrieves detailed access mappings between profiles and their associated tags, applications, and environments within Britive. It helps determine which profiles are associated with which tags, allowing you to analyze profile-level access across applications and environments, along with related metadata such as status, mapped accounts, and tags.
         
 
@@ -334,17 +377,20 @@ def report_run_profiles_assigned_to_service_identities(report_id: str, csv: bool
 
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
-    """)
-def report_run_profile_accessed_tags(report_id: str, csv: bool = False, filter_expression: str = None):
+    """,
+)
+def report_run_profile_accessed_tags(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -354,9 +400,11 @@ def report_run_profile_accessed_tags(report_id: str, csv: bool = False, filter_e
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_AI_identities_secret_last_access", description=""" This tool provides information on details of AI identities with secrets last access
+
+@mcp.tool(
+    name="report_run_AI_identities_secret_last_access",
+    description=""" This tool provides information on details of AI identities with secrets last access
     This tool retrieves detailed access mappings between AI identities and their associated secrets, including last access timestamps. It helps determine which AI identities have accessed which secrets, allowing you to analyze AI identity-level access across secrets, along with related metadata such as usernames,secret path and secret description.
         Steps:
         1. Use `reports_list` to find the report named 'AI Identity Secret Last Access'.
@@ -379,17 +427,20 @@ def report_run_profile_accessed_tags(report_id: str, csv: bool = False, filter_e
 
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
-    """)
-def report_run_AI_identities_secret_last_access(report_id: str, csv: bool = False, filter_expression: str = None):
+    """,
+)
+def report_run_AI_identities_secret_last_access(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -399,9 +450,11 @@ def report_run_AI_identities_secret_last_access(report_id: str, csv: bool = Fals
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_permission_details", description=""" This tool provides granular details on application permissions for specified application
+
+@mcp.tool(
+    name="report_run_permission_details",
+    description=""" This tool provides granular details on application permissions for specified application
                 use this tool after application access tool to get more details on permissions and focus on permissionDefinition
         
         1. Use `reports_list` to find the report named 'Permission Details'.
@@ -425,17 +478,20 @@ def report_run_AI_identities_secret_last_access(report_id: str, csv: bool = Fals
 
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
-    """)
-def report_run_permission_details(report_id: str, csv: bool = False, filter_expression: str = None):
+    """,
+)
+def report_run_permission_details(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -445,9 +501,11 @@ def report_run_permission_details(report_id: str, csv: bool = False, filter_expr
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_resource_historical_access", description=""" This tool provides information on resource checked out by users in last 90 days.
+
+@mcp.tool(
+    name="report_run_resource_historical_access",
+    description=""" This tool provides information on resource checked out by users in last 90 days.
     This tool retrieves historical information on resources accessed by users in the last 90 days. It provides details such as resource name, resource type, resource origin, last accessed date, etc.
 
         Steps:
@@ -470,17 +528,20 @@ def report_run_permission_details(report_id: str, csv: bool = False, filter_expr
 
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
-    """)
-def report_run_resource_historical_access(report_id: str, csv: bool = False, filter_expression: str = None):
+    """,
+)
+def report_run_resource_historical_access(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -490,9 +551,11 @@ def report_run_resource_historical_access(report_id: str, csv: bool = False, fil
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_resource_last_access", description=""" This tool provides information on when a resource was used.
+
+@mcp.tool(
+    name="report_run_resource_last_access",
+    description=""" This tool provides information on when a resource was used.
     This tool retrieves information about resources accessed by specific identities, including access date and days.
         Steps:
         1. Use `reports_list` to find the report named 'Resource Last Access'.
@@ -514,17 +577,20 @@ def report_run_resource_historical_access(report_id: str, csv: bool = False, fil
 
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
-    """)
-def report_run_resource_last_access(report_id: str, csv: bool = False, filter_expression: str = None):
+    """,
+)
+def report_run_resource_last_access(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -534,9 +600,11 @@ def report_run_resource_last_access(report_id: str, csv: bool = False, filter_ex
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_resources_assigned_to_ai_identities", description=""" This tool provides information on resources assigned to ai identities.
+
+@mcp.tool(
+    name="report_run_resources_assigned_to_ai_identities",
+    description=""" This tool provides information on resources assigned to ai identities.
     This tool retrieves detailed access mappings between AI identities and their assigned resources, including resource names, types, and origin. It helps determine which AI identities have access to which resources, allowing you to analyze AI identity-level access across resources.
         Steps:
         1. Use `reports_list` to find the report named 'Resources Assigned to AI Identities'.
@@ -558,17 +626,20 @@ def report_run_resource_last_access(report_id: str, csv: bool = False, filter_ex
 
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
-    """)
-def report_run_resources_assigned_to_ai_identities(report_id: str, csv: bool = False, filter_expression: str = None):
+    """,
+)
+def report_run_resources_assigned_to_ai_identities(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -578,9 +649,11 @@ def report_run_resources_assigned_to_ai_identities(report_id: str, csv: bool = F
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_resources_assigned_to_all_identities", description=""" This tool provides information on resources assigned to all identities.
+
+@mcp.tool(
+    name="report_run_resources_assigned_to_all_identities",
+    description=""" This tool provides information on resources assigned to all identities.
     This tool retrieves detailed access mappings between all identities and their assigned resources, including resource names, types, and origin. It helps determine which identities have access to which resources, allowing you to analyze identity-level access across resources.
         Steps:
         1. Use `reports_list` to find the report named 'Resources Assigned to All Identities'.
@@ -602,17 +675,20 @@ def report_run_resources_assigned_to_ai_identities(report_id: str, csv: bool = F
 
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
-    """)
-def report_run_resources_assigned_to_all_identities(report_id: str, csv: bool = False, filter_expression: str = None):
+    """,
+)
+def report_run_resources_assigned_to_all_identities(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -622,9 +698,11 @@ def report_run_resources_assigned_to_all_identities(report_id: str, csv: bool = 
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_resources_assigned_to_service_identities", description=""" This tool provides information on resources assigned to service identities.
+
+@mcp.tool(
+    name="report_run_resources_assigned_to_service_identities",
+    description=""" This tool provides information on resources assigned to service identities.
     This tool retrieves detailed access mappings between service identities and their assigned resources, including resource names, types, and origin. It helps determine which service identities have access to which resources, allowing you to analyze service identity-level access across resources.
         Steps:
         1. Use `reports_list` to find the report named 'Resources Assigned to Service Identities'.
@@ -646,17 +724,20 @@ def report_run_resources_assigned_to_all_identities(report_id: str, csv: bool = 
 
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
-    """)
-def report_run_resources_assigned_to_service_identities(report_id: str, csv: bool = False, filter_expression: str = None):
+    """,
+)
+def report_run_resources_assigned_to_service_identities(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -666,9 +747,11 @@ def report_run_resources_assigned_to_service_identities(report_id: str, csv: boo
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_resources_assigned_to_tags", description=""" This tool provides information on resources assigned to tags.
+
+@mcp.tool(
+    name="report_run_resources_assigned_to_tags",
+    description=""" This tool provides information on resources assigned to tags.
     This tool retrieves detailed access mappings between tags and their assigned resources, including resource names, types, and origin. It helps determine which tag have access to which resources, allowing you to analyze tag-level access across resources.
         Steps:
         1. Use `reports_list` to find the report named 'Resources Assigned to Tags'.
@@ -690,17 +773,20 @@ def report_run_resources_assigned_to_service_identities(report_id: str, csv: boo
 
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
-    """)
-def report_run_resources_assigned_to_tags(report_id: str, csv: bool = False, filter_expression: str = None):
+    """,
+)
+def report_run_resources_assigned_to_tags(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -710,9 +796,11 @@ def report_run_resources_assigned_to_tags(report_id: str, csv: bool = False, fil
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    
 
-@mcp.tool(name="report_run_resources_assigned_to_users", description=""" This tool provides information on resources assigned to users.
+
+@mcp.tool(
+    name="report_run_resources_assigned_to_users",
+    description=""" This tool provides information on resources assigned to users.
     This tool retrieves detailed access mappings between users and their assigned resources, including resource names, types, and origin. It helps determine which user have access to which resources, allowing you to analyze user-level access across resources.
         Steps:
         1. Use `reports_list` to find the report named 'Resources Assigned to Users'.
@@ -734,17 +822,20 @@ def report_run_resources_assigned_to_tags(report_id: str, csv: bool = False, fil
 
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
-    """)
-def report_run_resources_assigned_to_users(report_id: str, csv: bool = False, filter_expression: str = None):
+    """,
+)
+def report_run_resources_assigned_to_users(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
-:param report_id: The ID of the report.
-:param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-    as a list where each time in the list is a dict representing the row of data.
-:param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-    correct filter expression string.
-:return: CSV string or list."""
+    :param report_id: The ID of the report.
+    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
+        as a list where each time in the list is a dict representing the row of data.
+    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
+        correct filter expression string.
+    :return: CSV string or list."""
 
     try:
         client = client_wrapper.get_client()
@@ -754,4 +845,3 @@ def report_run_resources_assigned_to_users(report_id: str, csv: bool = False, fi
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
             "After the user finishes logging in, ask them to confirm so you can retry this tool."
         )
-    

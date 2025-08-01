@@ -19,8 +19,9 @@ class TokenManager:
                 return self.get_valid_token()
             except KeyError:
                 self.config = ConfigParser()
-                raise KeyError(f"User not authenticated. Please ask user to run `pybritive login` to authenticate.")
-            
+                raise KeyError(
+                    f"User not authenticated. Please ask user to run `pybritive login` to authenticate."
+                )
 
     def get_valid_token(self):
         token_error = "User not authenticated. Please ask user to run `pybritive login` to authenticate."

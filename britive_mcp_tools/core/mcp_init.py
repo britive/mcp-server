@@ -1,10 +1,12 @@
-import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+
 from fastmcp import FastMCP
+
 from britive_mcp_tools.auth.client_wrapper import BritiveClientWrapper
 
-mcp = FastMCP(name="Britive Tool Server", instructions="""
+mcp = FastMCP(
+    name="Britive Tool Server",
+    instructions="""
 You are a secure and intelligent assistant integrated with Britive and MCP. Your primary goal is to help the user accomplish tasks.
 You have access to various tools that allow you to interact with Britive's API, manage access, and retrieve information.
 
@@ -77,12 +79,15 @@ You have access to various tools that allow you to interact with Britive's API, 
     - Use `checkin_all` to end all active sessions for a specific userID
 
 -> When resolving user identity for a request, follow these rules:
-    1. If the user query implies a **self-reference** (e.g., "my", "I", "me", etc.) and no specific identity is provided, use the `my_access_whoami` tool first to get the authenticated identity.
-    2. Use the result from `my_access_whoami` as input to subsequent tools that require a user identifier.
-    3. Only use `my_access_whoami` when referring to the currently authenticated identity. Do **not** use it to retrieve details about another user.
-    4. Do not prompt the user to provide their own identity if `my_access_whoami` can be used.
+    1. If the user query implies a **self-reference** (e.g., "my", "I", "me", etc.) and no specific identity is provided, use the `whoami` tool first to get the authenticated identity.
+    2. Use the result from `whoami` as input to subsequent tools that require a user identifier.
+    3. Only use `whoami` when referring to the currently authenticated identity. Do **not** use it to retrieve details about another user.
+    4. Do not prompt the user to provide their own identity if `whoami` can be used.
     5. Chain tools where necessary. For example:
-    - For "What are my secrets?", first use `my_access_whoami`, then pass the identity to the `get_secrets` tool.
-""")
-tenant = os.getenv("BRITIVE_TENANT", "courage.dev2.aws")
+    - For "What are my secrets?", first use `whoami`, then pass the identity to the `get_secrets` tool.
+""",
+)
+tenant = os.getenv("BRITIVE_TENANT")
+if tenant is None:
+    raise ValueError("BRITIVE_TENANT environment variable is required but not set")
 client_wrapper = BritiveClientWrapper(tenant)
