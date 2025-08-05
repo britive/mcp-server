@@ -18,7 +18,7 @@ class BritiveClientWrapper:
         config = ConfigParser()
         config.read(os.path.expanduser("~/.britive/pybritive.config"))
         try:
-            return tenant
+            return config[f"tenant-{tenant}"]["name"]
         except KeyError:
             raise KeyError("Missing tenant DNS in config.")
 
