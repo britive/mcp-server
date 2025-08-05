@@ -6,20 +6,19 @@ from configparser import ConfigParser
 
 from britive.britive import Britive
 
-from britive_mcp_tools.auth.token_manager import TokenManager
+from .token_manager import TokenManager
 
 
 class BritiveClientWrapper:
-    def __init__(self, tenant="courage.dev2.aws"):
+    def __init__(self, tenant):
         self.token_manager = TokenManager(tenant)
         self.tenant_dns = self.get_tenant_dns(tenant)
 
-    @staticmethod
-    def get_tenant_dns(tenant):
+    def get_tenant_dns(self, tenant):
         config = ConfigParser()
         config.read(os.path.expanduser("~/.britive/pybritive.config"))
         try:
-            return config[f"tenant-{tenant}"]["name"]
+            return tenant
         except KeyError:
             raise KeyError("Missing tenant DNS in config.")
 

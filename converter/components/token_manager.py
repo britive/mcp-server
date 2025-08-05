@@ -2,8 +2,9 @@ import os
 import time
 from configparser import ConfigParser
 
+
 class TokenManager:
-    def __init__(self, tenant="courage.dev2.aws"):
+    def __init__(self, tenant):
         self.tenant = tenant
         self.token_file = os.path.expanduser("~/.britive/pybritive.credentials")
         self.config = ConfigParser()
@@ -18,8 +19,9 @@ class TokenManager:
                 return self.get_valid_token()
             except KeyError:
                 self.config = ConfigParser()
-                raise KeyError(f"User not authenticated. Please ask user to run `pybritive login` to authenticate.")
-            
+                raise KeyError(
+                    f"User not authenticated. Please ask user to run `pybritive login` to authenticate."
+                )
 
     def get_valid_token(self):
         token_error = "User not authenticated. Please ask user to run `pybritive login` to authenticate."

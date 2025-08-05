@@ -3,11 +3,16 @@ import os
 INIT_FILE = os.path.join("core", "mcp_init.py")
 RUNNER_FILE = os.path.join("core", "mcp_runner.py")
 
-def get_mcp_init_content(controller_attrs: list[str], system_prompt: str, output_dir: str) -> str:
+
+def get_mcp_init_content(
+    controller_attrs: list[str], system_prompt: str, output_dir: str
+) -> str:
     instances = {
         f"{k.replace('.', '_')} = britive_client.{k}" for k in controller_attrs
     }
     return f"""import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from fastmcp import FastMCP
 from {output_dir}.auth.client_wrapper import BritiveClientWrapper
 
@@ -18,11 +23,20 @@ if tenant is None:
 client_wrapper = BritiveClientWrapper(tenant)
 """
 
-def get_mcp_runner_content(output_dir: str, tools_dir: str, controller_attrs: list[str]) -> str:
-    import_lines = [f"from {tools_dir.replace(os.sep, '.')}.{controller_attr.replace('.', '_')} import *" for controller_attr in controller_attrs]
+
+def get_mcp_runner_content(
+    output_dir: str, tools_dir: str, controller_attrs: list[str]
+) -> str:
+    import_lines = [
+        f"from {tools_dir.replace(os.sep, '.')}.{controller_attr.replace('.', '_')} import *"
+        for controller_attr in controller_attrs
+    ]
     joined_imports = "\n".join(import_lines)
 
-    return f"""from {output_dir.replace(os.sep, '.')} import mcp
+    return f"""import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from {output_dir.replace(os.sep, ".")} import mcp
 {joined_imports}
 
 if __name__ == '__main__':

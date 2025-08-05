@@ -4,7 +4,7 @@ from configparser import ConfigParser
 
 
 class TokenManager:
-    def __init__(self, tenant="courage.dev2.aws"):
+    def __init__(self, tenant):
         self.tenant = tenant
         self.token_file = os.path.expanduser("~/.britive/pybritive.credentials")
         self.config = ConfigParser()
