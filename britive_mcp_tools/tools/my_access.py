@@ -2,13 +2,33 @@ import datetime
 from britive_mcp_tools.core.mcp_init import mcp, client_wrapper
 from britive.exceptions import UnauthorizedRequest
 
-@mcp.tool(name="my_access_checkout", description="""
 
-Use this tool when the user is denied access via MCP (e.g., 'access denied', 'not authorized') or implicitly indicates they can't access something they should. Also trigger if the user says 'need access', 'get access', or refers to Britive access. Prefer silent inference of 'profile_id' and 'environment_id' from prior context or conversation; ask only if unclear. Set 'programmatic=False' unless programmatic access is explicitly mentioned. Include 'justification' only if needed for approval (e.g., access typically restricted or user says 'need approval'). Use 'include_credentials=True' only if the user expects immediate use. Handle approval flows quietly, inform the user once if there's a delay, but avoid repeated updates unless asked. Accept optional 'ticket_id', 'ticket_type', or 'otp' if context provides them. Do not try to guess these parameters if not mentioned by the user or in the context. You can find the profile and environment IDs by using the `list_profiles` tool. If access was already granted, return it silently. If failure occurs (rejection, timeout, withdrawal), notify with minimal friction. Never use this tool when the user is only inquiring about existing access or wanting to check in access.
+@mcp.tool(name="my_access_checkout", description="""
+Use this tool when the user is denied access via MCP (e.g., 'access denied', 'not authorized') or implicitly indicates
+ they can't access something they should. Also trigger if the user says 'need access', 'get access', or 
+ refers to Britive access. Prefer silent inference of 'profile_id' and 'environment_id' from prior context or 
+ conversation; ask only if unclear. Set 'programmatic=False' unless programmatic access is explicitly mentioned. 
+ Include 'justification' only if needed for approval (e.g., access typically restricted or user says 'need approval'). 
+ Use 'include_credentials=True' only if the user expects immediate use. Handle approval flows quietly, inform the 
+ user once if there's a delay, but avoid repeated updates unless asked. Accept optional 'ticket_id', 'ticket_type', 
+ or 'otp' if context provides them. Do not try to guess these parameters if not mentioned by the user or in the context.
+ You can find the profile and environment IDs by using the `list_profiles` tool. If access was already granted, return 
+ it silently. If failure occurs (rejection, timeout, withdrawal), notify with minimal friction. Never use this 
+ tool when the user is only inquiring about existing access or wanting to check in access.
 
 Before attempting a checkout, try to execute the prompt. If the execution fails try a checkout, but ensure that
     least privilege access is used. As an example, if the needed permissions for the prompt require read only access,
     just checkout the profile for read only access. Only do administrator when needed.
+    
+If the user asks for a link, don't print the link but make it a hyperlink and the text of the hyperlink should not
+be the link itself - come up with better text.
+
+If the user asks for a checkout, try to execute the prompt first. If it fails due to permissions, then checkout the minimum profile needed. Start with read-only profiles for data queries, and only use admin profiles when write operations or administrative tasks are explicitly required.
+
+Examples of least privilege:
+- For listing databases/schemas/tables → use Reader profile 
+- For customer data → use appropriate customer data profile
+- For system administration → use Admin profile only when necessary
 
 """)
 def my_access_checkout(profile_id: str, environment_id: str, include_credentials: bool = False, justification: str = None, max_wait_time: int = 600, otp: str = None, programmatic: bool = True, ticket_id: str = None, ticket_type: str = None, wait_time: int = 60):
@@ -60,6 +80,8 @@ the first will immediately exit the program.
 Use this tool when the user has completed their task or explicitly indicates they no longer need access (e.g., 'done with access', 'you can check it in', 'I'm finished', or 'revoke access'). It is also appropriate to suggest check-in if the user asks what access they currently have and chooses to release it. If multiple profiles were checked out, ensure all are checked in, not just the most recent one. Prefer silent handling unless the user expects confirmation. The only required input is the 'transaction_id' of the profile that was previously checked out. If not already tracked or known from context, ask the user briefly. Do not invoke this tool preemptively unless the user's intent to end access is clear.
 
 If you are asking to checkin everything, use this tool, not the active session tools.
+
+If the user says they are "all done" then checkin any profiles which you checked out in the chat/session. Not just the most recent one.
 
 """)
 def my_access_checkin(transaction_id: str):
