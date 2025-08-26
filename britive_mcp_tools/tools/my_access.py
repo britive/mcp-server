@@ -1,9 +1,10 @@
 import datetime
 from britive_mcp_tools.core.mcp_init import mcp, client_wrapper
 from britive.exceptions import UnauthorizedRequest
+from fastmcp import Context
 
 @mcp.tool(name="my_access_checkout", description="""Use this tool when the user is denied access via MCP (e.g., 'access denied', 'not authorized') or implicitly indicates they can't access something they should. Also trigger if the user says 'need access', 'get access', or refers to Britive access. Prefer silent inference of 'profile_id' and 'environment_id' from prior context or conversation; ask only if unclear. Set 'programmatic=False' unless programmatic access is explicitly mentioned. Include 'justification' only if needed for approval (e.g., access typically restricted or user says 'need approval'). Use 'include_credentials=True' only if the user expects immediate use. Handle approval flows quietly, inform the user once if there's a delay, but avoid repeated updates unless asked. Accept optional 'ticket_id', 'ticket_type', or 'otp' if context provides them. Do not try to guess these parameters if not mentioned by the user or in the context. You can find the profile and environment IDs by using the `list_profiles` tool. If access was already granted, return it silently. If failure occurs (rejection, timeout, withdrawal), notify with minimal friction. Never use this tool when the user is only inquiring about existing access or wanting to check in access.""")
-def my_access_checkout(profile_id: str, environment_id: str, include_credentials: bool = False, justification: str = None, max_wait_time: int = 600, otp: str = None, programmatic: bool = True, ticket_id: str = None, ticket_type: str = None, wait_time: int = 60):
+def my_access_checkout(ctx: Context, profile_id: str, environment_id: str, include_credentials: bool = False, justification: str = None, max_wait_time: int = 600, otp: str = None, programmatic: bool = True, ticket_id: str = None, ticket_type: str = None, wait_time: int = 60):
     # This tool is generated using Britive SDK v4.3.0
     """Checkout a profile.
 
@@ -38,7 +39,7 @@ the first will immediately exit the program.
 :raises ProfileApprovalWithdrawn: if the approval request was withdrawn by the requester."""
 
     try:
-        client = client_wrapper.get_client()
+        client = client_wrapper.get_client(ctx)
         return client.my_access.checkout(profile_id, environment_id, include_credentials, justification, max_wait_time, otp, programmatic, None, ticket_id, ticket_type, wait_time)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -48,7 +49,7 @@ the first will immediately exit the program.
     
 
 @mcp.tool(name="my_access_checkin", description="""Use this tool when the user has completed their task or explicitly indicates they no longer need access (e.g., 'done with access', 'you can check it in', 'I'm finished', or 'revoke access'). It is also appropriate to suggest check-in if the user asks what access they currently have and chooses to release it. If multiple profiles were checked out, ensure all are checked in, not just the most recent one. Prefer silent handling unless the user expects confirmation. The only required input is the 'transaction_id' of the profile that was previously checked out. If not already tracked or known from context, ask the user briefly. Do not invoke this tool preemptively unless the user's intent to end access is clear.""")
-def my_access_checkin(transaction_id: str):
+def my_access_checkin(ctx: Context, transaction_id: str):
     # This tool is generated using Britive SDK v4.3.0
     """Check in a checked out profile.
 
@@ -56,7 +57,7 @@ def my_access_checkin(transaction_id: str):
 :return: Details of the checked in profile."""
 
     try:
-        client = client_wrapper.get_client()
+        client = client_wrapper.get_client(ctx)
         return client.my_access.checkin(transaction_id)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -66,14 +67,14 @@ def my_access_checkin(transaction_id: str):
     
 
 @mcp.tool(name="my_access_list_profiles", description="""List all profiles available for checkout. This tool is useful for understanding what access options are available to the user. It can also be used to find the profile and environment IDs needed for the `checkout` tool. This tool does not require any parameters and will return a list of profiles with their details.""")
-def my_access_list_profiles():
+def my_access_list_profiles(ctx: Context, ):
     # This tool is generated using Britive SDK v4.3.0
     """List the profiles for which the user has access.
 
 :return: List of profiles."""
 
     try:
-        client = client_wrapper.get_client()
+        client = client_wrapper.get_client(ctx)
         return client.my_access.list_profiles()
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -103,14 +104,14 @@ When to Use:
 Constraints:
 - Only use this tool when the user is referring to themselves.
 - Do **not** use this tool when the user is asking about someone else.""")
-def my_access_whoami():
+def my_access_whoami(ctx: Context, ):
     # This tool is generated using Britive SDK v4.3.0
     """Return details about the currently authenticated identity (user or service).
 
 :return: Details of the currently authenticated identity."""
 
     try:
-        client = client_wrapper.get_client()
+        client = client_wrapper.get_client(ctx)
         return client.my_access.whoami()
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
