@@ -9,4 +9,5 @@ from britive_mcp_tools.tools.security_active_sessions import *
 from britive_mcp_tools.tools.application_management_applications import *
 
 if __name__ == '__main__':
-    mcp.run()
+    mcp.run(transport="streamable-http", host="localhost", port=5000)
+    # mcp.run()
