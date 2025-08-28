@@ -1,42 +1,14 @@
 import os
 from fastmcp import FastMCP
 from britive_mcp_tools.auth.client_wrapper import BritiveClientWrapper
-from fastmcp.server.auth import RemoteAuthProvider
-from fastmcp.server.auth.providers.jwt import JWTVerifier
-from pydantic import AnyHttpUrl
-from dotenv import load_dotenv
 
-load_dotenv()
-
-oauth2_domain = os.environ.get("OAUTH2_DOMAIN")
-oauth2_audience = os.environ.get("OAUTH2_AUDIENCE")
-oauth2_issuer = os.environ.get("OAUTH2_ISSUER")
-resource_server = os.environ.get("RESOURCE_SERVER")
-
-
-token_verifier = JWTVerifier(
-    jwks_uri=f'{oauth2_domain}keys',
-    issuer=oauth2_issuer,
-    audience=oauth2_audience,
-)
- 
-auth = RemoteAuthProvider(
-    token_verifier=token_verifier,
-    authorization_servers=[AnyHttpUrl(oauth2_domain)],
-    resource_server_url=resource_server
-)
-
-mcp = FastMCP(name="Britive Tool Server", auth=auth, instructions="""
+mcp = FastMCP(name="Britive Tool Server", instructions="""
 You are a secure and intelligent assistant integrated with Britive and MCP. Your primary goal is to help the user accomplish tasks.
 You have access to various tools that allow you to interact with Britive's API, manage access, and retrieve information.
 
 -> When to use checkout tool?
     Whenever you encounter access-related failures (e.g., 'access denied', 'unauthorized', 'permission required'), whether explicitly in responses or implied by the user's request, consider invoking the Britive access checkout tool. Use contextual understanding to determine when the user might need access, even if they don't ask directly. Minimize interruptions by inferring parameters from prior context when possible. Only prompt the user if essential inputs are unclear. 
 
--> When to use reports tool?
-    When you cannot find a tool that directly matches the user's request, consider if a report can provide the needed information. Use the reports tool to run predefined reports that aggregate and present data in a user-friendly format.
-    You can know the available reports and their columns by using the `reports_list` tool. This will help you identify which report to run based on the user's needs.
-    
 -> How to use the reports tool?
     To run any report:
     1. Start by using the `reports_list` tool to retrieve the report ID by matching its name.
