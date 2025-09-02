@@ -1,13 +1,15 @@
 import os
 import time
 from configparser import ConfigParser
+from pybritive.helpers.encryption import StringEncryption
 
 
 class TokenManager:
     def __init__(self, tenant):
         self.tenant = tenant
-        self.token_file = os.path.expanduser("~/.britive/pybritive.credentials")
+        self.token_file = os.path.expanduser("~/.britive/pybritive.credentials.encrypted")
         self.config = ConfigParser()
+        self.encryption = StringEncryption()
 
     def get_token(self):
         static_token = os.getenv("BRITIVE_STATIC_TOKEN")
@@ -26,7 +28,8 @@ class TokenManager:
     def get_valid_token(self):
         token_error = "User not authenticated. Please ask user to run `pybritive login` to authenticate."
         try:
-            token = self.config[self.tenant].get("accessToken")
+            encrypted_token = self.config[self.tenant].get("accessToken")
+            token = self.encryption.decrypt(encrypted_token)
             token_expiry = int(self.config[self.tenant].get("safeExpirationTime", "0"))
             if not token or time.time() > token_expiry:
                 raise KeyError(token_error)

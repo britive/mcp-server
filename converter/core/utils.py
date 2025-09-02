@@ -59,7 +59,7 @@ def generate_tool_function(func_name: str, method: Callable, attr: str, descript
     controller_instance = attr.replace('.', '_')
     body = f"""
     try:
-        client = client_wrapper.get_client()
+        client = client_wrapper.get_client(ctx)
         return client.{attr}.{method.__name__}({args_str})
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -69,7 +69,7 @@ def generate_tool_function(func_name: str, method: Callable, attr: str, descript
     """
     docstring = process_method_docstring(method)
     tool_version = f"    # This tool is generated using Britive SDK v{britive_version}"
-    return "\n".join([decorator, f"def {func_name}({param_str}):", tool_version, docstring, body])
+    return "\n".join([decorator, f"def {func_name}(ctx: Context, {param_str}):", tool_version, docstring, body])
 
 
 def is_supported_parameter_type(param_type: Any) -> bool:

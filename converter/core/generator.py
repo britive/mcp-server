@@ -18,7 +18,7 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
     logger.info("========================(STARTING TOOL GENERATION)========================\n")
 
     """Generate MCP tool functions from Britive SDK methods."""
-    britive = client_wrapper.get_client()
+    britive = client_wrapper.get_client(ctx=None)
     existing_tool_names = set()
     new_tool_funcs = []
     new_tool_names = []
@@ -85,7 +85,8 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
         import_statement = (
             f"import datetime\n"
             f"from {module_path} import mcp, client_wrapper\n"
-            f"from britive.exceptions import UnauthorizedRequest"
+            f"from britive.exceptions import UnauthorizedRequest\n"
+            f"from fastmcp import Context"
         )
         if generate_all:
             # Write the new tool functions to the controller file

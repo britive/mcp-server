@@ -7,6 +7,7 @@ from configparser import ConfigParser
 from britive.britive import Britive
 
 from .token_manager import TokenManager
+from fastmcp import Context
 
 
 class BritiveClientWrapper:
@@ -22,7 +23,11 @@ class BritiveClientWrapper:
         except KeyError:
             raise KeyError("Missing tenant DNS in config.")
 
-    def get_client(self):
+    def get_client(self, ctx: Context):
+        try:
+            token = ctx.get_http_request().headers.get("Authorization")[7:]
+        except Exception:
+            token = None
         token = self.token_manager.get_token()
         b = Britive(tenant=self.tenant_dns, token=token)
         user_agent = b.session.headers.get("User-Agent")
