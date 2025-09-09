@@ -3,7 +3,7 @@ import datetime
 from britive.exceptions import UnauthorizedRequest
 from fastmcp import Context
 
-from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
+from britive_mcp_tools.core.mcp_init import auth_manager, mcp
 
 
 @mcp.tool(
@@ -11,7 +11,7 @@ from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
     description="""Use this tool **only if the user has confirmed they are referring to service identities**. Do not assume the type of identity.This tool lists all service identities available in the Britive platform. It provides list of details such as identity ID, name, type, and status. Use this tool to get userId based on filter options and use this id in further operations like enabling or disabling a service identity. You can filter the list by name, type, status, and tags to narrow down the results.""",
 )
 def identity_management_service_identities_list(
-    filter_expression: str = None, include_tags: bool = False
+    ctx: Context, filter_expression: str = None, include_tags: bool = False
 ):
     # This tool is generated using Britive SDK v4.3.0
     """Provide an optionally filtered list of all service identities.
@@ -22,7 +22,7 @@ def identity_management_service_identities_list(
     :return: List of service identity records"""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.identity_management.service_identities.list(
             filter_expression, include_tags
         )
@@ -37,7 +37,7 @@ def identity_management_service_identities_list(
     name="identity_management_service_identities_get",
     description="""Use this tool **only if the user has confirmed they are referring to service identities**. Do not assume the type of identity.This tool retrieves detailed information about a specific service identity by its ID. It provides comprehensive details including the identity's name, type, status, created date, modified date, last login, token expires on, token expiration in days, type of serviceIdentity type and any associated tags. Use this tool to gather specific information about a service identity before taking actions like enabling or disabling it.""",
 )
-def identity_management_service_identities_get(service_identity_id: str):
+def identity_management_service_identities_get(ctx: Context, service_identity_id: str):
     # This tool is generated using Britive SDK v4.3.0
     """Provide details of the given service_identity.
 
@@ -45,7 +45,7 @@ def identity_management_service_identities_get(service_identity_id: str):
     :return: Details of the specified user."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.identity_management.service_identities.get(service_identity_id)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -58,7 +58,7 @@ def identity_management_service_identities_get(service_identity_id: str):
     name="identity_management_service_identities_search",
     description="""Use this tool **only if the user has confirmed they are referring to service identities**. Do not assume the type of identity.This tool searches for service identities based on a query string. It allows you to find identities by name, type, or other attributes. The search results include basic details such as identity ID, name, type, and status. Use this tool to quickly locate service identities that match specific criteria without needing to list all identities.""",
 )
-def identity_management_service_identities_search(search_string: str):
+def identity_management_service_identities_search(ctx: Context, search_string: str):
     # This tool is generated using Britive SDK v4.3.0
     """Search all user fields for the given `search_string` and returns
     a list of matched service identities.
@@ -67,7 +67,7 @@ def identity_management_service_identities_search(search_string: str):
     :return: List of user records"""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.identity_management.service_identities.search(search_string)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -81,7 +81,7 @@ def identity_management_service_identities_search(search_string: str):
     description="""Use this tool **only if the user has confirmed they are referring to service identities**. Do not assume the type of identity.Checks the status of the specified service identity. If the status is inactive, prompts the user for confirmation to enable it. If confirmed, it performs the enable action. If the identity is already active, it informs the user and suggests disabling it instead.""",
 )
 def identity_management_service_identities_enable(
-    service_identity_id: str = None, service_identity_ids: list = None
+    ctx: Context, service_identity_id: str = None, service_identity_ids: list = None
 ):
     # This tool is generated using Britive SDK v4.3.0
     """Enable the given service identities.
@@ -95,7 +95,7 @@ def identity_management_service_identities_enable(
     :return: if `service_identity_ids` is set will return a list of user records, else returns a user dict"""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.identity_management.service_identities.enable(
             service_identity_id, service_identity_ids
         )
@@ -111,7 +111,7 @@ def identity_management_service_identities_enable(
     description="""Use this tool **only if the user has confirmed they are referring to service identities**. Do not assume the type of identity.Checks the status of the specified service identity. If the status is active, prompts the user for confirmation to disable it. If confirmed, it performs the disable action. If the identity is already inactive, it informs the user and suggests enabling it instead.""",
 )
 def identity_management_service_identities_disable(
-    service_identity_id: str = None, service_identity_ids: list = None
+    ctx: Context, service_identity_id: str = None, service_identity_ids: list = None
 ):
     # This tool is generated using Britive SDK v4.3.0
     """Disable the given service identities.
@@ -125,7 +125,7 @@ def identity_management_service_identities_disable(
     :return: if `user_ids` is set will return a list of user records, else returns a user dict"""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.identity_management.service_identities.disable(
             service_identity_id, service_identity_ids
         )
@@ -137,7 +137,7 @@ def identity_management_service_identities_disable(
 
 
 @mcp.tool(name="identity_management_service_identities_list", description="""Use this tool **only if the user has confirmed they are referring to service identities**. Do not assume the type of identity.This tool lists all service identities available in the Britive platform. It provides list of details such as identity ID, name, type, and status. Use this tool to get userId based on filter options and use this id in further operations like enabling or disabling a service identity. You can filter the list by name, type, status, and tags to narrow down the results.""")
-def identity_management_service_identities_list(filter_expression: str = None, include_tags: bool = False):
+def identity_management_service_identities_list(ctx: Context, filter_expression: str = None, include_tags: bool = False):
     # This tool is generated using Britive SDK v4.3.0
     """Provide an optionally filtered list of all service identities.
 
@@ -147,7 +147,7 @@ def identity_management_service_identities_list(filter_expression: str = None, i
 :return: List of service identity records"""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.identity_management.service_identities.list(filter_expression, include_tags)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -157,7 +157,7 @@ def identity_management_service_identities_list(filter_expression: str = None, i
     
 
 @mcp.tool(name="identity_management_service_identities_get", description="""Use this tool **only if the user has confirmed they are referring to service identities**. Do not assume the type of identity.This tool retrieves detailed information about a specific service identity by its ID. It provides comprehensive details including the identity's name, type, status, created date, modified date, last login, token expires on, token expiration in days, type of serviceIdentity type and any associated tags. Use this tool to gather specific information about a service identity before taking actions like enabling or disabling it.""")
-def identity_management_service_identities_get(service_identity_id: str):
+def identity_management_service_identities_get(ctx: Context, service_identity_id: str):
     # This tool is generated using Britive SDK v4.3.0
     """Provide details of the given service_identity.
 
@@ -165,7 +165,7 @@ def identity_management_service_identities_get(service_identity_id: str):
 :return: Details of the specified user."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.identity_management.service_identities.get(service_identity_id)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -175,7 +175,7 @@ def identity_management_service_identities_get(service_identity_id: str):
     
 
 @mcp.tool(name="identity_management_service_identities_search", description="""Use this tool **only if the user has confirmed they are referring to service identities**. Do not assume the type of identity.This tool searches for service identities based on a query string. It allows you to find identities by name, type, or other attributes. The search results include basic details such as identity ID, name, type, and status. Use this tool to quickly locate service identities that match specific criteria without needing to list all identities.""")
-def identity_management_service_identities_search(search_string: str):
+def identity_management_service_identities_search(ctx: Context, search_string: str):
     # This tool is generated using Britive SDK v4.3.0
     """Search all user fields for the given `search_string` and returns
 a list of matched service identities.
@@ -184,7 +184,7 @@ a list of matched service identities.
 :return: List of user records"""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.identity_management.service_identities.search(search_string)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -194,7 +194,7 @@ a list of matched service identities.
     
 
 @mcp.tool(name="identity_management_service_identities_enable", description="""Use this tool **only if the user has confirmed they are referring to service identities**. Do not assume the type of identity.Checks the status of the specified service identity. If the status is inactive, prompts the user for confirmation to enable it. If confirmed, it performs the enable action. If the identity is already active, it informs the user and suggests disabling it instead.""")
-def identity_management_service_identities_enable(service_identity_id: str = None, service_identity_ids: list = None):
+def identity_management_service_identities_enable(ctx: Context, service_identity_id: str = None, service_identity_ids: list = None):
     # This tool is generated using Britive SDK v4.3.0
     """Enable the given service identities.
 
@@ -207,7 +207,7 @@ will be merged together into one list.
 :return: if `service_identity_ids` is set will return a list of user records, else returns a user dict"""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.identity_management.service_identities.enable(service_identity_id, service_identity_ids)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -217,7 +217,7 @@ will be merged together into one list.
     
 
 @mcp.tool(name="identity_management_service_identities_disable", description="""Use this tool **only if the user has confirmed they are referring to service identities**. Do not assume the type of identity.Checks the status of the specified service identity. If the status is active, prompts the user for confirmation to disable it. If confirmed, it performs the disable action. If the identity is already inactive, it informs the user and suggests enabling it instead.""")
-def identity_management_service_identities_disable(service_identity_id: str = None, service_identity_ids: list = None):
+def identity_management_service_identities_disable(ctx: Context, service_identity_id: str = None, service_identity_ids: list = None):
     # This tool is generated using Britive SDK v4.3.0
     """Disable the given service identities.
 
@@ -230,7 +230,7 @@ provided they will be merged together into one list.
 :return: if `user_ids` is set will return a list of user records, else returns a user dict"""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.identity_management.service_identities.disable(service_identity_id, service_identity_ids)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(

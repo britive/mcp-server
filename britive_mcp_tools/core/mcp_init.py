@@ -1,16 +1,28 @@
 import os
 import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from fastmcp import FastMCP
-from britive_mcp_tools.auth.client_wrapper import BritiveClientWrapper
+from dotenv import load_dotenv
 
-mcp = FastMCP(name="Britive Tool Server", instructions="""
+from britive_mcp_tools.auth.auth_manager import AuthManager
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+load_dotenv()
+
+
+auth_manager = AuthManager()
+auth = auth_manager.auth_provider.get_auth()
+
+mcp = FastMCP(name="Britive Tool Server", auth=auth, instructions="""
 You are a secure and intelligent assistant integrated with Britive and MCP. Your primary goal is to help the user accomplish tasks.
 You have access to various tools that allow you to interact with Britive's API, manage access, and retrieve information.
 
 -> When to use checkout tool?
     Whenever you encounter access-related failures (e.g., 'access denied', 'unauthorized', 'permission required'), whether explicitly in responses or implied by the user's request, consider invoking the Britive access checkout tool. Use contextual understanding to determine when the user might need access, even if they don't ask directly. Minimize interruptions by inferring parameters from prior context when possible. Only prompt the user if essential inputs are unclear. 
 
+-> When to use reports tool?
+    When you cannot find a tool that directly matches the user's request, consider if a report can provide the needed information. Use the reports tool to run predefined reports that aggregate and present data in a user-friendly format.
+    You can know the available reports and their columns by using the `reports_list` tool. This will help you identify which report to run based on the user's needs.
+    
 -> How to use the reports tool?
     To run any report:
     1. Start by using the `reports_list` tool to retrieve the report ID by matching its name.
@@ -84,7 +96,3 @@ You have access to various tools that allow you to interact with Britive's API, 
     5. Chain tools where necessary. For example:
     - For "What are my secrets?", first use `whoami`, then pass the identity to the `get_secrets` tool.
 """)
-tenant = os.getenv("BRITIVE_TENANT")
-if tenant is None:
-    raise ValueError("BRITIVE_TENANT environment variable is required but not set")
-client_wrapper = BritiveClientWrapper(tenant)

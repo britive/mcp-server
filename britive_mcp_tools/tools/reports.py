@@ -4,6 +4,7 @@ from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
 from fastmcp import Context
 
 from britive.exceptions import UnauthorizedRequest
+from britive_mcp_tools.core.mcp_init import auth_manager, mcp
 
 
 @mcp.tool(
@@ -17,14 +18,14 @@ Use this tool to:
 You must call this tool before using any `report_run_*` tool to ensure you have the correct `reportId`, column names, and operator support.
 No parameters required.""",
 )
-def reports_list():
+def reports_list(ctx: Context):
     # This tool is generated using Britive SDK v4.3.0
     """Return list of all built-in reports.
 
     :return: List of reports."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.list()
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -52,7 +53,9 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
 """,
 )
-def report_run_profile_historical_access(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_profile_historical_access(
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -64,7 +67,7 @@ def report_run_profile_historical_access(report_id: str, csv: bool = False, filt
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -101,7 +104,9 @@ Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `
 - The output of this tool is incomplete until detailed permission info is fetched using the second tool.
 """,
 )
-def report_run_permissions_in_profile(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_permissions_in_profile(
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -113,7 +118,7 @@ def report_run_permissions_in_profile(report_id: str, csv: bool = False, filter_
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -142,7 +147,9 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
 """,
 )
-def report_run_tag_membership(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_tag_membership(
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -154,7 +161,7 @@ def report_run_tag_membership(report_id: str, csv: bool = False, filter_expressi
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -183,7 +190,9 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
 """,
 )
-def report_run_service_identities_details(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_service_identities_details(
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -195,7 +204,7 @@ def report_run_service_identities_details(report_id: str, csv: bool = False, fil
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -224,7 +233,9 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
 """,
 )
-def report_run_user_secret_access(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_user_secret_access(
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -236,7 +247,7 @@ def report_run_user_secret_access(report_id: str, csv: bool = False, filter_expr
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -265,7 +276,9 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
 """,
 )
-def report_run_secret_last_access(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_secret_last_access(
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -277,7 +290,7 @@ def report_run_secret_last_access(report_id: str, csv: bool = False, filter_expr
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -316,7 +329,7 @@ Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `
 """,
 )
 def report_run_profiles_assigned_to_service_identities(
-    report_id: str, csv: bool = False, filter_expression: str = None
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
 ):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
@@ -329,7 +342,7 @@ def report_run_profiles_assigned_to_service_identities(
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -368,7 +381,9 @@ def report_run_profiles_assigned_to_service_identities(
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_profile_accessed_tags(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_profile_accessed_tags(
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -380,7 +395,7 @@ def report_run_profile_accessed_tags(report_id: str, csv: bool = False, filter_e
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -416,7 +431,9 @@ def report_run_profile_accessed_tags(report_id: str, csv: bool = False, filter_e
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_AI_identities_secret_last_access(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_AI_identities_secret_last_access(
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -428,7 +445,7 @@ def report_run_AI_identities_secret_last_access(report_id: str, csv: bool = Fals
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -465,7 +482,9 @@ def report_run_AI_identities_secret_last_access(report_id: str, csv: bool = Fals
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_permission_details(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_permission_details(
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -477,7 +496,7 @@ def report_run_permission_details(report_id: str, csv: bool = False, filter_expr
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -513,7 +532,9 @@ def report_run_permission_details(report_id: str, csv: bool = False, filter_expr
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_resource_historical_access(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_resource_historical_access(
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -525,7 +546,7 @@ def report_run_resource_historical_access(report_id: str, csv: bool = False, fil
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -560,7 +581,9 @@ def report_run_resource_historical_access(report_id: str, csv: bool = False, fil
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_resource_last_access(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_resource_last_access(
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -572,7 +595,7 @@ def report_run_resource_last_access(report_id: str, csv: bool = False, filter_ex
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -607,7 +630,9 @@ def report_run_resource_last_access(report_id: str, csv: bool = False, filter_ex
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_resources_assigned_to_ai_identities(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_resources_assigned_to_ai_identities(
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -619,7 +644,7 @@ def report_run_resources_assigned_to_ai_identities(report_id: str, csv: bool = F
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -654,7 +679,9 @@ def report_run_resources_assigned_to_ai_identities(report_id: str, csv: bool = F
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_resources_assigned_to_all_identities(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_resources_assigned_to_all_identities(
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -666,7 +693,7 @@ def report_run_resources_assigned_to_all_identities(report_id: str, csv: bool = 
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -702,7 +729,7 @@ def report_run_resources_assigned_to_all_identities(report_id: str, csv: bool = 
     """,
 )
 def report_run_resources_assigned_to_service_identities(
-    report_id: str, csv: bool = False, filter_expression: str = None
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
 ):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
@@ -715,7 +742,7 @@ def report_run_resources_assigned_to_service_identities(
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -750,7 +777,9 @@ def report_run_resources_assigned_to_service_identities(
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_resources_assigned_to_tags(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_resources_assigned_to_tags(
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -762,7 +791,7 @@ def report_run_resources_assigned_to_tags(report_id: str, csv: bool = False, fil
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -797,7 +826,9 @@ def report_run_resources_assigned_to_tags(report_id: str, csv: bool = False, fil
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_resources_assigned_to_users(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_resources_assigned_to_users(
+    ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -809,7 +840,7 @@ def report_run_resources_assigned_to_users(report_id: str, csv: bool = False, fi
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -827,16 +858,15 @@ Use this tool to:
 - Understand which operators (e.g., `eq`, `co`, `gt`) are supported per column.
 
 You must call this tool before using any `report_run_*` tool to ensure you have the correct `reportId`, column names, and operator support.
-No parameters required.""",
-)
-def reports_list():
+No parameters required.""")
+def reports_list(ctx: Context):
     # This tool is generated using Britive SDK v4.3.0
     """Return list of all built-in reports.
 
     :return: List of reports."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.list()
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -855,9 +885,9 @@ Steps:
 Filters should be formatted as: `columnName operator value`. E.g., `profile eq admin and application co aws`.
 Supported operators include: `eq` (equals), `co` (contains), `sw` (starts with), `gt` (greater than), etc. Do not use any other operators or formats.
 Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
-""",
-)
-def all_reports_run(report_id: str, csv: bool = False, filter_expression: str = None):
+""")
+
+def all_reports_run(ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -869,7 +899,7 @@ def all_reports_run(report_id: str, csv: bool = False, filter_expression: str = 
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -904,9 +934,8 @@ def all_reports_run(report_id: str, csv: bool = False, filter_expression: str = 
 
     Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
-    """,
-)
-def report_run_permission_details(report_id: str, csv: bool = False, filter_expression: str = None):
+    """)
+def report_run_permission_details(ctx: Context, report_id: str, csv: bool = False, filter_expression: str = None):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -918,7 +947,7 @@ def report_run_permission_details(report_id: str, csv: bool = False, filter_expr
     :return: CSV string or list."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.reports.run(report_id, csv, filter_expression)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(

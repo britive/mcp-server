@@ -3,21 +3,21 @@ import datetime
 from britive.exceptions import UnauthorizedRequest
 from fastmcp import Context
 
-from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
+from britive_mcp_tools.core.mcp_init import auth_manager, mcp
 
 
 @mcp.tool(
     name="audit_logs_logs_fields",
     description="""Call this before using query tool as it returns list of fields that can be used in a filter for an audit query.""",
 )
-def audit_logs_logs_fields():
+def audit_logs_logs_fields(ctx: Context):
     # This tool is generated using Britive SDK v4.3.0
     """Return list of fields that be can used in a filter for an audit query.
 
     :return: Dict of field keys to field names."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.audit_logs.logs.fields()
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -30,14 +30,14 @@ def audit_logs_logs_fields():
     name="audit_logs_logs_operators",
     description="""Call this before using query tool as it returns the list of operators that can be used in a filter for an audit query.""",
 )
-def audit_logs_logs_operators():
+def audit_logs_logs_operators(ctx: Context):
     # This tool is generated using Britive SDK v4.3.0
     """Return the list of operators that can be used in a filter for an audit query.
 
     :return: Dict of operator keys to operator names."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.audit_logs.logs.operators()
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -51,6 +51,7 @@ def audit_logs_logs_operators():
     description="""This is used to retrieve audit log events based on the fields and operators. You need to call the `fields` and `operators` tools before using this tool to ensure you have the correct fields and operators for your query.""",
 )
 def audit_logs_logs_query(
+    ctx: Context,
     from_time: datetime.datetime = None,
     to_time: datetime.datetime = None,
     filter_expression: str = None,
@@ -79,7 +80,7 @@ def audit_logs_logs_query(
     :raises: ValueError - If from_time is greater than to_time."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.audit_logs.logs.query(from_time, to_time, filter_expression, csv)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -89,14 +90,14 @@ def audit_logs_logs_query(
 
 
 @mcp.tool(name="audit_logs_logs_fields", description="""Call this before using query tool as it returns list of fields that can be used in a filter for an audit query.""")
-def audit_logs_logs_fields():
+def audit_logs_logs_fields(ctx: Context):
     # This tool is generated using Britive SDK v4.3.0
     """Return list of fields that be can used in a filter for an audit query.
 
 :return: Dict of field keys to field names."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.audit_logs.logs.fields()
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -106,14 +107,14 @@ def audit_logs_logs_fields():
     
 
 @mcp.tool(name="audit_logs_logs_operators", description="""Call this before using query tool as it returns the list of operators that can be used in a filter for an audit query.""")
-def audit_logs_logs_operators():
+def audit_logs_logs_operators(ctx: Context):
     # This tool is generated using Britive SDK v4.3.0
     """Return the list of operators that can be used in a filter for an audit query.
 
 :return: Dict of operator keys to operator names."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.audit_logs.logs.operators()
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -123,7 +124,7 @@ def audit_logs_logs_operators():
     
 
 @mcp.tool(name="audit_logs_logs_query", description="""This is used to retrieve audit log events based on the fields and operators. You need to call the `fields` and `operators` tools before using this tool to ensure you have the correct fields and operators for your query.""")
-def audit_logs_logs_query(from_time: datetime.datetime = None, to_time: datetime.datetime = None, filter_expression: str = None, csv: bool = False):
+def audit_logs_logs_query(ctx: Context, from_time: datetime.datetime = None, to_time: datetime.datetime = None, filter_expression: str = None, csv: bool = False):
     # This tool is generated using Britive SDK v4.3.0
     """Retrieve audit log events.
 
@@ -147,7 +148,7 @@ def audit_logs_logs_query(from_time: datetime.datetime = None, to_time: datetime
 :raises: ValueError - If from_time is greater than to_time."""
 
     try:
-        client = client_wrapper.get_client()
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.audit_logs.logs.query(from_time, to_time, filter_expression, csv)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
