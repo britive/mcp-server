@@ -3,6 +3,9 @@ from britive_mcp_tools.core.mcp_init import auth_manager, mcp
 from britive.exceptions import UnauthorizedRequest
 from fastmcp import Context
 
+
+
+
 @mcp.tool(
     name="application_management_applications_list",
     description="""Use this tool to retrieve a list of all applications available in the Britive tenant. This is typically the first step when identifying applications by name or filtering them based on user input. The results can be used to extract application IDs required for other tools.""",
