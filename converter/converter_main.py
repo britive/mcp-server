@@ -19,5 +19,5 @@ if __name__ == "__main__":
     generate_tools_package(generate_all=args.all, output_dir=out_dir)
 
     # Step 2: Copy shared components to output
-    copy_component_file("converter/components/token_manager.py", f"{out_dir}/auth/")
-    copy_component_file("converter/components/client_wrapper.py", f"{out_dir}/auth/")
+    copy_component_file("converter/components/auth_provider.py", f"{out_dir}/auth/")
+    copy_component_file("converter/components/utils.py", out_dir)

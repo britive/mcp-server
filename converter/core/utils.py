@@ -59,7 +59,7 @@ def generate_tool_function(func_name: str, method: Callable, attr: str, descript
     controller_instance = attr.replace('.', '_')
     body = f"""
     try:
-        client = client_wrapper.get_client(ctx)
+        client = auth_manager.auth_provider.get_client(ctx)
         return client.{attr}.{method.__name__}({args_str})
     except UnauthorizedRequest:
         raise UnauthorizedRequest(

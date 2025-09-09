@@ -9,3 +9,4 @@ def write_file(path: str, content: str):
 def copy_component_file(src_file: str, dest_dir: str):
     os.makedirs(dest_dir, exist_ok=True)
     shutil.copy(src_file, dest_dir)
+

@@ -3,45 +3,34 @@ import os
 INIT_FILE = os.path.join("core", "mcp_init.py")
 RUNNER_FILE = os.path.join("core", "mcp_runner.py")
 
+CONVERTER_AUTH_MANAGER = os.path.join("converter", "components", "auth_manager.py")
+CONVERTER_OAUTH_PROVIDER = os.path.join("converter", "components", "oauth_provider.py")
+CONVERTER_PYBRITIVE_LOGIN_PROVIDER = os.path.join("converter", "components", "pybritive_login_provider.py")
+CONVERTER_STATIC_TOKEN_PROVIDER = os.path.join("converter", "components", "static_token_provider.py")
+
+AUTH_MANAGER = os.path.join("auth", "auth_manager.py")
+OAUTH_PROVIDER = os.path.join("auth", "oauth_provider.py")
+PYBRITIVE_LOGIN_PROVIDER = os.path.join("auth", "pybritive_login_provider.py")
+STATIC_TOKEN_PROVIDER = os.path.join("auth", "static_token_provider.py")
 
 def get_mcp_init_content(controller_attrs: list[str], system_prompt: str, output_dir: str) -> str:
     instances = {f"{k.replace('.', '_')} = britive_client.{k}" for k in controller_attrs}
     return f"""import os
 import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from fastmcp import FastMCP
-from {output_dir}.auth.client_wrapper import BritiveClientWrapper
-from fastmcp.server.auth import RemoteAuthProvider
-from fastmcp.server.auth.providers.jwt import JWTVerifier
-from pydantic import AnyHttpUrl
 from dotenv import load_dotenv
 
+from {output_dir}.auth.auth_manager import AuthManager
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 load_dotenv()
 
-oauth2_domain = os.environ.get("OAUTH2_DOMAIN")
-oauth2_audience = os.environ.get("OAUTH2_AUDIENCE")
-oauth2_issuer = os.environ.get("OAUTH2_ISSUER")
-resource_server = os.environ.get("RESOURCE_SERVER")
 
-
-token_verifier = JWTVerifier(
-    jwks_uri=f'{{oauth2_domain}}keys',
-    issuer=oauth2_issuer,
-    audience=oauth2_audience,
-)
- 
-auth = RemoteAuthProvider(
-    token_verifier=token_verifier,
-    authorization_servers=[AnyHttpUrl(oauth2_domain)],
-    resource_server_url=resource_server
-)
+auth_manager = AuthManager()
+auth = auth_manager.auth_provider.get_auth()
 
 mcp = FastMCP(name="Britive Tool Server", auth=auth, instructions=\"\"\"{system_prompt}\"\"\")
-tenant = os.getenv("BRITIVE_TENANT", "courage.dev2.aws")
-if tenant is None:
-    raise ValueError("BRITIVE_TENANT environment variable is required but not set")
-client_wrapper = BritiveClientWrapper(tenant)
+
 """
 
 
@@ -59,6 +48,73 @@ from {output_dir.replace(os.sep, ".")} import mcp
 {joined_imports}
 
 if __name__ == '__main__':
-    mcp.run(transport="streamable-http", host="localhost", port=5000)
-    # mcp.run()
+    mcp.run()
 """
+
+def get_auth_manager_content(output_dir: str) -> str:
+
+    replacements = {
+        "from components.utils": f"from {output_dir}.utils",
+        "from components.oauth_provider": f"from {output_dir}.auth.oauth_provider",
+        "from components.pybritive_login_provider": f"from {output_dir}.auth.pybritive_login_provider",
+        "from components.static_token_provider": f"from {output_dir}.auth.static_token_provider"
+    }
+
+    # Read file content
+    with open(CONVERTER_AUTH_MANAGER, "r", encoding="utf-8") as file:
+        content = file.read()
+
+    # Replace imports
+    for old_import, new_import in replacements.items():
+        content = content.replace(old_import, new_import)
+
+    return content
+    
+def get_oauth_provider_content(output_dir: str) -> str:
+
+    replacements = {
+        "from components.auth_provider": f"from {output_dir}.auth.auth_provider",
+        "from components.utils": f"from {output_dir}.utils",
+    }
+
+    # Read file content
+    with open(os.path.join("converter", "components", "oauth_provider.py"), "r", encoding="utf-8") as file:
+        content = file.read()
+
+    # Replace imports
+    for old_import, new_import in replacements.items():
+        content = content.replace(old_import, new_import)
+    
+    return content
+
+def get_pybritive_login_provider_content(output_dir: str) -> str:
+
+    replacements = {
+        "from components.auth_provider": f"from {output_dir}.auth.auth_provider",
+    }
+
+    # Read file content
+    with open(os.path.join("converter", "components", "pybritive_login_provider.py"), "r", encoding="utf-8") as file:
+        content = file.read()
+
+    # Replace imports
+    for old_import, new_import in replacements.items():
+        content = content.replace(old_import, new_import)
+
+    return content
+
+def get_static_token_provider_content(output_dir: str) -> str:
+    
+    replacements = {
+        "from components.auth_provider": f"from {output_dir}.auth.auth_provider",
+    }
+
+    # Read file content
+    with open(os.path.join("converter", "components", "static_token_provider.py"), "r", encoding="utf-8") as file:
+        content = file.read()
+
+    # Replace imports
+    for old_import, new_import in replacements.items():
+        content = content.replace(old_import, new_import)
+
+    return content

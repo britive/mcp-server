@@ -1,12 +1,18 @@
 import os, logging
-from converter import client_wrapper
+from converter import auth_provider
 from converter.converter_config import TOOLS, SYSTEM_PROMPT
 from converter.core.utils import (
     validate_output_dir, get_controller_instance, existing_tools, 
     get_tool_func_fullname, should_generate, generate_tool_function, 
     extract_params, remove_functions_from_content
 )
-from converter.core.templates import INIT_FILE, RUNNER_FILE, get_mcp_init_content, get_mcp_runner_content
+from converter.core.templates import (
+    INIT_FILE, RUNNER_FILE, AUTH_MANAGER, OAUTH_PROVIDER, 
+    PYBRITIVE_LOGIN_PROVIDER, STATIC_TOKEN_PROVIDER,
+    get_mcp_init_content, get_mcp_runner_content, get_auth_manager_content,
+    get_oauth_provider_content, get_pybritive_login_provider_content,
+    get_static_token_provider_content
+)
 from converter.core.logger import setup_logging, LOG_FILE
 
 
@@ -18,7 +24,7 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
     logger.info("========================(STARTING TOOL GENERATION)========================\n")
 
     """Generate MCP tool functions from Britive SDK methods."""
-    britive = client_wrapper.get_client(ctx=None)
+    britive = auth_provider.get_client(ctx=None)
     existing_tool_names = set()
     new_tool_funcs = []
     new_tool_names = []
@@ -34,10 +40,18 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
     init_file = os.path.join(output_dir, INIT_FILE)
     runner_file = os.path.join(output_dir, RUNNER_FILE)
     tools_dir = os.path.join(output_dir, TOOLS_DIRECTORY)
+    auth_manager_file = os.path.join(output_dir, AUTH_MANAGER)
+    oauth_provider_file = os.path.join(output_dir, OAUTH_PROVIDER)
+    pybritive_login_provider_file = os.path.join(output_dir, PYBRITIVE_LOGIN_PROVIDER)
+    static_token_provider_file = os.path.join(output_dir, STATIC_TOKEN_PROVIDER)
 
     os.makedirs(os.path.dirname(init_file), exist_ok=True)
     os.makedirs(os.path.dirname(runner_file), exist_ok=True)
     os.makedirs(tools_dir, exist_ok=True)
+    os.makedirs(os.path.dirname(auth_manager_file), exist_ok=True)
+    os.makedirs(os.path.dirname(oauth_provider_file), exist_ok=True)
+    os.makedirs(os.path.dirname(pybritive_login_provider_file), exist_ok=True)
+    os.makedirs(os.path.dirname(static_token_provider_file), exist_ok=True)
 
     valid_controllers = [controller for controller in controller_attrs if get_controller_instance(britive, controller)]
     with open(init_file, "w") as f:
@@ -46,6 +60,18 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
     with open(runner_file, "w") as f:
         f.write(get_mcp_runner_content(init_file.replace(".py", ""), tools_dir, controller_attrs))
 
+    with open(auth_manager_file, "w") as f:
+        f.write(get_auth_manager_content(output_dir.replace("/", ".")))
+    
+    with open(oauth_provider_file, "w") as f:
+        f.write(get_oauth_provider_content(output_dir.replace("/", ".")))
+    
+    with open(pybritive_login_provider_file, "w") as f:
+        f.write(get_pybritive_login_provider_content(output_dir.replace("/", ".")))
+
+    with open(static_token_provider_file, "w") as f:
+        f.write(get_static_token_provider_content(output_dir.replace("/", ".")))
+    
 
     # For each controller, write a separate file
     for controller_attr, tools in TOOLS.items():
@@ -84,7 +110,7 @@ def generate_tools_package(generate_all: bool = False, output_dir: str = None) -
         module_path = init_file.replace('.py', '').replace('/', '.').replace('\\', '.')
         import_statement = (
             f"import datetime\n"
-            f"from {module_path} import mcp, client_wrapper\n"
+            f"from {module_path} import mcp, auth_manager\n"
             f"from britive.exceptions import UnauthorizedRequest\n"
             f"from fastmcp import Context"
         )

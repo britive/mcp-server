@@ -1,6 +1,6 @@
-from converter.components.client_wrapper import BritiveClientWrapper
-import os
+from converter.components.auth_manager import AuthManager
+from dotenv import load_dotenv
 
-tenant = os.getenv("BRITIVE_TENANT", "courage.dev2.aws")
-client_wrapper = BritiveClientWrapper(tenant)
+load_dotenv()
 
+auth_provider = AuthManager("pybritive").auth_provider
