@@ -13,6 +13,11 @@ OAUTH_PROVIDER = os.path.join("auth", "oauth_provider.py")
 PYBRITIVE_LOGIN_PROVIDER = os.path.join("auth", "pybritive_login_provider.py")
 STATIC_TOKEN_PROVIDER = os.path.join("auth", "static_token_provider.py")
 
+AUTH_MANAGER = os.path.join("auth", "auth_manager.py")
+OAUTH_PROVIDER = os.path.join("auth", "oauth_provider.py")
+PYBRITIVE_LOGIN_PROVIDER = os.path.join("auth", "pybritive_login_provider.py")
+STATIC_TOKEN_PROVIDER = os.path.join("auth", "static_token_provider.py")
+
 def get_mcp_init_content(controller_attrs: list[str], system_prompt: str, output_dir: str) -> str:
     instances = {f"{k.replace('.', '_')} = britive_client.{k}" for k in controller_attrs}
     return f"""import os
