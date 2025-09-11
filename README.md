@@ -6,9 +6,9 @@ To learn more about MCPs, see [Get Started with MCP](https://modelcontextprotoco
 
 ## Prerequisites
 
-- Python version 3.10 or higher. [Python downloads](https://www.python.org/downloads/).
+- Python version 3.10 or higher. Download from [Python downloads](https://www.python.org/downloads/).
 - Ensure you have the latest version of Git installed and access to the repository. Download git from the [Git downloads](https://git-scm.com/downloads).
-- Any MCP client. For example: Claude desktop, VS Code Copilot
+- Any MCP client. For example, Claude desktop and VS Code Copilot.
 
 ---
 
@@ -26,13 +26,13 @@ git clone https://github.com/britive/mcp-server.git
 cd mcp-server
 ```
 
-3. Create a virtual environment
+3. Create a virtual environment:
 
 ```shell
 python -m venv <virtual_env_name>
 ```
 
-4. Activate the virtual environment
+4. Activate the virtual environment:
 
 * **Windows**
 
@@ -47,25 +47,24 @@ python -m venv <virtual_env_name>
 
 5. Install Python packages (dependencies)
 
-```shell
-pip install -r requirements.txt
-```
+    ```shell
+    pip install -r requirements.txt
+    ```
 
 ---
 
-## Configuring your MCP client and Authentication:
-Authentication to the Britive platform can be performed using the Britive CLI or a Static Token
+## Configuring your MCP client and Authentication
+Authentication to the Britive platform can be performed using the Britive CLI or a Static Token:
 
 * #### **Option 1: CLI login using PyBritive (Recommended):**
 
-1. Install the PyBritive CLI if not installed. For more information, see [PyBritive Documentation](https://britive.github.io/python-cli/)
+1. Install the PyBritive CLI if it is not already installed. For more information, see [PyBritive Documentation](https://britive.github.io/python-cli/)
 
-2. Configure the tenant, if you have not configured it already, using the following
-command. To find out more about how to enter the tenant name, see [PyBritive: Tenant selection logic](https://britive.github.io/python-cli/#tenant-selection-logic):
+2. Configure the tenant, if it has not already been configured, using the following command. To find out more about how to enter the tenant name, see [PyBritive: Tenant selection logic](https://britive.github.io/python-cli/#tenant-selection-logic).
 
-   ```shell
-   pybritive configure tenant
-   ```
+    ```shell
+    pybritive configure tenant
+    ```
 
 3. Log in to PyBritive:
 
@@ -73,32 +72,49 @@ command. To find out more about how to enter the tenant name, see [PyBritive: Te
    pybritive login
    ```
 
-4. Log in using the following command if you have multiple tenants:
+4. Log in using the following command if you have multiple tenants: 
 
    ```shell
    pybritive login --tenant=<your_tenant_name>
    ```
-5. Log in directs you to the Britive login page, where you can enter your credentials. 
-6. Modify your MCP JSON file to configure the Britive MCP.
-> **Note:**  
-> For Windows, use **backslash (\\\\)**.  
-> For macOS/Linux, use a **forward slash (/)** in the path.
-```json
-{
-  "servers": {
-    "britive": {
-      "command": "C:\\Users\\YourName\\mcp-server\\venv\\Scripts\\python.exe",
-      "args": [
-        "C:\\Users\\YourName\\mcp-server\\britive_mcp_tools\\core\\mcp_runner.py"
-      ],
-      "env": {
-        "PYTHONPATH": "C:\\Users\\YourName\\mcp-server",
-        "BRITIVE_TENANT": "your_tenant_name"
+5. Log in directs you to the Britive login page, where you can enter your credentials.
+6. Modify your MCP JSON file to configure the Britive MCP. The MCP JSON file may be located at different locations depending on your MCP client and how it was installed. 
+
+    * Windows: If you are using the Claude desktop as your MCP client, the JSON file might be at this location: %APPDATA%\Claude\claude_desktop_config.json
+
+      ```json
+      {
+        "servers": {
+          "britive": {
+            "command": "C:\\Users\\YourName\\mcp-server\\venv\\Scripts\\python.exe",
+            "args": [
+              "C:\\Users\\YourName\\mcp-server\\britive_mcp_tools\\core\\mcp_runner.py"
+            ],
+            "env": {
+              "PYTHONPATH": "C:\\Users\\YourName\\mcp-server",
+              "BRITIVE_TENANT": "your_tenant_name"
+            }
+          }
+        }
       }
-    }
-  }
-}
-```
+      ```
+    * Linux:
+      ```json
+      {
+        "servers": {
+          "britive": {
+            "command": "/user/local/bin/python",
+            "args": [
+              "/Users/YourName/mcp-server/britive_mcp_tools/core/mcp_runner.py"
+            ],
+            "env": {
+              "PYTHONPATH": "/Users/YourName/mcp-server",
+              "BRITIVE_TENANT": "your_tenant_name",
+            }
+          }
+        }
+      }
+      ```
 
 Where:
 <table>
@@ -109,7 +125,7 @@ Where:
     </tr>
     <tr>
       <td><code>args</code></td>
-      <td>Full path to the <code>britive_mcp_tools\core\mcp_runner.py</code> module.</td>
+      <td>Full path to the <code>britive_mcp_tools\core\mcp_runner.py</code></td>
     </tr>
     <tr>
       <td><code>PYTHONPATH</code></td>
@@ -124,30 +140,46 @@ Where:
 
 * #### **Option 2: Login using a static token:**
 
-1. Generate a static token from Britive UI. For more information, see [API Tokens](https://docs.britive.com/v1/docs/api-tokens-1).
+1. Generate a static token from the Britive UI. For more information, see [API Tokens](https://docs.britive.com/v1/docs/api-tokens-1).
 2. Copy the token to use in the MCP JSON file.
-3. Modify your MCP JSON file to configure the Britive MCP.
+3. Modify your MCP JSON file to configure the Britive MCP.  The MCP JSON file may be located at different locations depending on your MCP client and how it was installed.
 
-> **Note:**  
-> For Windows, use **backslash (\\\\)**.  
-> For macOS, use a **forward slash (/)** in the path.
-```json
-{
-  "servers": {
-    "britive": {
-      "command": "C:\\Users\\YourName\\mcp-server\\venv\\Scripts\\python.exe",
-      "args": [
-        "C:\\Users\\YourName\\mcp-server\\britive_mcp_tools\\core\\mcp_runner.py"
-      ],
-      "env": {
-        "PYTHONPATH": "C:\\Users\\YourName\\mcp-server",
-        "BRITIVE_TENANT": "your_tenant_name",
-        "BRITIVE_STATIC_TOKEN": "your_static_token_here"
+    * Windows: If you are using the Claude desktop as your MCP client, the JSON file might be at this location: %APPDATA%\Claude\claude_desktop_config.json
+
+      ```json
+      {
+        "servers": {
+          "britive": {
+            "command": "C:\\Users\\YourName\\mcp-server\\venv\\Scripts\\python.exe",
+            "args": ["C:\\Users\\YourName\\mcp-server\\britive_mcp_tools\\core\\mcp_runner.py"
+            ],
+            "env": {
+              "PYTHONPATH": "C:\\Users\\YourName\\mcp-server",
+              "BRITIVE_TENANT": "your_tenant_name",
+              "BRITIVE_STATIC_TOKEN": "your_static_token_here"
+            }
+          }
+        }
       }
-    }
-  }
-}
-```
+      ```
+    * Linux:
+      ```json
+      {
+        "servers": {
+          "britive": {
+            "command": "/user/local/bin/python",
+            "args": [
+              "/Users/YourName/mcp-server/britive_mcp_tools/core/mcp_runner.py"
+            ],
+            "env": {
+              "PYTHONPATH": "/Users/YourName/mcp-server",
+              "BRITIVE_TENANT": "your_tenant_name",
+              "BRITIVE_STATIC_TOKEN": "your_static_token_here"
+            }
+          }
+        }
+      }
+      ```
 
 **Where:**
 <table>
@@ -179,5 +211,5 @@ Where:
 </table>
 
  
-## Connect to the MCP server using a client application. 
-For more information, see [Connect to Local MCP Servers](https://modelcontextprotocol.io/quickstart/user).
+## Connecting to the MCP server using a client application
+For more information, see [Connect to Local MCP Servers](https://modelcontextprotocol.io/docs/develop/connect-local-servers).
