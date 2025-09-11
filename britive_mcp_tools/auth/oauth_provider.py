@@ -6,6 +6,7 @@ from britive_mcp_tools.utils import get_env_or_raise
 from fastmcp.server.auth import RemoteAuthProvider
 from fastmcp.server.auth.providers.jwt import JWTVerifier
 from pydantic import AnyHttpUrl
+import os
 
 class OAuthProvider(AuthProvider):
     """
@@ -15,6 +16,13 @@ class OAuthProvider(AuthProvider):
 
     def __init__(self, tenant: str):
         self.tenant = tenant
+        self.oauth2_domain = os.environ.get(
+            "OAUTH2_DOMAIN", 
+            f"https://{self.tenant}.britive-app.com/api/auth/sso/oauth2/"
+        )
+        self.oauth2_audience = os.environ.get("OAUTH2_AUDIENCE", "Britive")
+        self.oauth2_issuer = os.environ.get("OAUTH2_ISSUER", "Britive")
+        self.resource_server = get_env_or_raise("RESOURCE_SERVER")
         self._ctx: Context = None
 
     def _get_token(self) -> str:
@@ -22,15 +30,24 @@ class OAuthProvider(AuthProvider):
         Extracts the OAuth token from the Authorization header in the request context.
         """
         if not self._ctx:
-            raise RuntimeError("Context not set.")
+            raise RuntimeError("Context not set. Did you specify the provider correctly?")
 
         try:
             auth_header = self._ctx.get_http_request().headers.get("Authorization")
             if not auth_header or not auth_header.startswith("Bearer "):
-                raise ValueError("Authorization header is missing or invalid.")
-            return auth_header[7:]  # Remove 'Bearer '
+                raise ValueError(
+                "No valid OAuth token found. "
+                "Please log in using the OAuth provider before calling this tool."
+                )
+            return auth_header[7:]
+        except RuntimeError:
+            # No active request context at all
+            raise ValueError(
+                "Failed to extract token: No active HTTP request found. "
+                "Please log in using OAuth before using this tool."
+            )
         except Exception as e:
-            raise ValueError(f"Failed to extract token from context: {e}")
+            raise ValueError(f"Unexpected error while extracting token: {e}")
 
     def _get_tenant_dns(self) -> str:
         """
@@ -53,20 +70,15 @@ class OAuthProvider(AuthProvider):
         return client
 
     def get_auth(self) -> RemoteAuthProvider:
-        oauth2_domain = get_env_or_raise("OAUTH2_DOMAIN")
-        oauth2_audience = get_env_or_raise("OAUTH2_AUDIENCE")
-        oauth2_issuer = get_env_or_raise("OAUTH2_ISSUER")
-        resource_server = get_env_or_raise("RESOURCE_SERVER")
-
         token_verifier = JWTVerifier(
-            jwks_uri=f'{oauth2_domain}keys',
-            issuer=oauth2_issuer,
-            audience=oauth2_audience,
+            jwks_uri=f'{self.oauth2_domain}keys',
+            issuer=self.oauth2_issuer,
+            audience=self.oauth2_audience,
         )
         
         auth = RemoteAuthProvider(
             token_verifier=token_verifier,
-            authorization_servers=[AnyHttpUrl(oauth2_domain)],
-            resource_server_url=resource_server
+            authorization_servers=[AnyHttpUrl(self.oauth2_domain)],
+            resource_server_url=self.resource_server
         )
         return auth
