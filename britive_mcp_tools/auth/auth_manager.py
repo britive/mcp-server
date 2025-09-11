@@ -42,21 +42,20 @@ class AuthManager:
           3. Default fallback to PyBritiveLoginProvider
         """
 
-        if auth_provider:
-            auth_provider = auth_provider.lower()
-            if auth_provider not in self.PROVIDER_MAP:
-                raise ValueError(
-                    f"Invalid auth provider '{auth_provider}'. "
-                    f"Choose one of: {list(self.PROVIDER_MAP.keys())}"
-                )
-            return self.PROVIDER_MAP[auth_provider](self.tenant)
+        if auth_provider is None:
+            auth_provider = get_env_or_raise("AUTH_PROVIDER")
 
-        if os.getenv("BRITIVE_STATIC_TOKEN"):
-            return StaticTokenProvider(self.tenant)
-        if os.getenv("OAUTH2_DOMAIN"):
-            return OAuthProvider(self.tenant)
+        print(f"Auth provider from env: {os.getenv('AUTH_PROVIDER')}")
+        print(f"Auth provider from param: {auth_provider}")
 
-        return PyBritiveLoginProvider(self.tenant)
+        auth_provider = auth_provider.lower()
+        if auth_provider not in self.PROVIDER_MAP:
+            raise ValueError(
+                f"Invalid auth provider '{auth_provider}'. "
+                f"Choose one of: {list(self.PROVIDER_MAP.keys())}"
+            )
+        return self.PROVIDER_MAP[auth_provider](self.tenant)
+
 
     def get_provider(self):
         """Return the chosen AuthProvider instance."""
