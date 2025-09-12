@@ -1,5 +1,6 @@
 import os
 from britive_mcp_tools.utils import get_env_or_raise
+from britive_mcp_tools.auth.auth_provider import AuthProvider
 from britive_mcp_tools.auth.oauth_provider import OAuthProvider
 from britive_mcp_tools.auth.pybritive_login_provider import PyBritiveLoginProvider
 from britive_mcp_tools.auth.static_token_provider import StaticTokenProvider
@@ -33,7 +34,7 @@ class AuthManager:
         self.tenant = get_env_or_raise("BRITIVE_TENANT")
         self.auth_provider = self._get_auth_provider(auth_provider)
 
-    def _get_auth_provider(self, auth_provider: str = None):
+    def _get_auth_provider(self, auth_provider: str = None) -> AuthProvider:
         """
         Select the AuthProvider based on user input or environment variables.
         Priority:
@@ -44,9 +45,6 @@ class AuthManager:
 
         if auth_provider is None:
             auth_provider = get_env_or_raise("AUTH_PROVIDER")
-
-        print(f"Auth provider from env: {os.getenv('AUTH_PROVIDER')}")
-        print(f"Auth provider from param: {auth_provider}")
 
         auth_provider = auth_provider.lower()
         if auth_provider not in self.PROVIDER_MAP:

@@ -12,6 +12,7 @@ class StaticTokenProvider(AuthProvider):
     def __init__(self, tenant: str):
         self.tenant = tenant
         self.token = os.environ.get("BRITIVE_STATIC_TOKEN")
+        self.transport_type = "stdio"
 
     def _get_token(self) -> str:
         return self.token
@@ -34,3 +35,9 @@ class StaticTokenProvider(AuthProvider):
 
     def get_auth(self) -> None:
         return None
+    
+    def get_runner_params(self) -> dict:
+        """Return parameters required to run based on transport type."""
+        return {
+            "transport": self.transport_type
+        }

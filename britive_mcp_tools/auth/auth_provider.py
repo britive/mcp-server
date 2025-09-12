@@ -12,3 +12,11 @@ class AuthProvider(ABC):
     @abstractmethod
     def _get_tenant_dns(self):
         pass
+
+    @abstractmethod
+    def get_auth(self):
+        pass
+
+    @abstractmethod
+    def get_runner_params(self):
+        pass
