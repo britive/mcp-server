@@ -59,6 +59,8 @@ class PyBritiveLoginProvider(AuthProvider):
             return token
         except KeyError:
             raise AuthenticationError("Authentication details missing. Please run `pybritive login`.")
+        except Exception as e:
+            raise AuthenticationError(f"Error retrieving token: {e}. Please run `pybritive login`.")
 
     def _get_tenant_dns(self) -> str:
         """

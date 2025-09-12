@@ -110,6 +110,6 @@ def get_env_or_raise(key: str) -> str:
     if value is None or value.strip() == "":
         raise ValueError(
             f"\n\nMissing required environment variable: '{key}'. "
-            f"Please define it in your .env file.\n"
+            f"Please define it in the env.\n"
         )
     return value
