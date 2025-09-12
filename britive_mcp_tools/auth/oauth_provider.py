@@ -25,8 +25,8 @@ class OAuthProvider(AuthProvider):
         # MCP transport settings
         self.transport_type = "streamable-http"
         self.host = os.environ.get("MCP_HOST", "0.0.0.0")
-        self.port = int(os.environ.get("MCP_PORT", 5000))
-        self.path = os.environ.get("MCP_PATH", "/mcp")
+        self.port = int(os.environ.get("MCP_PORT", 80))
+        self.path = os.environ.get("MCP_PATH", "/")
 
         # Resource server defaults
         scheme = "" if self.host.startswith("http") else "http://"
