@@ -1,6 +1,7 @@
 import os
 from britive_mcp_tools.auth.auth_provider import AuthProvider
 from britive.britive import Britive
+from britive_mcp_tools.utils import get_env_or_raise
 
 
 class StaticTokenProvider(AuthProvider):
@@ -11,7 +12,7 @@ class StaticTokenProvider(AuthProvider):
 
     def __init__(self, tenant: str):
         self.tenant = tenant
-        self.token = os.environ.get("BRITIVE_STATIC_TOKEN")
+        self.token = get_env_or_raise("BRITIVE_STATIC_TOKEN")
         self.transport_type = "stdio"
 
     def _get_token(self) -> str:
