@@ -16,20 +16,20 @@ class AuthManager:
         3. PyBritive Login (default fallback)
     
     You can also explicitly select the provider by passing:
-        - "static"  -> StaticTokenProvider
+        - "static_token"  -> StaticTokenProvider
         - "oauth"   -> OAuthProvider
         - "pybritive" -> PyBritiveLoginProvider
     """
 
     PROVIDER_MAP = {
-        "static": StaticTokenProvider,
+        "static_token": StaticTokenProvider,
         "oauth": OAuthProvider,
         "pybritive": PyBritiveLoginProvider,
     }
 
     def __init__(self, auth_provider: str = None):
         """
-        :param provider: Optional string specifying the provider: "static", "oauth", or "pybritive"
+        :param provider: Optional string specifying the provider: "static_token", "oauth", or "pybritive"
         """
         self.tenant = get_env_or_raise("BRITIVE_TENANT")
         self.auth_provider = self._get_auth_provider(auth_provider)
