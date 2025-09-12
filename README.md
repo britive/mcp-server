@@ -39,7 +39,7 @@ python -m venv <virtual_env_name>
   ```shell
   <virtual_env_name>\Scripts\activate
   ```
-* **Linux**
+* **macOS/Linux**
 
   ```shell
   source <virtual_env_name>/bin/activate
@@ -98,7 +98,7 @@ Authentication to the Britive platform can be performed using the Britive CLI or
         }
       }
       ```
-    * Linux:
+    * macOS/Linux: If you are using the Claude desktop on macOS as your MCP client, the JSON file might be at this location: ~/Library/Application Support/Claude/claude_desktop_config.json.
       ```json
       {
         "servers": {
@@ -162,7 +162,7 @@ Where:
         }
       }
       ```
-    * Linux:
+    * macOS/Linux: If you are using the Claude desktop on macOS as your MCP client, the JSON file might be at this location: ~/Library/Application Support/Claude/claude_desktop_config.json.
       ```json
       {
         "servers": {
