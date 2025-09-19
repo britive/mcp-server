@@ -17,7 +17,7 @@ def my_access_checkout(
     justification: str = None,
     max_wait_time: int = 600,
     otp: str = None,
-    programmatic: bool = True,
+    programmatic: bool = False,
     ticket_id: str = None,
     ticket_type: str = None,
     wait_time: int = 60,
@@ -42,7 +42,7 @@ def my_access_checkout(
     :param max_wait_time: The maximum number of seconds to wait for an approval before throwing
         an exception.
     :param otp: Optional time based one-time passcode use for step up authentication.
-    :param programmatic: True for programmatic credential checkout. False for console checkout.
+    :param programmatic: True for programmatic credential checkout. False for console checkout. Defaults to console checkout.
     :param progress_func: An optional callback that will be invoked as the checkout process progresses.
     :param ticket_id: Optional ITSM ticket ID
     :param ticket_type: Optional ITSM ticket type or category
