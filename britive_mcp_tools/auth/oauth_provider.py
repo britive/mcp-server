@@ -20,7 +20,7 @@ class OAuthProvider(AuthProvider):
         # OAuth2 settings (env override > default)
         self.oauth2_domain = os.environ.get("OAUTH2_DOMAIN", f"{self.base_tenant_url}/api/auth/sso/oauth2/")
         self.oauth2_audience = os.environ.get("OAUTH2_AUDIENCE", "Britive")
-        self.oauth2_issuer = os.environ.get("OAUTH2_ISSUER", "Britive")
+        self.oauth2_issuer = os.environ.get("OAUTH2_ISSUER", self.base_tenant_url)
 
         # MCP transport settings
         self.transport_type = "streamable-http"
