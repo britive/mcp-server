@@ -10,6 +10,7 @@ from britive_mcp_tools.tools.identity_management_users import *
 from britive_mcp_tools.tools.identity_management_tags import *
 from britive_mcp_tools.tools.security_active_sessions import *
 from britive_mcp_tools.tools.application_management_applications import *
+from britive_mcp_tools.tools.my_secrets import *
 
 if __name__ == '__main__':
     mcp.run()
