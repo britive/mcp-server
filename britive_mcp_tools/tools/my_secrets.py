@@ -48,7 +48,7 @@ def my_secrets_list():
     - The user provides a secret path and wants to access its value
     - After using `my_secrets_list`, when the user selects which secret they want to view
 
-    If approval is required for the secret, inform the user that the request has been submitted and you're waiting for approval. Only provide the wait_time and max_wait_time parameters if the user has specific timing requirements.""",
+    When returning secret value, format value in a copy-pastable format, like a code block or artifact""",
 )
 def my_secrets_view(
     path: str,
