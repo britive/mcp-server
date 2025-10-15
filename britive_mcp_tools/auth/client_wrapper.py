@@ -4,17 +4,15 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from configparser import ConfigParser
 
-from fastmcp import Context
-
 from britive.britive import Britive
-
 from fastmcp import Context
-
 from pybritive import britive_cli
+
 
 class BritiveClientWrapper:
     def __init__(self, tenant):
         self.tenant_dns = self.get_tenant_dns(tenant)
+        self.tenant = tenant
 
     def get_tenant_dns(self, tenant):
         if os.environ.get("BRITIVE_STATIC_TOKEN"):
@@ -28,11 +26,12 @@ class BritiveClientWrapper:
             raise KeyError(
                 f"User not authenticated. Please ask user to run `pybritive login` to authenticate."
             )
+
     def get_token(self):
-        temp_cli = britive_cli.BritiveCli()
+        temp_cli = britive_cli.BritiveCli(tenant_name=self.tenant)
         temp_cli.login()
         temp_cli.set_credential_manager()
-        return temp_cli.credential_manager.credentials['accessToken']
+        return temp_cli.credential_manager.credentials["accessToken"]
 
     def get_client(self):
         token = self.get_token()
