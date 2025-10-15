@@ -1,7 +1,4 @@
-import datetime
-
 from britive.exceptions import UnauthorizedRequest
-from fastmcp import Context
 
 from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
 
