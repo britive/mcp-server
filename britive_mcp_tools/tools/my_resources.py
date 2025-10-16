@@ -10,12 +10,15 @@ from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
     options are available to the user. It can also be used to find the resource and profile IDs 
     needed for the `checkout` tool. This tool does not require any parameters and will return a 
     list of resources with their details.
+
+    You can also help the user by filtering the list by resource type. 
+    To recieve the resource types available, you can call the resource list without a type, find out what the types are, then recall the tool
     """,
 )
-def my_resources_list():
+def my_resources_list(list_type: str = None):
     try:
         client = client_wrapper.get_client()
-        return client.my_resources.list()
+        return client.my_resources.list(list_type=list_type)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
@@ -49,6 +52,36 @@ def my_resources_list():
     - Try executing the prompt first
     - If execution fails, try checkout with least privilege (e.g., read-only)
     - Use administrator access only when necessary
+
+    When do you use my_access versus my_resources?
+
+    My access is used for access to SaaS application priviledged accounts, including but not limited to:
+        
+        MongoDB
+        Atlassian
+        Aviatrix
+        AWS
+        Azure
+        Databricks
+        GCP
+        Github
+        Kubernetes
+        Okta
+        Oracle
+        OpenShift
+        SalesForce
+        Saviynt
+        ServiceNow
+        Snowflake
+        Zoom
+
+    My resources is used for access to everything that isn't cloud or SaaS including but not limited to:
+
+        GKE
+        GoogleWorkspace
+        Guac
+        Linux servers
+        Databases
     """,
 )
 def my_resources_checkout(
