@@ -1,14 +1,65 @@
 import datetime
 
-from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
+from britive.exceptions import UnauthorizedRequest
 from fastmcp import Context
 
-from britive.exceptions import UnauthorizedRequest
+from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
 
 
 @mcp.tool(
     name="my_access_checkout",
-    description="""Use this tool when the user is denied access via MCP (e.g., 'access denied', 'not authorized') or implicitly indicates they can't access something they should. Also trigger if the user says 'need access', 'get access', or refers to Britive access. Prefer silent inference of 'profile_id' and 'environment_id' from prior context or conversation;Ask only if unclear. Set 'programmatic=False' unless programmatic access is explicitly mentioned.Include 'justification' only if needed for approval (e.g., access typically restricted or user says 'need approval'). Use 'include_credentials=True' only if the user expects immediate use. Handle approval flows quietly, inform the user once if there's a delay, but avoid repeated updates unless asked. Accept optional 'ticket_id', 'ticket_type', or 'otp' if context provides them. Do not try to guess these parameters if not mentioned by the user or in the context. You can find the profile and environment IDs by using the `list_profiles` tool.If access was already granted, return it silently. If failure occurs (rejection, timeout, withdrawal), notify with minimal friction. Never use this tool when the user is only inquiring about existing access or wanting to check in access.Before attempting a checkout, try to execute the prompt. If the execution fails try a checkout, but ensure thatleast privilege access is used. As an example, if the needed permissions for the prompt require read only accessjust checkout the profile for read only access. Only do administrator when needed.""",
+    description="""Use this tool when the user is denied access via MCP (e.g., 'access denied', 'not authorized') or implicitly indicates they can't access something they should. Also trigger if the user says 'need access', 'get access', or refers to Britive access. 
+
+    Prefer silent inference of 'profile_id' and 'environment_id' from prior context or conversation; Ask only if unclear. 
+
+    Set 'programmatic=False' unless programmatic access is explicitly mentioned.
+
+    Include 'justification' only if needed for approval (e.g., access typically restricted or user says 'need approval'). 
+
+    Use 'include_credentials=True' only if the user expects immediate use. 
+
+    Handle approval flows quietly, inform the user once if there's a delay, but avoid repeated updates unless asked. 
+
+    Accept optional 'ticket_id', 'ticket_type', or 'otp' if context provides them. Do not try to guess these parameters if not mentioned by the user or in the context. 
+
+    You can find the profile and environment IDs by using the `list_profiles` tool.
+
+    If access was already granted, return it silently. If failure occurs (rejection, timeout, withdrawal), notify with minimal friction. 
+
+    Never use this tool when the user is only inquiring about existing access or wanting to check in access.
+
+    Before attempting a checkout, try to execute the prompt. If the execution fails try a checkout, but ensure that least privilege access is used. As an example, if the needed permissions for the prompt require read only access just checkout the profile for read only access. Only do administrator when needed.
+    
+    When do you use my_access versus my_resources?
+
+    My access is used for access to SaaS application priviledged accounts, including but not limited to:
+        
+        MongoDB
+        Atlassian
+        Aviatrix
+        AWS
+        Azure
+        Databricks
+        GCP
+        Github
+        Kubernetes
+        Okta
+        Oracle
+        OpenShift
+        SalesForce
+        Saviynt
+        ServiceNow
+        Snowflake
+        Zoom
+
+    My resources is used for access to everything that isn't cloud or SaaS including but not limited to:
+
+        GKE
+        GoogleWorkspace
+        Guac
+        Linux servers
+        Databases
+    """,
 )
 def my_access_checkout(
     profile_id: str,
@@ -17,7 +68,7 @@ def my_access_checkout(
     justification: str = None,
     max_wait_time: int = 600,
     otp: str = None,
-    programmatic: bool = True,
+    programmatic: bool = False,
     ticket_id: str = None,
     ticket_type: str = None,
     wait_time: int = 60,
@@ -42,7 +93,7 @@ def my_access_checkout(
     :param max_wait_time: The maximum number of seconds to wait for an approval before throwing
         an exception.
     :param otp: Optional time based one-time passcode use for step up authentication.
-    :param programmatic: True for programmatic credential checkout. False for console checkout.
+    :param programmatic: True for programmatic credential checkout. False for console checkout. Defaults to console checkout.
     :param progress_func: An optional callback that will be invoked as the checkout process progresses.
     :param ticket_id: Optional ITSM ticket ID
     :param ticket_type: Optional ITSM ticket type or category
