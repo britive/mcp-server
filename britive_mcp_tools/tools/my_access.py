@@ -108,19 +108,36 @@ def my_access_checkout(
 
     try:
         client = client_wrapper.get_client()
-        return client.my_access.checkout(
-            profile_id,
-            environment_id,
-            include_credentials,
-            justification,
-            max_wait_time,
-            otp,
-            programmatic,
-            None,
-            ticket_id,
-            ticket_type,
-            wait_time,
-        )
+        if client.obo:
+            return client.my_access.checkout(
+                profile_id,
+                environment_id,
+                f"X-On-Behalf-Of: {client.email}",
+                include_credentials,
+                justification,
+                max_wait_time,
+                otp,
+                programmatic,
+                None,
+                ticket_id,
+                ticket_type,
+                wait_time,
+            )
+        else:
+            return client.my_access.checkout(
+                profile_id,
+                environment_id,
+                include_credentials,
+                justification,
+                max_wait_time,
+                otp,
+                programmatic,
+                None,
+                ticket_id,
+                ticket_type,
+                wait_time,
+            )
+
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
@@ -141,7 +158,14 @@ def my_access_checkin(transaction_id: str):
 
     try:
         client = client_wrapper.get_client()
-        return client.my_access.checkin(transaction_id)
+        if client.obo:
+            return client.my_access.checkin(
+                transaction_id,
+                f"X-On-Behalf-Of: {client.email}",
+            )
+        else:
+            client = client_wrapper.get_client()
+            return client.my_access.checkin(transaction_id)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
@@ -161,7 +185,12 @@ def my_access_list_profiles():
 
     try:
         client = client_wrapper.get_client()
-        return client.my_access.list_profiles()
+        if client.obo:
+            return client.my_access.list_profiles(
+                headers=f"X-On-Behalf-Of: {client.email}",
+            )
+        else:
+            return client.my_access.list_profiles()
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
@@ -201,7 +230,10 @@ def my_access_whoami():
 
     try:
         client = client_wrapper.get_client()
-        return client.my_access.whoami()
+        if client.obo:
+            return client.my_access.whoami(f"X-On-Behalf-Of: {client.email}")
+        else:
+            return client.my_access.whoami()
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
