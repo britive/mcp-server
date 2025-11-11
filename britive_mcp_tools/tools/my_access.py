@@ -108,11 +108,11 @@ def my_access_checkout(
 
     try:
         client = client_wrapper.get_client()
-        if client.obo:
+        if client_wrapper.obo:
             return client.my_access.checkout(
                 profile_id,
                 environment_id,
-                f"X-On-Behalf-Of: {client.email}",
+                {"X-On-Behalf-Of": client_wrapper.email},
                 include_credentials,
                 justification,
                 max_wait_time,
@@ -158,10 +158,10 @@ def my_access_checkin(transaction_id: str):
 
     try:
         client = client_wrapper.get_client()
-        if client.obo:
+        if client_wrapper.obo:
             return client.my_access.checkin(
                 transaction_id,
-                f"X-On-Behalf-Of: {client.email}",
+                {"X-On-Behalf-Of": client_wrapper.email},
             )
         else:
             client = client_wrapper.get_client()
@@ -185,9 +185,9 @@ def my_access_list_profiles():
 
     try:
         client = client_wrapper.get_client()
-        if client.obo:
+        if client_wrapper.obo:
             return client.my_access.list_profiles(
-                headers=f"X-On-Behalf-Of: {client.email}",
+                headers={"X-On-Behalf-Of": client_wrapper.email},
             )
         else:
             return client.my_access.list_profiles()
@@ -230,8 +230,8 @@ def my_access_whoami():
 
     try:
         client = client_wrapper.get_client()
-        if client.obo:
-            return client.my_access.whoami(f"X-On-Behalf-Of: {client.email}")
+        if client_wrapper.obo:
+            return client.my_access.whoami({"X-On-Behalf-Of": client_wrapper.email})
         else:
             return client.my_access.whoami()
     except UnauthorizedRequest:
