@@ -16,7 +16,6 @@ if __name__ == "__main__":
         from britive_mcp_tools.tools.identity_management_service_identities import *
         from britive_mcp_tools.tools.identity_management_tags import *
         from britive_mcp_tools.tools.identity_management_users import *
-        from britive_mcp_tools.tools.my_access import *
         from britive_mcp_tools.tools.my_resources import *
         from britive_mcp_tools.tools.my_secrets import *
         from britive_mcp_tools.tools.reports import *
