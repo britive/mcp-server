@@ -13,7 +13,7 @@ class BritiveClientWrapper:
     def __init__(self, tenant):
         self.tenant_dns = self.get_tenant_dns(tenant)
         self.tenant = tenant
-        if os.environ.get("BRITIVE_OBO_EMAIL"):
+        if os.environ.get("BRITIVE_EMAIL"):
             self.obo = True
             self.email = os.environ.get("BRITIVE_EMAIL")
         else:
