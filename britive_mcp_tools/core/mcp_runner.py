@@ -22,3 +22,4 @@ if __name__ == "__main__":
         from britive_mcp_tools.tools.security_active_sessions import *
 
     mcp.run()
+    print("MCP server has started")
