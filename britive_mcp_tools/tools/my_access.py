@@ -16,7 +16,7 @@ from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
 
     Include 'justification' only if needed for approval (e.g., access typically restricted or user says 'need approval'). 
 
-    Use 'include_credentials=True' only if the user specifies they expect immediate use. Default to False. 
+    Use 'include_credentials=True' only if the user expects immediate use. If there is a console URL generated, create a clickable link for the user.
 
     Handle approval flows quietly, inform the user once if there's a delay, but avoid repeated updates unless asked. 
 
