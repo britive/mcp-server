@@ -16,7 +16,7 @@ from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
 
     Include 'justification' only if needed for approval (e.g., access typically restricted or user says 'need approval'). 
 
-    Use 'include_credentials=True' only if the user expects immediate use. 
+    Use 'include_credentials=True' only if the user expects immediate use. If there is a console URL generated, create a clickable link for the user.
 
     Handle approval flows quietly, inform the user once if there's a delay, but avoid repeated updates unless asked. 
 
@@ -108,19 +108,36 @@ def my_access_checkout(
 
     try:
         client = client_wrapper.get_client()
-        return client.my_access.checkout(
-            profile_id,
-            environment_id,
-            include_credentials,
-            justification,
-            max_wait_time,
-            otp,
-            programmatic,
-            None,
-            ticket_id,
-            ticket_type,
-            wait_time,
-        )
+        if client_wrapper.obo:
+            return client.my_access.checkout(
+                profile_id=profile_id,
+                environment_id=environment_id,
+                headers={"X-On-Behalf-Of": client_wrapper.email},
+                include_credentials=include_credentials,
+                justification=justification,
+                max_wait_time=max_wait_time,
+                otp=otp,
+                programmatic=programmatic,
+                progress_func=None,
+                ticket_id=ticket_id,
+                ticket_type=ticket_type,
+                wait_time=wait_time,
+            )
+        else:
+            return client.my_access.checkout(
+                profile_id=profile_id,
+                environment_id=environment_id,
+                include_credentials=include_credentials,
+                justification=justification,
+                max_wait_time=max_wait_time,
+                otp=otp,
+                programmatic=programmatic,
+                progress_func=None,
+                ticket_id=ticket_id,
+                ticket_type=ticket_type,
+                wait_time=wait_time,
+            )
+
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
@@ -141,7 +158,14 @@ def my_access_checkin(transaction_id: str):
 
     try:
         client = client_wrapper.get_client()
-        return client.my_access.checkin(transaction_id)
+        if client_wrapper.obo:
+            return client.my_access.checkin(
+                transaction_id=transaction_id,
+                headers={"X-On-Behalf-Of": client_wrapper.email},
+            )
+        else:
+            client = client_wrapper.get_client()
+            return client.my_access.checkin(transaction_id=transaction_id)
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
@@ -161,7 +185,12 @@ def my_access_list_profiles():
 
     try:
         client = client_wrapper.get_client()
-        return client.my_access.list_profiles()
+        if client_wrapper.obo:
+            return client.my_access.list_profiles(
+                headers={"X-On-Behalf-Of": client_wrapper.email},
+            )
+        else:
+            return client.my_access.list_profiles()
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
@@ -201,7 +230,12 @@ def my_access_whoami():
 
     try:
         client = client_wrapper.get_client()
-        return client.my_access.whoami()
+        if client_wrapper.obo:
+            return client.my_access.whoami(
+                headers={"X-On-Behalf-Of": client_wrapper.email}
+            )
+        else:
+            return client.my_access.whoami()
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
