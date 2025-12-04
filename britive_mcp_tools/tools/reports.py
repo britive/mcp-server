@@ -52,7 +52,9 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
 """,
 )
-def report_run_profile_historical_access(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_profile_historical_access(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -101,7 +103,9 @@ Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `
 - The output of this tool is incomplete until detailed permission info is fetched using the second tool.
 """,
 )
-def report_run_permissions_in_profile(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_permissions_in_profile(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -142,7 +146,9 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
 """,
 )
-def report_run_tag_membership(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_tag_membership(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -183,7 +189,9 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `co`, `gt`, etc. Do not use any other operators or formats.
 """,
 )
-def report_run_service_identities_details(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_service_identities_details(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -224,7 +232,9 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
 """,
 )
-def report_run_user_secret_access(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_user_secret_access(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -265,7 +275,9 @@ Do not add any quotes around the values, even if they contain spaces or special 
 Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
 """,
 )
-def report_run_secret_last_access(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_secret_last_access(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -368,7 +380,9 @@ def report_run_profiles_assigned_to_service_identities(
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_profile_accessed_tags(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_profile_accessed_tags(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -416,7 +430,9 @@ def report_run_profile_accessed_tags(report_id: str, csv: bool = False, filter_e
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_AI_identities_secret_last_access(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_AI_identities_secret_last_access(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -465,7 +481,9 @@ def report_run_AI_identities_secret_last_access(report_id: str, csv: bool = Fals
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_permission_details(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_permission_details(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -513,7 +531,9 @@ def report_run_permission_details(report_id: str, csv: bool = False, filter_expr
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_resource_historical_access(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_resource_historical_access(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -560,7 +580,9 @@ def report_run_resource_historical_access(report_id: str, csv: bool = False, fil
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_resource_last_access(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_resource_last_access(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -607,7 +629,9 @@ def report_run_resource_last_access(report_id: str, csv: bool = False, filter_ex
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_resources_assigned_to_ai_identities(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_resources_assigned_to_ai_identities(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -654,7 +678,9 @@ def report_run_resources_assigned_to_ai_identities(report_id: str, csv: bool = F
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_resources_assigned_to_all_identities(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_resources_assigned_to_all_identities(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -750,7 +776,9 @@ def report_run_resources_assigned_to_service_identities(
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_resources_assigned_to_tags(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_resources_assigned_to_tags(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -797,7 +825,9 @@ def report_run_resources_assigned_to_tags(report_id: str, csv: bool = False, fil
     Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
     """,
 )
-def report_run_resources_assigned_to_users(report_id: str, csv: bool = False, filter_expression: str = None):
+def report_run_resources_assigned_to_users(
+    report_id: str, csv: bool = False, filter_expression: str = None
+):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
@@ -811,33 +841,6 @@ def report_run_resources_assigned_to_users(report_id: str, csv: bool = False, fi
     try:
         client = client_wrapper.get_client()
         return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
-
-
-@mcp.tool(
-    name="reports_list",
-    description="""List all available reports and their metadata.
-Use this tool to:
-- Retrieve report names and their `reportId`s.
-- Extract available filterable columns for each report.
-- Understand which operators (e.g., `eq`, `co`, `gt`) are supported per column.
-
-You must call this tool before using any `report_run_*` tool to ensure you have the correct `reportId`, column names, and operator support.
-No parameters required.""",
-)
-def reports_list():
-    # This tool is generated using Britive SDK v4.3.0
-    """Return list of all built-in reports.
-
-    :return: List of reports."""
-
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.list()
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
@@ -858,55 +861,6 @@ Do not add any quotes around the values, even if they contain spaces or special 
 """,
 )
 def all_reports_run(report_id: str, csv: bool = False, filter_expression: str = None):
-    # This tool is generated using Britive SDK v4.3.0
-    """Run a report.
-
-    :param report_id: The ID of the report.
-    :param csv: If True the result will be returned as a CSV string. If False (default) the result will be returned
-        as a list where each time in the list is a dict representing the row of data.
-    :param filter_expression: The filter to apply to the report. It is left to the caller to provide a syntactically
-        correct filter expression string.
-    :return: CSV string or list."""
-
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
-
-
-@mcp.tool(
-    name="report_run_permission_details",
-    description=""" This tool provides granular details on application permissions for specified application
-                use this tool after application access tool to get more details on permissions and focus on permissionDefinition
-        
-        1. Use `reports_list` to find the report named 'Permission Details'.
-        2. Extract its `reportId` and valid columns/operators.
-        3. Call this tool with that `report_id` and optional filters. after the application access tool to have detailed permission information.
-
-        Filterable columns include: `application`, `environment`,`permissionDefinition`,`scope`, `scopeType`, `name`,`applicationStatus`,`environmentStatus`,`type`, `highrisk`
-
-
-        Examples:
-
-        User may ask questions such as:
-        -Show me what permissions are assigned to a role/policy in a `xyz` application
-        -Show me which roles/policies in a `xyz` application have not been used in the past 30 days.
-
-
-    Expected Response Format:
-    Answer in a structured format (e.g., tables or bullet points).
-    Include metadata like Application, Environment, account, permissions, permission description, status, etc., when relevant associated with application access. 
-    Apply column-based filters precisely based on the question.
-
-    Do not add any quotes around the values, even if they contain spaces or special characters. The tool will handle them correctly.
-    Strictly use the operators defined in the `logs_operators` tool, such as `eq`, `sw`, `co`, etc. and if having negative context in filter matching then use operator `neq`, `nco` Do not use any other operators or formats.
-    """,
-)
-def report_run_permission_details(report_id: str, csv: bool = False, filter_expression: str = None):
     # This tool is generated using Britive SDK v4.3.0
     """Run a report.
 
