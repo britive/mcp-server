@@ -1,4 +1,4 @@
-from mcp_init import mcp
+from .mcp_init import mcp
 
 # Both OBO MCP and non OBO MCP use my access
 from ..tools.my_access import *
