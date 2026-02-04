@@ -13,6 +13,12 @@ class BritiveClientWrapper:
     def __init__(self, tenant):
         self.tenant_dns = self.get_tenant_dns(tenant)
         self.tenant = tenant
+        if os.environ.get("BRITIVE_EMAIL"):
+            self.obo = True
+            self.email = os.environ.get("BRITIVE_EMAIL")
+        else:
+            self.obo = False
+            self.email = None
 
     def get_tenant_dns(self, tenant):
         if os.environ.get("BRITIVE_STATIC_TOKEN"):
@@ -28,6 +34,8 @@ class BritiveClientWrapper:
             )
 
     def get_token(self):
+        if os.environ.get("BRITIVE_STATIC_TOKEN"):
+            return os.environ.get("BRITIVE_STATIC_TOKEN")
         temp_cli = britive_cli.BritiveCli(tenant_name=self.tenant)
         temp_cli.login()
         temp_cli.set_credential_manager()

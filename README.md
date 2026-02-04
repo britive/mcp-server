@@ -181,3 +181,21 @@ Where:
  
 ## Connect to the MCP server using a client application. 
 For more information, see [Connect to Local MCP Servers](https://modelcontextprotocol.io/quickstart/user).
+
+
+## Using On-Behalf-Of MCP Functionality
+To use OBO MCP, you can following environment variable: 
+
+<table>
+  <tbody>
+    <tr>
+      <td><code>BRITIVE_EMAIL</code></td>
+      <td>The Britive email of the person you want the MCP server to impersonate</td>
+    </tr>
+  </tbody>
+</table>
+
+If this environment variable is set, the MCP server will assume the user intends to use OBO and will take priority over non OBO MCP functionality. The `BRITIVE_STATIC_TOKEN` should refer to the following service identity that the user would like to perform impersonation. Currently, not all tools are supported by OBO.
+
+List of supported OBO tools:
+1. `my_access`

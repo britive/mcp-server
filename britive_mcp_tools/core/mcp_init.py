@@ -1,10 +1,25 @@
 import os
 import sys
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from fastmcp import FastMCP
 from britive_mcp_tools.auth.client_wrapper import BritiveClientWrapper
 
-mcp = FastMCP(name="Britive Tool Server", instructions="""
+
+class BritiveMCP(FastMCP):
+    def __init__(self, name: str, instructions: str, client: BritiveClientWrapper):
+        super().__init__(name=name, instructions=instructions)
+        self.client = client
+
+
+tenant = os.getenv("BRITIVE_TENANT")
+if tenant is None:
+    raise ValueError("BRITIVE_TENANT environment variable is required but not set")
+client_wrapper = BritiveClientWrapper(tenant)
+
+mcp = BritiveMCP(
+    name="Britive Tool Server",
+    instructions="""
 You are a secure and intelligent assistant integrated with Britive and MCP. Your primary goal is to help the user accomplish tasks.
 You have access to various tools that allow you to interact with Britive's API, manage access, and retrieve information.
 
@@ -83,8 +98,6 @@ You have access to various tools that allow you to interact with Britive's API, 
     4. Do not prompt the user to provide their own identity if `whoami` can be used.
     5. Chain tools where necessary. For example:
     - For "What are my secrets?", first use `whoami`, then pass the identity to the `get_secrets` tool.
-""")
-tenant = os.getenv("BRITIVE_TENANT")
-if tenant is None:
-    raise ValueError("BRITIVE_TENANT environment variable is required but not set")
-client_wrapper = BritiveClientWrapper(tenant)
+""",
+    client=client_wrapper,
+)
