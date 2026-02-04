@@ -1,6 +1,6 @@
 from britive.exceptions import UnauthorizedRequest
 
-from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
+from ..core.mcp_init import client_wrapper, mcp
 
 
 @mcp.tool(
@@ -18,13 +18,12 @@ from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
 def my_resources_list(list_type: str = None):
     try:
         client = client_wrapper.get_client()
-        if client_wrapper.obo:
-            return client.my_resources.list(
-                list_type=list_type,
-                headers={"X-On-Behalf-Of": client_wrapper.email},
-            )
-        else:
-            return client.my_resources.list(list_type=list_type)
+        return client.my_resources.list(
+            list_type=list_type,
+            headers={"X-On-Behalf-Of": client_wrapper.email}
+            if client_wrapper.obo
+            else None,
+        )
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
@@ -136,35 +135,22 @@ def my_resources_checkout(
 
     try:
         client = client_wrapper.get_client()
-        if client_wrapper.obo:
-            return client.my_resources.checkout(
-                profile_id=profile_id,
-                resource_id=resource_id,
-                headers={"X-On-Behalf-Of": client_wrapper.email},
-                include_credentials=include_credentials,
-                justification=justification,
-                max_wait_time=max_wait_time,
-                otp=otp,
-                progress_func=None,
-                response_template=response_template,
-                ticket_id=ticket_id,
-                ticket_type=ticket_type,
-                wait_time=wait_time,
-            )
-        else:
-            return client.my_resources.checkout(
-                profile_id=profile_id,
-                resource_id=resource_id,
-                include_credentials=include_credentials,
-                justification=justification,
-                max_wait_time=max_wait_time,
-                otp=otp,
-                progress_func=None,
-                response_template=response_template,
-                ticket_id=ticket_id,
-                ticket_type=ticket_type,
-                wait_time=wait_time,
-            )
+        return client.my_resources.checkout(
+            profile_id=profile_id,
+            resource_id=resource_id,
+            headers={"X-On-Behalf-Of": client_wrapper.email}
+            if client_wrapper.obo
+            else None,
+            include_credentials=include_credentials,
+            justification=justification,
+            max_wait_time=max_wait_time,
+            otp=otp,
+            progress_func=None,
+            response_template=response_template,
+            ticket_id=ticket_id,
+            ticket_type=ticket_type,
+            wait_time=wait_time,
+        )
 
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -206,15 +192,12 @@ def my_resources_checkin(
 
     try:
         client = client_wrapper.get_client()
-        if client_wrapper.obo:
-            return client.my_resources.checkin(
-                transaction_id=transaction_id,
-                headers={"X-On-Behalf-Of": client_wrapper.email},
-            )
-        else:
-            return client.my_resources.checkin(
-                transaction_id=transaction_id,
-            )
+        return client.my_resources.checkin(
+            transaction_id=transaction_id,
+            headers={"X-On-Behalf-Of": client_wrapper.email}
+            if client_wrapper.obo
+            else None,
+        )
 
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
@@ -253,12 +236,11 @@ def my_resources_checkin(
 def my_resources_list_checked_out_profiles():
     try:
         client = client_wrapper.get_client()
-        if client_wrapper.obo:
-            return client.my_resources.list_checked_out_profiles(
-                headers={"X-On-Behalf-Of": client_wrapper.email},
-            )
-        else:
-            return client.my_resources.list_checked_out_profiles()
+        return client.my_resources.list_checked_out_profiles(
+            headers={"X-On-Behalf-Of": client_wrapper.email}
+            if client_wrapper.obo
+            else None,
+        )
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
