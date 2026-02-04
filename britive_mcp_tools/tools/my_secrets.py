@@ -1,6 +1,6 @@
 from britive.exceptions import UnauthorizedRequest
 
-from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
+from ..core.mcp_init import client_wrapper, mcp
 
 
 @mcp.tool(
@@ -19,12 +19,11 @@ from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
 def my_secrets_list():
     try:
         client = client_wrapper.get_client()
-        if client_wrapper.obo:
-            return client.my_secrets.list(
-                headers={"X-On-Behalf-Of": client_wrapper.email},
-            )
-        else:
-            return client.my_secrets.list()
+        return client.my_secrets.list(
+            headers={"X-On-Behalf-Of": client_wrapper.email}
+            if client_wrapper.obo
+            else None,
+        )
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
@@ -61,23 +60,16 @@ def my_secrets_view(
 ):
     try:
         client = client_wrapper.get_client()
-        if client_wrapper.obo:
-            return client.my_secrets.view(
-                path=path,
-                justification=justification,
-                otp=otp,
-                wait_time=wait_time,
-                max_wait_time=max_wait_time,
-                headers={"X-On-Behalf-Of": client_wrapper.email},
-            )
-        else:
-            return client.my_secrets.view(
-                path=path,
-                justification=justification,
-                otp=otp,
-                wait_time=wait_time,
-                max_wait_time=max_wait_time,
-            )
+        return client.my_secrets.view(
+            path=path,
+            justification=justification,
+            otp=otp,
+            wait_time=wait_time,
+            max_wait_time=max_wait_time,
+            headers={"X-On-Behalf-Of": client_wrapper.email}
+            if client_wrapper.obo
+            else None,
+        )
     except UnauthorizedRequest:
         raise UnauthorizedRequest(
             "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "

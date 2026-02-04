@@ -1,5 +1,27 @@
 # Change Log
 
+## v0.3.0 [2026-1-30]
+
+__What's New:__
+
+* Support for On-Behalf-Of for my secrets and my resources
+
+__Enhancements:__
+
+* None
+
+__Bug Fixes:__
+
+* None
+
+__Dependencies:__
+
+* None
+
+__Other:__
+
+* None
+  
 ## v0.2.0 [2025-10-15]
 
 __What's New:__
