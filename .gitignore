@@ -356,3 +356,7 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,python,windows,macos,linux,pycharm+all
 
+# Claude Code
+CLAUDE.md
+.claude/
+

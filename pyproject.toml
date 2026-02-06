@@ -1,0 +1,78 @@
+[project]
+name = "britive_mcp_server"
+version = "1.0.0"
+description = "Britive's MCP Server for AI agents and users to interact with the Britive platform"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Britive", email = "engineering@britive.com"}
+]
+keywords = ["britive", "mcp", "model-context-protocol", "ai", "agents"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "britive>=4.5.0",
+    "fastmcp>=2.10.6",
+    "pydantic>=2.11.7",
+    "python-dotenv>=1.0.1",
+    "pybritive>=2.2.0",
+    "pyenchant>=3.2.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "black>=23.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0",
+]
+
+[project.scripts]
+britive_mcp_server = "britive_mcp_tools:main"
+
+[project.urls]
+Homepage = "https://github.com/britive/mcp-server"
+Repository = "https://github.com/britive/mcp-server.git"
+Documentation = "https://docs.britive.com"
+Issues = "https://github.com/britive/mcp-server/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["britive_mcp_tools"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
