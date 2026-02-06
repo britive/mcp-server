@@ -43,7 +43,7 @@ dev-dependencies = [
 ]
 
 [project.scripts]
-britive_mcp_server = "britive_mcp_tools:main"
+britive-mcp-server = "britive_mcp_tools:main"
 
 [project.urls]
 Homepage = "https://github.com/britive/mcp-server"
