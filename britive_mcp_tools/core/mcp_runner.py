@@ -1,21 +1,34 @@
+import importlib
+
 from .mcp_init import mcp
 
-# Both OBO MCP and non OBO MCP use my access
-from ..tools.my_access import *
-from ..tools.my_resources import *
-from ..tools.my_secrets import *
+# Both OBO MCP and non OBO MCP use these tools
+from ..tools import my_access
+from ..tools import my_resources
+from ..tools import my_secrets
 
-if __name__ == "__main__":
+# Non-OBO tool modules
+_NON_OBO_MODULES = [
+    "britive_mcp_tools.tools.application_management_applications",
+    "britive_mcp_tools.tools.audit_logs_logs",
+    "britive_mcp_tools.tools.identity_management_service_identities",
+    "britive_mcp_tools.tools.identity_management_tags",
+    "britive_mcp_tools.tools.identity_management_users",
+    "britive_mcp_tools.tools.reports",
+    "britive_mcp_tools.tools.security_active_sessions",
+]
+
+
+def main():
+    """Entry point for the Britive MCP server."""
     if not mcp.client.obo:
-        # tools not supported by OBO
-
-        from ..tools.application_management_applications import *
-        from ..tools.audit_logs_logs import *
-        from ..tools.identity_management_service_identities import *
-        from ..tools.identity_management_tags import *
-        from ..tools.identity_management_users import *
-        from ..tools.reports import *
-        from ..tools.security_active_sessions import *
+        # Load tools not supported by OBO
+        for module_name in _NON_OBO_MODULES:
+            importlib.import_module(module_name)
 
     mcp.run()
     print("MCP server has started")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git config:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: convert project to pyproject.toml package\n\n- Add pyproject.toml with build system, metadata, and dependencies\n- Add CLI entry point `britive-mcp`\n- Add main\\(\\) function to mcp_runner.py for entry point\n- Update __init__.py to expose main function\n- Include dev dependencies and tool configurations\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)"
+    ]
+  }
+}

@@ -1,27 +1,30 @@
 # Change Log
 
-## v0.3.0 [2026-1-30]
+## v1.0.0 [2026-2-5]
 
 __What's New:__
 
+* Converted to installable Python package
+* Added `britive-mcp` CLI command for easy MCP server startup
+* Simplified MCP client configuration - no more manual PYTHONPATH setup
 * Support for On-Behalf-Of for my secrets and my resources
 
 __Enhancements:__
 
-* None
+* Converted to installable Python package via `pip install britive-mcp-tools`
 
 __Bug Fixes:__
 
-* None
+* Fixed dynamic imports to work properly as installed package
 
 __Dependencies:__
 
-* None
+* Added `setuptools>=68.0` as build dependency
 
 __Other:__
 
 * None
-  
+
 ## v0.2.0 [2025-10-15]
 
 __What's New:__
@@ -65,4 +68,3 @@ __Dependencies:__
 __Other:__
 
 * Added Changelog
-
