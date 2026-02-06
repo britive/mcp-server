@@ -1,3 +1,5 @@
+# Britive MCP Server
+
 Britive's MCP Server enables AI agents and users to interact with the Britive platform. Britive's MCP server exposes several tools that enable users and AI agents to interact with the Britive platform for dynamic access, query configurations, reporting, and access activity.
 
 To learn more about MCPs, see [Get Started with MCP](https://modelcontextprotocol.io/docs/getting-started/intro).
@@ -7,195 +9,189 @@ To learn more about MCPs, see [Get Started with MCP](https://modelcontextprotoco
 ## Prerequisites
 
 - Python version 3.10 or higher. [Python downloads](https://www.python.org/downloads/).
-- Ensure you have the latest version of Git installed and access to the repository. Download git from the [Git downloads](https://git-scm.com/downloads).
-- Any MCP client. For example: Claude desktop, VS Code Copilot
+- Any MCP client. For example: Claude Desktop, VS Code Copilot
 
 ---
 
-## Setting up the Britive MCP Server
+## Installation
 
-1. Clone the GitHub repository that has the MCP server.
+### Install with uv (Recommended)
+
+```shell
+uv pip install britive_mcp_server
+```
+
+### Install with pip
+
+```shell
+pip install britive_mcp_server
+```
+
+### Install from source
 
 ```shell
 git clone https://github.com/britive/mcp-server.git
-````
-
-2. Change directory to `mcp-server`
-
-```shell
 cd mcp-server
-```
-
-3. Create a virtual environment
-
-```shell
-python -m venv <virtual_env_name>
-```
-
-4. Activate the virtual environment
-
-* **Windows**
-
-  ```shell
-  <virtual_env_name>\Scripts\activate
-  ```
-* **Linux**
-
-  ```shell
-  source <virtual_env_name>/bin/activate
-  ```
-
-5. Install Python packages (dependencies)
-
-```shell
-pip install -r requirements.txt
+uv pip install -e .
 ```
 
 ---
 
-## Configuring your MCP client and Authentication:
-Authentication to the Britive platform can be performed using the Britive CLI or a Static Token
+## Usage
 
-* #### **Option 1: CLI login using PyBritive (Recommended):**
+### Command Line Arguments
 
-1. Install the PyBritive CLI if not installed. For more information, see [PyBritive Documentation](https://britive.github.io/python-cli/)
+```shell
+britive_mcp_server --tenant <your_tenant_name>
+```
 
-2. Configure the tenant, if you have not configured it already, using the following
-command. To find out more about how to enter the tenant name, see [PyBritive: Tenant selection logic](https://britive.github.io/python-cli/#tenant-selection-logic):
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--tenant` | Yes | Britive tenant name (e.g., `my-company` for `my-company.britive.com`) |
+| `--token` | No | Static API token (alternative to PyBritive CLI auth) |
+| `--email` | No | Email for On-Behalf-Of (OBO) functionality |
+
+All arguments can also be set via environment variables: `BRITIVE_TENANT`, `BRITIVE_STATIC_TOKEN`, `BRITIVE_EMAIL`.
+
+---
+
+## Configuring your MCP client
+
+### Option 1: Using uvx (Recommended)
+
+```json
+{
+  "mcpServers": {
+    "britive": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/britive/mcp-server.git@feat/v1.0.0",
+        "britive_mcp_server",
+        "--tenant",
+        "courage.dev2.aws",
+      ]
+    }
+  },
+  "preferences": {
+    "coworkScheduledTasksEnabled": false,
+    "sidebarMode": "chat"
+  }
+}
+```
+
+With static token:
+
+```json
+{
+  "mcpServers": {
+    "britive": {
+      "command": "uvx",
+      "args": [
+        "britive_mcp_server",
+        "--tenant", "your_tenant_name",
+        "--token", "your_static_token"
+      ]
+    }
+  }
+}
+```
+
+### Option 2: Using installed command
+
+```json
+{
+  "mcpServers": {
+    "britive": {
+      "command": "britive_mcp_server",
+      "args": ["--tenant", "your_tenant_name"]
+    }
+  }
+}
+```
+
+### Configuration file locations
+
+- **Claude Desktop (Windows):** `%APPDATA%\Claude\claude_desktop_config.json`
+- **Claude Desktop (macOS):** `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **VS Code:** See [VS Code MCP documentation](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)
+
+---
+
+## Authentication
+
+### Option 1: PyBritive CLI (Recommended)
+
+1. Install PyBritive CLI: [PyBritive Documentation](https://britive.github.io/python-cli/)
+
+2. Configure and login:
 
    ```shell
    pybritive configure tenant
-   ```
-
-3. Log in to PyBritive:
-
-   ```shell
    pybritive login
    ```
 
-4. Log in using the following command if you have multiple tenants:
+### Option 2: Static Token
 
-   ```shell
-   pybritive login --tenant=<your_tenant_name>
-   ```
-5. Log in directs you to the Britive login page, where you can enter your credentials. 
-6. Modify your MCP JSON file to configure the Britive MCP.
-> **Note:**  
-> For Windows, use **backslash (\\\\)**.  
-> For macOS/Linux, use a **forward slash (/)** in the path.
+1. Generate a static token from Britive UI. See [API Tokens](https://docs.britive.com/v1/docs/api-tokens-1).
+
+2. Pass via `--token` argument or `BRITIVE_STATIC_TOKEN` env var.
+
+---
+
+## On-Behalf-Of (OBO) Mode
+
+For impersonating users, use the `--email` argument:
+
 ```json
 {
-  "servers": {
+  "mcpServers": {
     "britive": {
-      "command": "C:\\Users\\YourName\\mcp-server\\venv\\Scripts\\python.exe",
+      "command": "uvx",
       "args": [
-        "C:\\Users\\YourName\\mcp-server\\britive_mcp_tools\\core\\mcp_runner.py"
-      ],
-      "env": {
-        "PYTHONPATH": "C:\\Users\\YourName\\mcp-server",
-        "BRITIVE_TENANT": "your_tenant_name"
-      }
+        "britive_mcp_server",
+        "--tenant", "your_tenant_name",
+        "--token", "your_service_identity_token",
+        "--email", "user@example.com"
+      ]
     }
   }
 }
 ```
 
-Where:
-<table>
-  <tbody>
-    <tr>
-      <td><code>command</code></td>
-      <td>Full path to the Python executable</td>
-    </tr>
-    <tr>
-      <td><code>args</code></td>
-      <td>Full path to the <code>britive_mcp_tools\core\mcp_runner.py</code> module.</td>
-    </tr>
-    <tr>
-      <td><code>PYTHONPATH</code></td>
-      <td>Set the Python path to the <code>mcp-server</code> directory (repository)</td>
-    </tr>
-    <tr>
-      <td><code>BRITIVE_TENANT</code></td>
-      <td>Your tenant on Britive. This tenant name must match the name used in the PyBritive CLI</td>
-    </tr>
-  </tbody>
-</table>
+**Supported OBO tools:** `my_access`, `my_resources`, `my_secrets`
 
-* #### **Option 2: Login using a static token:**
+---
 
-1. Generate a static token from Britive UI. For more information, see [API Tokens](https://docs.britive.com/v1/docs/api-tokens-1).
-2. Copy the token to use in the MCP JSON file.
-3. Modify your MCP JSON file to configure the Britive MCP.
+## Available Tools
 
-> **Note:**  
-> For Windows, use **backslash (\\\\)**.  
-> For macOS, use a **forward slash (/)** in the path.
-```json
-{
-  "servers": {
-    "britive": {
-      "command": "C:\\Users\\YourName\\mcp-server\\venv\\Scripts\\python.exe",
-      "args": [
-        "C:\\Users\\YourName\\mcp-server\\britive_mcp_tools\\core\\mcp_runner.py"
-      ],
-      "env": {
-        "PYTHONPATH": "C:\\Users\\YourName\\mcp-server",
-        "BRITIVE_TENANT": "your_tenant_name",
-        "BRITIVE_STATIC_TOKEN": "your_static_token_here"
-      }
-    }
-  }
-}
+- **My Access** - Check out/check in privileged access
+- **My Resources** - List and manage resources
+- **My Secrets** - List and view secrets
+- **Application Management** - List and manage applications
+- **Audit Logs** - Query audit logs
+- **Identity Management** - Manage users, service identities, and tags
+- **Reports** - Run and retrieve reports
+- **Security** - Manage active sessions
+
+---
+
+## Development
+
+```shell
+# Install dev dependencies
+uv sync
+
+# Run tests
+uv run pytest
+
+# Format code
+uv run black britive_mcp_tools
+uv run ruff check britive_mcp_tools
 ```
 
-**Where:**
-<table>
-  <tbody>
-    <tr>
-      <td><code>command</code></td>
-      <td>Full path to the Python executable</td>
-    </tr>
-    <tr>
-      <td><code>args</code></td>
-      <td>Full path to the <code>britive_mcp_tools\core\mcp_runner.py</code> module.</td>
-    </tr>
-    <tr>
-      <td><code>PYTHONPATH</code></td>
-      <td>Set the Python path to the <code>mcp-server</code> directory (repository)</td>
-    </tr>
-    <tr>
-      <td><code>BRITIVE_TENANT</code></td>
-      <td>Your tenant on Britive. Do not use the entire FQDN for the subdomain. For example, for 
-      <code>https://super-customer.test.aws.britive-corp.com</code>, use 
-      <code>super-customer.test.aws</code> as a tenant subdomain.
-      </td>
-    </tr>
-    <tr>
-      <td><code>BRITIVE_STATIC_TOKEN</code></td>
-      <td>Static token created in the previous step</td>
-    </tr>
-  </tbody>
-</table>
+---
 
- 
-## Connect to the MCP server using a client application. 
-For more information, see [Connect to Local MCP Servers](https://modelcontextprotocol.io/quickstart/user).
+## License
 
-
-## Using On-Behalf-Of MCP Functionality
-To use OBO MCP, you can following environment variable: 
-
-<table>
-  <tbody>
-    <tr>
-      <td><code>BRITIVE_EMAIL</code></td>
-      <td>The Britive email of the person you want the MCP server to impersonate</td>
-    </tr>
-  </tbody>
-</table>
-
-If this environment variable is set, the MCP server will assume the user intends to use OBO and will take priority over non OBO MCP functionality. The `BRITIVE_STATIC_TOKEN` should refer to the following service identity that the user would like to perform impersonation. Currently, not all tools are supported by OBO.
-
-List of supported OBO tools:
-1. `my_access`
+MIT
