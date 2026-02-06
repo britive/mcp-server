@@ -13,13 +13,12 @@ To learn more about MCPs, see [Get Started with MCP](https://modelcontextprotoco
 
 ---
 
----
-
+## Installing and Configuring the MCP Server
 
 ### Command Line Arguments
 
 ```shell
-britive_mcp_server --tenant <your_tenant_name>
+britive-mcp-server --tenant <your_tenant_name>
 ```
 
 | Argument | Required | Description |
@@ -30,11 +29,37 @@ britive_mcp_server --tenant <your_tenant_name>
 
 All arguments can also be set via environment variables: `BRITIVE_TENANT`, `BRITIVE_STATIC_TOKEN`, `BRITIVE_EMAIL`.
 
+### Installation Methods
+
+There are two ways to run the MCP server:
+
+- **`uvx` (no install required)** - Runs the package directly without installing it. Requires [uv](https://docs.astral.sh/uv/).
+- **`pip install`** - Install the package, then use the `britive-mcp-server` command.
+
+To install with pip:
+
+```shell
+pip install git+https://github.com/britive/mcp-server.git@feat/v1.0.0
+```
+
+### Authentication Methods
+
+- **PyBritive CLI (Recommended)** - Authenticate via the PyBritive CLI. Install from [PyBritive Documentation](https://britive.github.io/python-cli/), then run `pybritive configure tenant` and `pybritive login`.
+- **Static Token** - Generate a static API token from the Britive UI. See [API Tokens](https://docs.britive.com/v1/docs/api-tokens-1). Pass via `--token` argument.
+
+### On-Behalf-Of (OBO) Mode
+
+OBO mode allows the server to impersonate a specific user by passing their email via `--email`. This is useful when a service identity needs to perform actions on behalf of an end user.
+
+**Supported OBO tools:** `my_access`, `my_resources`, `my_secrets`
+
 ---
 
-## Installing and configuring your MCP client
+### Example MCP Client Configurations
 
-### Option 1: Using uvx (Recommended)
+Below are example configurations for all combinations of installation method, authentication, and OBO mode.
+
+#### uvx + PyBritive CLI Auth
 
 ```json
 {
@@ -44,20 +69,15 @@ All arguments can also be set via environment variables: `BRITIVE_TENANT`, `BRIT
       "args": [
         "--from",
         "git+https://github.com/britive/mcp-server.git@feat/v1.0.0",
-        "britive_mcp_server",
-        "--tenant",
-        "your_tenant_name",
+        "britive-mcp-server",
+        "--tenant", "your_tenant_name"
       ]
     }
-  },
-  "preferences": {
-    "coworkScheduledTasksEnabled": false,
-    "sidebarMode": "chat"
   }
 }
 ```
 
-With static token:
+#### uvx + PyBritive CLI Auth + OBO
 
 ```json
 {
@@ -65,7 +85,28 @@ With static token:
     "britive": {
       "command": "uvx",
       "args": [
-        "britive_mcp_server",
+        "--from",
+        "git+https://github.com/britive/mcp-server.git@feat/v1.0.0",
+        "britive-mcp-server",
+        "--tenant", "your_tenant_name",
+        "--email", "user@example.com"
+      ]
+    }
+  }
+}
+```
+
+#### uvx + Static Token Auth
+
+```json
+{
+  "mcpServers": {
+    "britive": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/britive/mcp-server.git@feat/v1.0.0",
+        "britive-mcp-server",
         "--tenant", "your_tenant_name",
         "--token", "your_static_token"
       ]
@@ -74,44 +115,7 @@ With static token:
 }
 ```
 
-### Option 2: Using installed command
-
-```json
-{
-  "mcpServers": {
-    "britive": {
-      "command": "britive_mcp_server",
-      "args": ["--tenant", "your_tenant_name"]
-    }
-  }
-}
-```
----
-
-## Authentication
-
-### Option 1: PyBritive CLI (Recommended)
-
-1. Install PyBritive CLI: [PyBritive Documentation](https://britive.github.io/python-cli/)
-
-2. Configure and login:
-
-   ```shell
-   pybritive configure tenant
-   pybritive login
-   ```
-
-### Option 2: Static Token
-
-1. Generate a static token from Britive UI. See [API Tokens](https://docs.britive.com/v1/docs/api-tokens-1).
-
-2. Pass via `--token` argument or `BRITIVE_STATIC_TOKEN` env var.
-
----
-
-## On-Behalf-Of (OBO) Mode
-
-For impersonating users, use the `--email` argument:
+#### uvx + Static Token Auth + OBO
 
 ```json
 {
@@ -119,9 +123,11 @@ For impersonating users, use the `--email` argument:
     "britive": {
       "command": "uvx",
       "args": [
-        "britive_mcp_server",
+        "--from",
+        "git+https://github.com/britive/mcp-server.git@feat/v1.0.0",
+        "britive-mcp-server",
         "--tenant", "your_tenant_name",
-        "--token", "your_service_identity_token",
+        "--token", "your_static_token",
         "--email", "user@example.com"
       ]
     }
@@ -129,7 +135,69 @@ For impersonating users, use the `--email` argument:
 }
 ```
 
-**Supported OBO tools:** `my_access`, `my_resources`, `my_secrets`
+#### pip install + PyBritive CLI Auth
+
+```json
+{
+  "mcpServers": {
+    "britive": {
+      "command": "britive-mcp-server",
+      "args": [
+        "--tenant", "your_tenant_name"
+      ]
+    }
+  }
+}
+```
+
+#### pip install + PyBritive CLI Auth + OBO
+
+```json
+{
+  "mcpServers": {
+    "britive": {
+      "command": "britive-mcp-server",
+      "args": [
+        "--tenant", "your_tenant_name",
+        "--email", "user@example.com"
+      ]
+    }
+  }
+}
+```
+
+#### pip install + Static Token Auth
+
+```json
+{
+  "mcpServers": {
+    "britive": {
+      "command": "britive-mcp-server",
+      "args": [
+        "--tenant", "your_tenant_name",
+        "--token", "your_static_token"
+      ]
+    }
+  }
+}
+```
+
+#### pip install + Static Token Auth + OBO
+
+```json
+{
+  "mcpServers": {
+    "britive": {
+      "command": "britive-mcp-server",
+      "args": [
+        "--tenant", "your_tenant_name",
+        "--token", "your_static_token",
+        "--email", "user@example.com"
+      ]
+    }
+  }
+}
+```
 
 ---
 
