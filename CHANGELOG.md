@@ -1,5 +1,33 @@
 # Change Log
 
+## v1.0.0 [2026-2-5]
+
+__What's New:__
+
+* Converted to installable Python package with `pyproject.toml`
+* Added `britive-mcp-server` CLI command for easy MCP server startup
+* Support for running directly via `uvx` without installation
+* Support for On-Behalf-Of for my secrets and my resources
+
+__Enhancements:__
+
+* Streamlined installation via `pip install britive-mcp-server`
+* Simplified MCP client configuration - no more manual PYTHONPATH setup
+* Support for running directly via `uvx` without installation
+* Support for On-Behalf-Of for my secrets and my resources
+
+__Bug Fixes:__
+
+* None
+
+__Dependencies:__
+
+* Added `hatchling` as build dependency
+
+__Other:__
+
+* None
+
 ## v0.2.0 [2025-10-15]
 
 __What's New:__

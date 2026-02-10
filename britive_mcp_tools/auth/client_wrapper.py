@@ -1,9 +1,6 @@
 import os
 import sys
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from configparser import ConfigParser
-
 from britive.britive import Britive
 from fastmcp import Context
 from pybritive import britive_cli
