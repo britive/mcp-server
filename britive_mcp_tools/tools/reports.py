@@ -1,9 +1,4 @@
-import datetime
-
 from ..core.mcp_init import client_wrapper, mcp
-from fastmcp import Context
-
-from britive.exceptions import UnauthorizedRequest
 
 
 @mcp.tool(
@@ -23,14 +18,8 @@ def reports_list():
 
     :return: List of reports."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.list()
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.list()
 
 
 @mcp.tool(
@@ -65,14 +54,8 @@ def report_run_profile_historical_access(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -116,14 +99,8 @@ def report_run_permissions_in_profile(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -159,14 +136,8 @@ def report_run_tag_membership(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -202,14 +173,8 @@ def report_run_service_identities_details(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -245,14 +210,8 @@ def report_run_user_secret_access(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -288,14 +247,8 @@ def report_run_secret_last_access(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -340,14 +293,8 @@ def report_run_profiles_assigned_to_service_identities(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -393,14 +340,8 @@ def report_run_profile_accessed_tags(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -443,14 +384,8 @@ def report_run_AI_identities_secret_last_access(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -494,14 +429,8 @@ def report_run_permission_details(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -544,14 +473,8 @@ def report_run_resource_historical_access(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -593,14 +516,8 @@ def report_run_resource_last_access(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -642,14 +559,8 @@ def report_run_resources_assigned_to_ai_identities(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -691,14 +602,8 @@ def report_run_resources_assigned_to_all_identities(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -740,14 +645,8 @@ def report_run_resources_assigned_to_service_identities(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -789,14 +688,8 @@ def report_run_resources_assigned_to_tags(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -838,14 +731,8 @@ def report_run_resources_assigned_to_users(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -865,14 +752,8 @@ def reports_list():
 
     :return: List of reports."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.list()
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.list()
 
 
 @mcp.tool(
@@ -898,14 +779,8 @@ def all_reports_run(report_id: str, csv: bool = False, filter_expression: str = 
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)
 
 
 @mcp.tool(
@@ -949,11 +824,5 @@ def report_run_permission_details(
         correct filter expression string.
     :return: CSV string or list."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.reports.run(report_id, csv, filter_expression)
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.reports.run(report_id, csv, filter_expression)

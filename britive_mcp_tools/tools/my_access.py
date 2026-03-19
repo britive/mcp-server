@@ -1,39 +1,34 @@
-import datetime
-
-from britive.exceptions import UnauthorizedRequest
-from fastmcp import Context
-
 from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
 
 
 @mcp.tool(
     name="my_access_checkout",
-    description="""Use this tool when the user is denied access via MCP (e.g., 'access denied', 'not authorized') or implicitly indicates they can't access something they should. Also trigger if the user says 'need access', 'get access', or refers to Britive access. 
+    description="""Use this tool when the user is denied access via MCP (e.g., 'access denied', 'not authorized') or implicitly indicates they can't access something they should. Also trigger if the user says 'need access', 'get access', or refers to Britive access.
 
-    Prefer silent inference of 'profile_id' and 'environment_id' from prior context or conversation; Ask only if unclear. 
+    Prefer silent inference of 'profile_id' and 'environment_id' from prior context or conversation; Ask only if unclear.
 
     Set 'programmatic=False' unless programmatic access is explicitly mentioned.
 
-    Include 'justification' only if needed for approval (e.g., access typically restricted or user says 'need approval'). 
+    Include 'justification' only if needed for approval (e.g., access typically restricted or user says 'need approval').
 
     Use 'include_credentials=True' only if the user expects immediate use. If there is a console URL generated, create a clickable link for the user.
 
-    Handle approval flows quietly, inform the user once if there's a delay, but avoid repeated updates unless asked. 
+    Handle approval flows quietly, inform the user once if there's a delay, but avoid repeated updates unless asked.
 
-    Accept optional 'ticket_id', 'ticket_type', or 'otp' if context provides them. Do not try to guess these parameters if not mentioned by the user or in the context. 
+    Accept optional 'ticket_id', 'ticket_type', or 'otp' if context provides them. Do not try to guess these parameters if not mentioned by the user or in the context.
 
     You can find the profile and environment IDs by using the `list_profiles` tool.
 
-    If access was already granted, return it silently. If failure occurs (rejection, timeout, withdrawal), notify with minimal friction. 
+    If access was already granted, return it silently. If failure occurs (rejection, timeout, withdrawal), notify with minimal friction.
 
     Never use this tool when the user is only inquiring about existing access or wanting to check in access.
 
     Before attempting a checkout, try to execute the prompt. If the execution fails try a checkout, but ensure that least privilege access is used. As an example, if the needed permissions for the prompt require read only access just checkout the profile for read only access. Only do administrator when needed.
-    
+
     When do you use my_access versus my_resources?
 
     My access is used for access to SaaS application priviledged accounts, including but not limited to:
-        
+
         MongoDB
         Atlassian
         Aviatrix
@@ -106,30 +101,23 @@ def my_access_checkout(
         profile policy.
     :raises ProfileApprovalWithdrawn: if the approval request was withdrawn by the requester."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.my_access.checkout(
-            profile_id=profile_id,
-            environment_id=environment_id,
-            headers={"X-On-Behalf-Of": client_wrapper.email}
-            if client_wrapper.obo
-            else None,
-            include_credentials=include_credentials,
-            justification=justification,
-            max_wait_time=max_wait_time,
-            otp=otp,
-            programmatic=programmatic,
-            progress_func=None,
-            ticket_id=ticket_id,
-            ticket_type=ticket_type,
-            wait_time=wait_time,
-        )
-
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.my_access.checkout(
+        profile_id=profile_id,
+        environment_id=environment_id,
+        headers={"X-On-Behalf-Of": client_wrapper.email}
+        if client_wrapper.obo
+        else None,
+        include_credentials=include_credentials,
+        justification=justification,
+        max_wait_time=max_wait_time,
+        otp=otp,
+        programmatic=programmatic,
+        progress_func=None,
+        ticket_id=ticket_id,
+        ticket_type=ticket_type,
+        wait_time=wait_time,
+    )
 
 
 @mcp.tool(
@@ -143,19 +131,13 @@ def my_access_checkin(transaction_id: str):
     :param transaction_id: The ID of the transaction.
     :return: Details of the checked in profile."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.my_access.checkin(
-            transaction_id=transaction_id,
-            headers={"X-On-Behalf-Of": client_wrapper.email}
-            if client_wrapper.obo
-            else None,
-        )
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.my_access.checkin(
+        transaction_id=transaction_id,
+        headers={"X-On-Behalf-Of": client_wrapper.email}
+        if client_wrapper.obo
+        else None,
+    )
 
 
 @mcp.tool(
@@ -168,24 +150,18 @@ def my_access_list_profiles():
 
     :return: List of profiles."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.my_access.list_profiles(
-            headers={"X-On-Behalf-Of": client_wrapper.email}
-            if client_wrapper.obo
-            else None,
-        )
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.my_access.list_profiles(
+        headers={"X-On-Behalf-Of": client_wrapper.email}
+        if client_wrapper.obo
+        else None,
+    )
 
 
 @mcp.tool(
     name="my_access_whoami",
     description="""
-Use this tool to retrieve details of the currently authenticated identity (user or service). 
+Use this tool to retrieve details of the currently authenticated identity (user or service).
 It returns information like username, type (user/service), and any other associated metadata.
 
 When to Use:
@@ -212,15 +188,9 @@ def my_access_whoami():
 
     :return: Details of the currently authenticated identity."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.my_access.whoami(
-            headers={"X-On-Behalf-Of": client_wrapper.email}
-            if client_wrapper.obo
-            else None
-        )
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.my_access.whoami(
+        headers={"X-On-Behalf-Of": client_wrapper.email}
+        if client_wrapper.obo
+        else None
+    )

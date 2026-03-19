@@ -1,8 +1,6 @@
 import os
-import sys
 from configparser import ConfigParser
 from britive.britive import Britive
-from fastmcp import Context
 from pybritive import britive_cli
 
 

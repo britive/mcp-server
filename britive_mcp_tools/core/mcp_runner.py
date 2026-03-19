@@ -14,6 +14,7 @@ _NON_OBO_MODULES = [
     "britive_mcp_tools.tools.identity_management_service_identities",
     "britive_mcp_tools.tools.identity_management_tags",
     "britive_mcp_tools.tools.identity_management_users",
+    "britive_mcp_tools.tools.notification_mediums",
     "britive_mcp_tools.tools.reports",
     "britive_mcp_tools.tools.security_active_sessions",
 ]

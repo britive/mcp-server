@@ -1,41 +1,33 @@
-from britive.exceptions import UnauthorizedRequest
-
 from ..core.mcp_init import client_wrapper, mcp
 
 
 @mcp.tool(
     name="my_resources_list",
     description="""
-    List all resources available for checkout. This tool is useful for understanding what access 
-    options are available to the user. It can also be used to find the resource and profile IDs 
-    needed for the `checkout` tool. This tool does not require any parameters and will return a 
+    List all resources available for checkout. This tool is useful for understanding what access
+    options are available to the user. It can also be used to find the resource and profile IDs
+    needed for the `checkout` tool. This tool does not require any parameters and will return a
     list of resources with their details.
 
-    You can also help the user by filtering the list by resource type. 
+    You can also help the user by filtering the list by resource type.
     To recieve the resource types available, you can call the resource list without a type, find out what the types are, then recall the tool
     """,
 )
 def my_resources_list(list_type: str = None):
-    try:
-        client = client_wrapper.get_client()
-        return client.my_resources.list(
-            list_type=list_type,
-            headers={"X-On-Behalf-Of": client_wrapper.email}
-            if client_wrapper.obo
-            else None,
-        )
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.my_resources.list(
+        list_type=list_type,
+        headers={"X-On-Behalf-Of": client_wrapper.email}
+        if client_wrapper.obo
+        else None,
+    )
 
 
 @mcp.tool(
     name="my_resources_checkout",
     description="""
-    Use this tool when the user is denied access via MCP (e.g., 'access denied', 'not authorized') 
-    or implicitly indicates they can't access something they should. Also trigger if the user says 
+    Use this tool when the user is denied access via MCP (e.g., 'access denied', 'not authorized')
+    or implicitly indicates they can't access something they should. Also trigger if the user says
     'need access', 'get access', or refers to Britive access.
 
     Parameters:
@@ -61,7 +53,7 @@ def my_resources_list(list_type: str = None):
     When do you use my_access versus my_resources?
 
     My access is used for access to SaaS application priviledged accounts, including but not limited to:
-        
+
         MongoDB
         Atlassian
         Aviatrix
@@ -133,36 +125,29 @@ def my_resources_checkout(
         profile policy.
     :raises ProfileApprovalWithdrawn: if the approval request was withdrawn by the requester."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.my_resources.checkout(
-            profile_id=profile_id,
-            resource_id=resource_id,
-            headers={"X-On-Behalf-Of": client_wrapper.email}
-            if client_wrapper.obo
-            else None,
-            include_credentials=include_credentials,
-            justification=justification,
-            max_wait_time=max_wait_time,
-            otp=otp,
-            progress_func=None,
-            response_template=response_template,
-            ticket_id=ticket_id,
-            ticket_type=ticket_type,
-            wait_time=wait_time,
-        )
-
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.my_resources.checkout(
+        profile_id=profile_id,
+        resource_id=resource_id,
+        headers={"X-On-Behalf-Of": client_wrapper.email}
+        if client_wrapper.obo
+        else None,
+        include_credentials=include_credentials,
+        justification=justification,
+        max_wait_time=max_wait_time,
+        otp=otp,
+        progress_func=None,
+        response_template=response_template,
+        ticket_id=ticket_id,
+        ticket_type=ticket_type,
+        wait_time=wait_time,
+    )
 
 
 @mcp.tool(
     name="my_resources_checkin",
     description="""
-    Use this tool when the user has completed their task or explicitly indicates they no longer 
+    Use this tool when the user has completed their task or explicitly indicates they no longer
     need access (e.g., 'done with access', 'you can check it in', 'I'm finished', or 'revoke access').
     When to use:
     - User explicitly indicates they're done with a resource
@@ -190,20 +175,13 @@ def my_resources_checkin(
     :return: Details about the checked in resource.
     :raises ResourceNotFound: if the transaction ID does not correspond to a checked out resource."""
 
-    try:
-        client = client_wrapper.get_client()
-        return client.my_resources.checkin(
-            transaction_id=transaction_id,
-            headers={"X-On-Behalf-Of": client_wrapper.email}
-            if client_wrapper.obo
-            else None,
-        )
-
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.my_resources.checkin(
+        transaction_id=transaction_id,
+        headers={"X-On-Behalf-Of": client_wrapper.email}
+        if client_wrapper.obo
+        else None,
+    )
 
 
 @mcp.tool(
@@ -217,8 +195,8 @@ def my_resources_checkin(
     4. User needs to see transaction IDs before checking in resources
     5. User wants to verify if specific resources are checked out
 
-    This tool requires no parameters and returns detailed information about all active resources 
-    including resource names, checkout times, expiration times, and the critical transaction_id 
+    This tool requires no parameters and returns detailed information about all active resources
+    including resource names, checkout times, expiration times, and the critical transaction_id
     needed for check-in operations.
 
     When to use:
@@ -234,15 +212,9 @@ def my_resources_checkin(
     """,
 )
 def my_resources_list_checked_out_profiles():
-    try:
-        client = client_wrapper.get_client()
-        return client.my_resources.list_checked_out_profiles(
-            headers={"X-On-Behalf-Of": client_wrapper.email}
-            if client_wrapper.obo
-            else None,
-        )
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.my_resources.list_checked_out_profiles(
+        headers={"X-On-Behalf-Of": client_wrapper.email}
+        if client_wrapper.obo
+        else None,
+    )

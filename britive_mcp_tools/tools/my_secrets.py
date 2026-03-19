@@ -1,5 +1,3 @@
-from britive.exceptions import UnauthorizedRequest
-
 from ..core.mcp_init import client_wrapper, mcp
 
 
@@ -17,18 +15,12 @@ from ..core.mcp_init import client_wrapper, mcp
     The path returned by this tool is required to use the `my_secrets_view` tool.""",
 )
 def my_secrets_list():
-    try:
-        client = client_wrapper.get_client()
-        return client.my_secrets.list(
-            headers={"X-On-Behalf-Of": client_wrapper.email}
-            if client_wrapper.obo
-            else None,
-        )
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.my_secrets.list(
+        headers={"X-On-Behalf-Of": client_wrapper.email}
+        if client_wrapper.obo
+        else None,
+    )
 
 
 @mcp.tool(
@@ -58,20 +50,14 @@ def my_secrets_view(
     wait_time: int = 60,
     max_wait_time: int = 600,
 ):
-    try:
-        client = client_wrapper.get_client()
-        return client.my_secrets.view(
-            path=path,
-            justification=justification,
-            otp=otp,
-            wait_time=wait_time,
-            max_wait_time=max_wait_time,
-            headers={"X-On-Behalf-Of": client_wrapper.email}
-            if client_wrapper.obo
-            else None,
-        )
-    except UnauthorizedRequest:
-        raise UnauthorizedRequest(
-            "User is not authenticated. Please ask the user to run `pybritive login` in their terminal to log in interactively. "
-            "After the user finishes logging in, ask them to confirm so you can retry this tool."
-        )
+    client = client_wrapper.get_client()
+    return client.my_secrets.view(
+        path=path,
+        justification=justification,
+        otp=otp,
+        wait_time=wait_time,
+        max_wait_time=max_wait_time,
+        headers={"X-On-Behalf-Of": client_wrapper.email}
+        if client_wrapper.obo
+        else None,
+    )

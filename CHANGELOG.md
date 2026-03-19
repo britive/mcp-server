@@ -1,5 +1,28 @@
 # Change Log
 
+## v1.1.0 [2026-3-19]
+
+__What's New:__
+
+* Added notification mediums tools (list, create, get, update, delete, get channels)
+
+__Enhancements:__
+
+* General tool simplifications and code cleanup
+
+__Bug Fixes:__
+
+* None
+
+__Dependencies:__
+
+* None
+
+__Other:__
+
+* None
+
+
 ## v1.0.0 [2026-2-5]
 
 __What's New:__
