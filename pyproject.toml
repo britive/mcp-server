@@ -1,6 +1,6 @@
 [project]
 name = "britive_mcp_server"
-version = "1.0.5"
+version = "0.3.0"
 description = "Britive's MCP Server for AI agents and users to interact with the Britive platform"
 readme = "README.md"
 requires-python = ">=3.10"
