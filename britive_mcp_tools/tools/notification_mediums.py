@@ -12,7 +12,7 @@ def notification_mediums_list(filter_expression: str = None):
     :return: List of all notification mediums."""
 
     client = client_wrapper.get_client()
-    return client.notification_mediums.list(filter_expression)
+    return client.global_settings.notification_mediums.list(filter_expression)
 
 
 @mcp.tool(
@@ -41,7 +41,7 @@ def notification_mediums_create(
     :return: Details of the newly created notification medium."""
 
     client = client_wrapper.get_client()
-    return client.notification_mediums.create(
+    return client.global_settings.notification_mediums.create(
         notification_medium_type=notification_medium_type,
         name=name,
         url=url,
@@ -61,7 +61,7 @@ def notification_mediums_get(notification_medium_id: str):
     :return: Details of the specified notification medium."""
 
     client = client_wrapper.get_client()
-    return client.notification_mediums.get(notification_medium_id)
+    return client.global_settings.notification_mediums.get(notification_medium_id)
 
 
 @mcp.tool(
@@ -81,7 +81,7 @@ def notification_mediums_update(notification_medium_id: str, parameters: dict):
     :return: Details of the updated notification medium."""
 
     client = client_wrapper.get_client()
-    return client.notification_mediums.update(notification_medium_id, parameters)
+    return client.global_settings.notification_mediums.update(notification_medium_id, parameters)
 
 
 @mcp.tool(
@@ -95,7 +95,7 @@ def notification_mediums_delete(notification_medium_id: str):
     :return: None"""
 
     client = client_wrapper.get_client()
-    return client.notification_mediums.delete(notification_medium_id)
+    return client.global_settings.notification_mediums.delete(notification_medium_id)
 
 
 @mcp.tool(
@@ -109,4 +109,4 @@ def notification_mediums_get_channels(notification_medium_id: str):
     :return: List of all channels for the given notification medium."""
 
     client = client_wrapper.get_client()
-    return client.notification_mediums.get_channels(notification_medium_id)
+    return client.global_settings.notification_mediums.get_channels(notification_medium_id)
