@@ -1,4 +1,38 @@
+from britive.exceptions import (
+    ApprovalRequiredButNoJustificationProvided,
+    ProfileCheckoutAlreadyApproved,
+)
+
 from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
+
+
+def _obo_headers():
+    """Return the On-Behalf-Of header dict when running in OBO mode, else None."""
+    return {"X-On-Behalf-Of": client_wrapper.email} if client_wrapper.obo else None
+
+
+def _granted_response(my_access, transaction, include_credentials, status, headers=None):
+    """Build the response for a granted checkout without blocking on credential provisioning.
+
+    A freshly checked-out profile is often returned in a `checkOutSubmitted` state while access is
+    still being provisioned. Fetching credentials in that window blocks (and can raise) until the
+    transaction flips to `checkedOut`. So we attach credentials only when the transaction is already
+    `checkedOut`; otherwise we return a `provisioning` status and let the caller poll again.
+    """
+    txn = transaction or {}
+    if include_credentials and txn.get("status") == "checkedOut":
+        txn = dict(txn)
+        txn["credentials"] = my_access.credentials(transaction_id=txn.get("transactionId"), headers=headers)
+        return {"status": status, "transaction": txn}
+    if include_credentials:
+        return {
+            "status": "provisioning",
+            "transaction_id": txn.get("transactionId"),
+            "transaction": txn,
+            "message": "Access was granted but credentials are still being provisioned. Poll the "
+            "status tool (or re-run checkout) again shortly to retrieve them.",
+        }
+    return {"status": status, "transaction": txn}
 
 
 @mcp.tool(
@@ -13,11 +47,14 @@ from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
 
     Use 'include_credentials=True' only if the user expects immediate use. If there is a console URL generated, create a clickable link for the user.
 
-    Handle approval flows quietly, inform the user once if there's a delay, but avoid repeated updates unless asked.
-
     Accept optional 'ticket_id', 'ticket_type', or 'otp' if context provides them. Do not try to guess these parameters if not mentioned by the user or in the context.
 
     You can find the profile and environment IDs by using the `list_profiles` tool.
+
+    THIS TOOL IS ASYNCHRONOUS AND NEVER BLOCKS. It returns one of these statuses in the response:
+    - "checked_out": access was granted immediately (no approval required, or already checked out). The 'transaction' holds the details (and credentials if requested). You are done.
+    - "justification_required": the profile requires approval but no justification was supplied. Ask the user for a justification, then call this tool again with it.
+    - "pending_approval": an approval request was submitted. The response includes a 'request_id'. Do NOT block or loop here. Inform the user once that approval is pending, then call `my_access_checkout_status` with the returned request_id (and the same profile_id/environment_id/include_credentials/programmatic) to check the outcome and obtain credentials once approved. Poll that tool periodically rather than rapidly.
 
     If access was already granted, return it silently. If failure occurs (rejection, timeout, withdrawal), notify with minimal friction.
 
@@ -61,63 +98,156 @@ def my_access_checkout(
     environment_id: str,
     include_credentials: bool = False,
     justification: str = None,
-    max_wait_time: int = 600,
     otp: str = None,
     programmatic: bool = False,
     ticket_id: str = None,
     ticket_type: str = None,
-    wait_time: int = 60,
 ):
-    # This tool is generated using Britive SDK v4.3.0
-    """Checkout a profile.
+    """Asynchronously check out a profile.
 
-    If the profile has already been checked out this method will return the details of the checked out profile.
+    Unlike the blocking SDK `checkout()`, this tool never waits for an approval to be dispositioned. Instead
+    it returns immediately with a status the caller can act on:
 
-    If approval is required, this method will continue to check if approval has been obtained. Once the request
-    is approved the profile will be checked out. Sending a `SIGINT/KeyboardInterrupt/Ctrl+C/^C` while waiting for
-    the approval request to be dispositioned will withdraw the request. Sending a second `^C` immediately after
-    the first will immediately exit the program.
+    - If the profile is already checked out or requires no approval, the checkout is performed and the
+      transaction (optionally including credentials) is returned with status "checked_out".
+    - If approval is required and a justification was provided, a non-blocking approval request is submitted
+      and status "pending_approval" is returned along with the request_id to poll via `my_access_checkout_status`.
+    - If approval is required but no justification was provided, status "justification_required" is returned.
 
     :param profile_id: The ID of the profile. Use `list_profiles()` to obtain the eligible profiles.
     :param environment_id: The ID of the environment. Use `list_profiles()` to obtain the eligible environments.
-    :param include_credentials: True if tokens should be included in the response. False if the caller wishes to
-        call `credentials()` at a later time. If True, the `credentials` key will be included in the response which
-        contains the response from `credentials()`. Setting this parameter to `True` will result in a synchronous
-        call vs. setting to `False` will allow for an async call.
-    :param justification: Optional justification if checking out the profile requires approval.
-    :param max_wait_time: The maximum number of seconds to wait for an approval before throwing
-        an exception.
-    :param otp: Optional time based one-time passcode use for step up authentication.
-    :param programmatic: True for programmatic credential checkout. False for console checkout. Defaults to console checkout.
-    :param progress_func: An optional callback that will be invoked as the checkout process progresses.
+    :param include_credentials: True if tokens should be included in the response when access is granted.
+    :param justification: Justification required if checking out the profile requires approval.
+    :param otp: Optional time based one-time passcode used for step up authentication.
+    :param programmatic: True for programmatic credential checkout. False for console checkout.
     :param ticket_id: Optional ITSM ticket ID
     :param ticket_type: Optional ITSM ticket type or category
-    :param wait_time: The number of seconds to sleep/wait between polling to check if the profile checkout
-        was approved.
-    :return: Details about the checked out profile, and optionally the credentials generated by the checkout.
-    :raises ApprovalRequiredButNoJustificationProvided: if approval is required but no justification is provided.
-    :raises ProfileApprovalRejected: if the approval request was rejected by the approver.
-    :raises ProfileApprovalTimedOut: if the approval request timed out exceeded the max time as specified by the
-        profile policy.
-    :raises ProfileApprovalWithdrawn: if the approval request was withdrawn by the requester."""
+    :return: A dict with a "status" key (one of "checked_out", "pending_approval", "justification_required")."""
 
     client = client_wrapper.get_client()
-    return client.my_access.checkout(
-        profile_id=profile_id,
-        environment_id=environment_id,
-        headers={"X-On-Behalf-Of": client_wrapper.email}
-        if client_wrapper.obo
-        else None,
-        include_credentials=include_credentials,
-        justification=justification,
-        max_wait_time=max_wait_time,
-        otp=otp,
-        programmatic=programmatic,
-        progress_func=None,
-        ticket_id=ticket_id,
-        ticket_type=ticket_type,
-        wait_time=wait_time,
-    )
+    headers = _obo_headers()
+    try:
+        # Probe with the real checkout but force an immediate failure (rather than a blocking poll)
+        # if approval is required, by withholding the justification on this attempt. The failed
+        # checkout does not create an approval request -- that is a separate endpoint invoked below.
+        transaction = client.my_access.checkout(
+            profile_id=profile_id,
+            environment_id=environment_id,
+            headers=headers,
+            include_credentials=False,
+            justification=None,
+            otp=otp,
+            programmatic=programmatic,
+            progress_func=None,
+            ticket_id=ticket_id,
+            ticket_type=ticket_type,
+        )
+        return _granted_response(client.my_access, transaction, include_credentials, "checked_out", headers)
+    except ApprovalRequiredButNoJustificationProvided:
+        if not justification:
+            return {
+                "status": "justification_required",
+                "profile_id": profile_id,
+                "environment_id": environment_id,
+                "message": "This profile requires approval. Ask the user for a justification, then call "
+                "my_access_checkout again with the justification provided.",
+            }
+        try:
+            request = client.my_access.request_approval(
+                profile_id=profile_id,
+                justification=justification,
+                environment_id=environment_id,
+                block_until_disposition=False,
+                ticket_id=ticket_id,
+                ticket_type=ticket_type,
+                headers=headers,
+            )
+        except ProfileCheckoutAlreadyApproved:
+            # Approval already granted out-of-band -- the checkout will now succeed.
+            transaction = client.my_access.checkout(
+                profile_id=profile_id,
+                environment_id=environment_id,
+                headers=headers,
+                include_credentials=False,
+                programmatic=programmatic,
+                progress_func=None,
+            )
+            return _granted_response(client.my_access, transaction, include_credentials, "checked_out", headers)
+        request_id = request.get("requestId") if isinstance(request, dict) else None
+        return {
+            "status": "pending_approval",
+            "request_id": request_id,
+            "profile_id": profile_id,
+            "environment_id": environment_id,
+            "include_credentials": include_credentials,
+            "programmatic": programmatic,
+            "message": "Approval has been requested. Poll my_access_checkout_status with this request_id "
+            "to check the outcome and obtain credentials once approved.",
+        }
+
+
+@mcp.tool(
+    name="my_access_checkout_status",
+    description="""Check the status of an approval-required profile checkout that was previously submitted via `my_access_checkout` (which returned status "pending_approval" and a request_id).
+
+    Call this tool to poll the outcome of a pending approval. Provide the 'request_id' returned by `my_access_checkout`, along with the same 'profile_id', 'environment_id', 'include_credentials', and 'programmatic' values used in the original checkout.
+
+    The response 'status' will be one of:
+    - "pending": approval has not yet been dispositioned. Wait a bit, then call this tool again. Do not poll rapidly.
+    - "approved": access was granted. The profile is now checked out and the 'transaction' (with credentials if requested) is returned. You are done.
+    - "provisioning": approval was granted and checkout has started, but credentials are not ready yet. Wait briefly and call this tool again to retrieve them.
+    - "rejected" / "timeout" / "cancelled": the request will not be fulfilled. Inform the user with minimal friction.
+
+    Do not use this tool to check existing/active access -- it is only for polling a pending approval request.""",
+)
+def my_access_checkout_status(
+    request_id: str,
+    profile_id: str,
+    environment_id: str,
+    include_credentials: bool = False,
+    programmatic: bool = False,
+):
+    """Poll the status of a pending profile-checkout approval request and finalize the checkout once approved.
+
+    :param request_id: The approval request ID returned by `my_access_checkout` with status "pending_approval".
+    :param profile_id: The ID of the profile being checked out.
+    :param environment_id: The ID of the environment being checked out.
+    :param include_credentials: True if tokens should be included in the response once approved.
+    :param programmatic: True for programmatic credential checkout. False for console checkout.
+    :return: A dict with a "status" key (one of "pending", "approved", "rejected", "timeout", "cancelled")."""
+
+    client = client_wrapper.get_client()
+    headers = _obo_headers()
+    details = client.my_requests.approval_request_status(request_id=request_id, headers=headers)
+    status = (details.get("status") or "").lower() if isinstance(details, dict) else ""
+
+    if status == "pending":
+        return {
+            "status": "pending",
+            "request_id": request_id,
+            "message": "Approval is still pending. Wait before polling again.",
+        }
+
+    if status == "approved":
+        # Approval granted -- the checkout now succeeds without blocking. Fetch credentials only
+        # once provisioning completes (status checkedOut); otherwise report "provisioning".
+        transaction = client.my_access.checkout(
+            profile_id=profile_id,
+            environment_id=environment_id,
+            headers=headers,
+            include_credentials=False,
+            programmatic=programmatic,
+            progress_func=None,
+        )
+        return _granted_response(client.my_access, transaction, include_credentials, "approved", headers)
+
+    # rejected / timeout / cancelled
+    return {
+        "status": status or "unknown",
+        "request_id": request_id,
+        "details": details,
+        "message": f"Approval request is '{status or 'unknown'}'. Access will not be granted for this request.",
+    }
 
 
 @mcp.tool(
