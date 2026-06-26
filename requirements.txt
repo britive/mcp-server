@@ -1,5 +1,5 @@
 britive==4.5.0rc2
-fastmcp==2.10.6
+fastmcp==3.2.0
 pydantic==2.11.7
 python-dotenv==1.1.0
 pybritive==2.2.0
