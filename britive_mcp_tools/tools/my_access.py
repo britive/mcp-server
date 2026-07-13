@@ -2,6 +2,7 @@ from britive.exceptions import (
     ApprovalRequiredButNoJustificationProvided,
     ProfileCheckoutAlreadyApproved,
 )
+from britive.exceptions.badrequest import PendingProfileApprovalRequestError
 
 from britive_mcp_tools.core.mcp_init import client_wrapper, mcp
 
@@ -143,6 +144,19 @@ def my_access_checkout(
             ticket_type=ticket_type,
         )
         return _granted_response(client.my_access, transaction, include_credentials, "checked_out", headers)
+    except PendingProfileApprovalRequestError:
+        # An approval request for this profile/environment is already outstanding. Report it as
+        # pending (instead of surfacing the raw 400) so the caller polls status rather than resubmitting.
+        return {
+            "status": "pending_approval",
+            "request_id": None,
+            "profile_id": profile_id,
+            "environment_id": environment_id,
+            "include_credentials": include_credentials,
+            "programmatic": programmatic,
+            "message": "An approval request is already pending for this profile/environment. Poll "
+            "my_access_checkout_status with the request_id from the original checkout; do not submit another.",
+        }
     except ApprovalRequiredButNoJustificationProvided:
         if not justification:
             return {
