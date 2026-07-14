@@ -1,6 +1,8 @@
 from britive.exceptions import (
     ApprovalRequiredButNoJustificationProvided,
     ProfileCheckoutAlreadyApproved,
+    StepUpAuthFailed,
+    StepUpAuthRequiredButNotProvided,
 )
 from britive.exceptions.badrequest import PendingProfileApprovalRequestError
 
@@ -56,6 +58,8 @@ def _granted_response(my_access, transaction, include_credentials, status, heade
     - "checked_out": access was granted immediately (no approval required, or already checked out). The 'transaction' holds the details (and credentials if requested). You are done.
     - "justification_required": the profile requires approval but no justification was supplied. Ask the user for a justification, then call this tool again with it.
     - "pending_approval": an approval request was submitted. The response includes a 'request_id'. Do NOT block or loop here. Inform the user once that approval is pending, then call `my_access_checkout_status` with the returned request_id (and the same profile_id/environment_id/include_credentials/programmatic) to check the outcome and obtain credentials once approved. Poll that tool periodically rather than rapidly.
+    - "step_up_otp_required": the profile requires step-up authentication. Ask the user for their time-based one-time passcode (MFA/TOTP code), then call this tool again with the otp parameter set.
+    - "step_up_auth_failed": the provided one-time passcode was rejected. Ask the user for a fresh code and retry.
 
     If access was already granted, return it silently. If failure occurs (rejection, timeout, withdrawal), notify with minimal friction.
 
@@ -144,6 +148,23 @@ def my_access_checkout(
             ticket_type=ticket_type,
         )
         return _granted_response(client.my_access, transaction, include_credentials, "checked_out", headers)
+    except StepUpAuthRequiredButNotProvided:
+        return {
+            "status": "step_up_otp_required",
+            "profile_id": profile_id,
+            "environment_id": environment_id,
+            "message": "This profile requires step-up authentication. Ask the user for their "
+            "time-based one-time passcode (MFA/TOTP code), then call my_access_checkout again "
+            "with the otp parameter set.",
+        }
+    except StepUpAuthFailed:
+        return {
+            "status": "step_up_auth_failed",
+            "profile_id": profile_id,
+            "environment_id": environment_id,
+            "message": "The provided one-time passcode was rejected. Ask the user for a fresh "
+            "code and call my_access_checkout again with the new otp.",
+        }
     except PendingProfileApprovalRequestError:
         # An approval request for this profile/environment is already outstanding. Report it as
         # pending (instead of surfacing the raw 400) so the caller polls status rather than resubmitting.
@@ -183,6 +204,7 @@ def my_access_checkout(
                 environment_id=environment_id,
                 headers=headers,
                 include_credentials=False,
+                otp=otp,
                 programmatic=programmatic,
                 progress_func=None,
             )
@@ -204,12 +226,13 @@ def my_access_checkout(
     name="my_access_checkout_status",
     description="""Check the status of an approval-required profile checkout that was previously submitted via `my_access_checkout` (which returned status "pending_approval" and a request_id).
 
-    Call this tool to poll the outcome of a pending approval. Provide the 'request_id' returned by `my_access_checkout`, along with the same 'profile_id', 'environment_id', 'include_credentials', and 'programmatic' values used in the original checkout.
+    Call this tool to poll the outcome of a pending approval. Provide the 'request_id' returned by `my_access_checkout`, along with the same 'profile_id', 'environment_id', 'include_credentials', and 'programmatic' values used in the original checkout. If the profile also requires step-up authentication, pass the user's current 'otp' so the approved checkout can complete.
 
     The response 'status' will be one of:
     - "pending": approval has not yet been dispositioned. Wait a bit, then call this tool again. Do not poll rapidly.
     - "approved": access was granted. The profile is now checked out and the 'transaction' (with credentials if requested) is returned. You are done.
     - "provisioning": approval was granted and checkout has started, but credentials are not ready yet. Wait briefly and call this tool again to retrieve them.
+    - "step_up_otp_required" / "step_up_auth_failed": the approval was granted but the profile requires step-up authentication. Ask the user for their time-based one-time passcode (MFA/TOTP) and call this tool again with 'otp' set.
     - "rejected" / "timeout" / "cancelled": the request will not be fulfilled. Inform the user with minimal friction.
 
     Do not use this tool to check existing/active access -- it is only for polling a pending approval request.""",
@@ -219,6 +242,7 @@ def my_access_checkout_status(
     profile_id: str,
     environment_id: str,
     include_credentials: bool = False,
+    otp: str = None,
     programmatic: bool = False,
 ):
     """Poll the status of a pending profile-checkout approval request and finalize the checkout once approved.
@@ -227,8 +251,10 @@ def my_access_checkout_status(
     :param profile_id: The ID of the profile being checked out.
     :param environment_id: The ID of the environment being checked out.
     :param include_credentials: True if tokens should be included in the response once approved.
+    :param otp: Optional time based one-time passcode if the profile also requires step-up authentication.
     :param programmatic: True for programmatic credential checkout. False for console checkout.
-    :return: A dict with a "status" key (one of "pending", "approved", "rejected", "timeout", "cancelled")."""
+    :return: A dict with a "status" key (one of "pending", "approved", "provisioning",
+        "step_up_otp_required", "step_up_auth_failed", "rejected", "timeout", "cancelled")."""
 
     client = client_wrapper.get_client()
     headers = _obo_headers()
@@ -245,14 +271,31 @@ def my_access_checkout_status(
     if status == "approved":
         # Approval granted -- the checkout now succeeds without blocking. Fetch credentials only
         # once provisioning completes (status checkedOut); otherwise report "provisioning".
-        transaction = client.my_access.checkout(
-            profile_id=profile_id,
-            environment_id=environment_id,
-            headers=headers,
-            include_credentials=False,
-            programmatic=programmatic,
-            progress_func=None,
-        )
+        try:
+            transaction = client.my_access.checkout(
+                profile_id=profile_id,
+                environment_id=environment_id,
+                headers=headers,
+                include_credentials=False,
+                otp=otp,
+                programmatic=programmatic,
+                progress_func=None,
+            )
+        except StepUpAuthRequiredButNotProvided:
+            return {
+                "status": "step_up_otp_required",
+                "request_id": request_id,
+                "message": "Approval was granted, but this profile also requires step-up authentication. "
+                "Ask the user for their time-based one-time passcode (MFA/TOTP code), then call this "
+                "tool again with the otp parameter set.",
+            }
+        except StepUpAuthFailed:
+            return {
+                "status": "step_up_auth_failed",
+                "request_id": request_id,
+                "message": "The provided one-time passcode was rejected. Ask the user for a fresh "
+                "code and call this tool again with the new otp.",
+            }
         return _granted_response(client.my_access, transaction, include_credentials, "approved", headers)
 
     # rejected / timeout / cancelled

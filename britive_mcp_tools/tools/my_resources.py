@@ -1,6 +1,8 @@
 from britive.exceptions import (
     ApprovalRequiredButNoJustificationProvided,
     ProfileCheckoutAlreadyApproved,
+    StepUpAuthFailed,
+    StepUpAuthRequiredButNotProvided,
 )
 from britive.exceptions.badrequest import PendingProfileApprovalRequestError
 
@@ -82,6 +84,8 @@ def my_resources_list(list_type: str = None):
        - "checked_out": access granted immediately; the 'transaction' holds the details (and credentials if requested).
        - "justification_required": approval is needed but no justification was supplied; ask the user for one and call again.
        - "pending_approval": an approval request was submitted; a 'request_id' is returned. Inform the user once, then poll `my_resources_checkout_status` with that request_id to obtain credentials once approved. Do not loop rapidly.
+       - "step_up_otp_required": step-up authentication is required; ask the user for their MFA/TOTP code and call again with 'otp' set.
+       - "step_up_auth_failed": the passcode was rejected; ask for a fresh code and retry.
     4. For failures (rejection, timeout, withdrawal), notify with minimal friction
     5. Never use when user is only inquiring about existing access or wanting to check in
 
@@ -173,6 +177,23 @@ def my_resources_checkout(
         return _granted_response(
             client.my_resources, transaction, include_credentials, "checked_out", response_template, headers
         )
+    except StepUpAuthRequiredButNotProvided:
+        return {
+            "status": "step_up_otp_required",
+            "profile_id": profile_id,
+            "resource_id": resource_id,
+            "message": "This resource requires step-up authentication. Ask the user for their "
+            "time-based one-time passcode (MFA/TOTP code), then call my_resources_checkout again "
+            "with the otp parameter set.",
+        }
+    except StepUpAuthFailed:
+        return {
+            "status": "step_up_auth_failed",
+            "profile_id": profile_id,
+            "resource_id": resource_id,
+            "message": "The provided one-time passcode was rejected. Ask the user for a fresh "
+            "code and call my_resources_checkout again with the new otp.",
+        }
     except PendingProfileApprovalRequestError:
         # An approval request for this profile/resource is already outstanding. Report it as
         # pending (instead of surfacing the raw 400) so the caller polls status rather than resubmitting.
@@ -212,6 +233,7 @@ def my_resources_checkout(
                 resource_id=resource_id,
                 headers=headers,
                 include_credentials=False,
+                otp=otp,
                 progress_func=None,
                 response_template=response_template,
             )
@@ -235,12 +257,13 @@ def my_resources_checkout(
     name="my_resources_checkout_status",
     description="""Check the status of an approval-required resource checkout that was previously submitted via `my_resources_checkout` (which returned status "pending_approval" and a request_id).
 
-    Call this tool to poll the outcome of a pending approval. Provide the 'request_id' returned by `my_resources_checkout`, along with the same 'profile_id', 'resource_id', 'include_credentials', and 'response_template' values used in the original checkout.
+    Call this tool to poll the outcome of a pending approval. Provide the 'request_id' returned by `my_resources_checkout`, along with the same 'profile_id', 'resource_id', 'include_credentials', and 'response_template' values used in the original checkout. If the resource also requires step-up authentication, pass the user's current 'otp' so the approved checkout can complete.
 
     The response 'status' will be one of:
     - "pending": approval has not yet been dispositioned. Wait a bit, then call this tool again. Do not poll rapidly.
     - "approved": access was granted. The resource is now checked out and the 'transaction' (with credentials if requested) is returned. You are done.
     - "provisioning": approval was granted and checkout has started, but credentials are not ready yet. Wait briefly and call this tool again to retrieve them.
+    - "step_up_otp_required" / "step_up_auth_failed": the approval was granted but the resource requires step-up authentication. Ask the user for their time-based one-time passcode (MFA/TOTP) and call this tool again with 'otp' set.
     - "rejected" / "timeout" / "cancelled": the request will not be fulfilled. Inform the user with minimal friction.
 
     Do not use this tool to check existing/active access -- it is only for polling a pending approval request.""",
@@ -250,6 +273,7 @@ def my_resources_checkout_status(
     profile_id: str,
     resource_id: str,
     include_credentials: bool = False,
+    otp: str = None,
     response_template: str = None,
 ):
     """Poll the status of a pending resource-checkout approval request and finalize the checkout once approved.
@@ -258,8 +282,10 @@ def my_resources_checkout_status(
     :param profile_id: The ID of the profile being checked out.
     :param resource_id: The ID of the resource being checked out.
     :param include_credentials: True if tokens should be included in the response once approved.
+    :param otp: Optional time based one-time passcode if the resource also requires step-up authentication.
     :param response_template: Optional response template for formatting the checkout response.
-    :return: A dict with a "status" key (one of "pending", "approved", "rejected", "timeout", "cancelled")."""
+    :return: A dict with a "status" key (one of "pending", "approved", "provisioning",
+        "step_up_otp_required", "step_up_auth_failed", "rejected", "timeout", "cancelled")."""
 
     client = client_wrapper.get_client()
     headers = _obo_headers()
@@ -276,14 +302,31 @@ def my_resources_checkout_status(
     if status == "approved":
         # Approval granted -- the checkout now succeeds without blocking. Fetch credentials only
         # once provisioning completes (status checkedOut); otherwise report "provisioning".
-        transaction = client.my_resources.checkout(
-            profile_id=profile_id,
-            resource_id=resource_id,
-            headers=headers,
-            include_credentials=False,
-            progress_func=None,
-            response_template=response_template,
-        )
+        try:
+            transaction = client.my_resources.checkout(
+                profile_id=profile_id,
+                resource_id=resource_id,
+                headers=headers,
+                include_credentials=False,
+                otp=otp,
+                progress_func=None,
+                response_template=response_template,
+            )
+        except StepUpAuthRequiredButNotProvided:
+            return {
+                "status": "step_up_otp_required",
+                "request_id": request_id,
+                "message": "Approval was granted, but this resource also requires step-up authentication. "
+                "Ask the user for their time-based one-time passcode (MFA/TOTP code), then call this "
+                "tool again with the otp parameter set.",
+            }
+        except StepUpAuthFailed:
+            return {
+                "status": "step_up_auth_failed",
+                "request_id": request_id,
+                "message": "The provided one-time passcode was rejected. Ask the user for a fresh "
+                "code and call this tool again with the new otp.",
+            }
         return _granted_response(
             client.my_resources, transaction, include_credentials, "approved", response_template, headers
         )

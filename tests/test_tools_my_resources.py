@@ -6,6 +6,8 @@ import pytest
 from britive.exceptions import (
     ApprovalRequiredButNoJustificationProvided,
     ProfileCheckoutAlreadyApproved,
+    StepUpAuthFailed,
+    StepUpAuthRequiredButNotProvided,
 )
 from britive.exceptions.badrequest import PendingProfileApprovalRequestError
 
@@ -118,6 +120,24 @@ class TestMyResourcesCheckout:
             headers=None,
         )
 
+    def test_checkout_step_up_required_returns_status(self, mock_client_wrapper, mock_britive_client):
+        from britive_mcp_tools.tools.my_resources import my_resources_checkout
+
+        mock_britive_client.my_resources.checkout.side_effect = StepUpAuthRequiredButNotProvided()
+
+        result = my_resources_checkout(profile_id="prof-1", resource_id="res-1")
+
+        assert result["status"] == "step_up_otp_required"
+
+    def test_checkout_step_up_failed_returns_status(self, mock_client_wrapper, mock_britive_client):
+        from britive_mcp_tools.tools.my_resources import my_resources_checkout
+
+        mock_britive_client.my_resources.checkout.side_effect = StepUpAuthFailed()
+
+        result = my_resources_checkout(profile_id="prof-1", resource_id="res-1", otp="000000")
+
+        assert result["status"] == "step_up_auth_failed"
+
     def test_checkout_already_pending_returns_pending_approval(
         self, mock_client_wrapper, mock_britive_client
     ):
@@ -199,6 +219,7 @@ class TestMyResourcesCheckoutStatus:
             resource_id="res-1",
             headers=None,
             include_credentials=False,
+            otp=None,
             progress_func=None,
             response_template="template-1",
         )
@@ -219,6 +240,28 @@ class TestMyResourcesCheckoutStatus:
         assert result["status"] == "provisioning"
         assert result["transaction_id"] == "tx-7"
         mock_britive_client.my_resources.credentials.assert_not_called()
+
+    def test_status_approved_step_up_required(self, mock_client_wrapper, mock_britive_client):
+        from britive_mcp_tools.tools.my_resources import my_resources_checkout_status
+
+        mock_britive_client.my_requests.approval_request_status.return_value = {"status": "APPROVED"}
+        mock_britive_client.my_resources.checkout.side_effect = StepUpAuthRequiredButNotProvided()
+
+        result = my_resources_checkout_status(request_id="req-7", profile_id="prof-1", resource_id="res-1")
+
+        assert result["status"] == "step_up_otp_required"
+
+    def test_status_approved_forwards_otp(self, mock_client_wrapper, mock_britive_client):
+        from britive_mcp_tools.tools.my_resources import my_resources_checkout_status
+
+        mock_britive_client.my_requests.approval_request_status.return_value = {"status": "APPROVED"}
+        mock_britive_client.my_resources.checkout.return_value = {"transactionId": "tx-7", "status": "checkedOut"}
+
+        my_resources_checkout_status(
+            request_id="req-7", profile_id="prof-1", resource_id="res-1", otp="123456"
+        )
+
+        assert mock_britive_client.my_resources.checkout.call_args[1]["otp"] == "123456"
 
     def test_status_rejected(self, mock_client_wrapper, mock_britive_client):
         from britive_mcp_tools.tools.my_resources import my_resources_checkout_status
